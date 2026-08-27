@@ -92,9 +92,9 @@ final class StatusService
 
 		$error = null;
 		if (!$supported) {
-			$error = 'LogCheck only supports file-based logging.';
+			$error = 'HealthCheck only supports file-based logging.';
 		} elseif (!$topologyOk) {
-			$error = 'LogCheck noticed a different server. Multi-server setups need one shared log file.';
+			$error = 'HealthCheck noticed a different server. Multi-server setups need one shared log file.';
 		} elseif (!empty($runtime['last_error'])) {
 			$error = ChannelStateStore::safeError((string)$runtime['last_error']);
 		} elseif (!$secretsReadable) {

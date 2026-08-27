@@ -1,6 +1,6 @@
 <?php
 /**
- * LogCheck Logs — view, search, copy, start fresh / delete; multi-file picker.
+ * HealthCheck Logs — view, search, copy, start fresh / delete; multi-file picker.
  *
  * @var array $_
  * @var \OCP\IL10N $l
@@ -46,7 +46,7 @@ include __DIR__ . '/common/page-start.php';
 
 	<?php if (!$backendOk): ?>
 		<div class="lck-callout lck-callout--warning" role="status">
-			<p><strong><?php p($l->t('Can\'t open logs')); ?></strong> — <?php p($l->t('LogCheck only supports file-based logging.')); ?></p>
+			<p><strong><?php p($l->t('Can\'t open logs')); ?></strong> — <?php p($l->t('HealthCheck only supports file-based logging.')); ?></p>
 		</div>
 	<?php else: ?>
 

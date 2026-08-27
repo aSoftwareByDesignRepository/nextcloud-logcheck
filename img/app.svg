@@ -3,14 +3,12 @@
   SPDX-FileCopyrightText: 2026 Alexander Maeule <info@software-by-design.de>
   SPDX-License-Identifier: AGPL-3.0-or-later
 
-  SnackCheck white glyph for Nextcloud header / app menu / navigation entry.
-  Motif: kitchen refrigerator (honor ledger at the fridge). White strokes only so
-  Nextcloud background-image-invert-if-bright keeps the glyph visible.
+  HealthCheck white glyph for Nextcloud header / app menu / navigation entry.
+  Motif: status ring with heartbeat (instance health and log pulse). White strokes
+  only so Nextcloud background-image-invert-if-bright keeps the glyph visible.
   XML comments must not contain consecutive hyphen pairs (breaks strict SVG parsers).
 -->
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-	<rect x="7" y="2" width="10" height="20" rx="2"/>
-	<path d="M7 10h10"/>
-	<path d="M10 6v2"/>
-	<path d="M10 14v2"/>
+	<circle cx="12" cy="12" r="9"/>
+	<path d="M6.5 12h2l1.5-4 2.5 8 2-4H17.5"/>
 </svg>

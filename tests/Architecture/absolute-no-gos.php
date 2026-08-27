@@ -341,6 +341,26 @@ if (!str_contains($deliveryStore, 'function hasSent')
 	ok('NG-M-DEDUP: delivery hasSent gate before send');
 }
 
+$sendPos = strpos($channelDispatcher, '$this->send($channel');
+$recordSentPos = $sendPos === false ? false : strpos($channelDispatcher, "deliveryStore->record(\$row['event_id'], \$channel, 'sent')", $sendPos);
+$markSentPos = $sendPos === false ? false : strpos($channelDispatcher, 'pendingStore->markSent', $sendPos);
+if ($sendPos === false || $recordSentPos === false || $markSentPos === false || $recordSentPos > $markSentPos
+	|| !str_contains($channelDispatcher, 'delivery already recorded')
+) {
+	fail('NG-M-DEDUP2: after successful send, record sent before depending on markSent (reclaim race)');
+} else {
+	ok('NG-M-DEDUP2: delivery recorded even if markSent loses claim_gen');
+}
+
+$settingsSvc = (string)file_get_contents($root . '/lib/Service/SettingsService.php');
+if (!str_contains($settingsSvc, "runtime['watcher_node'] = \$this->topologyGuard->currentNodeId()")
+	|| !str_contains($settingsSvc, "runtime['watcher_node'] = null")
+) {
+	fail('NG-M-TOPO1: enabling watch must pin watcher_node; disabling must clear it');
+} else {
+	ok('NG-M-TOPO1: topology pin on watch enable');
+}
+
 $logFileSvc = (string)file_get_contents($root . '/lib/Service/LogFileService.php');
 if (!preg_match('/function\s+resolveDownload\s*\([^)]*\)[^{]*\{[^}]*assertNcAdmin/s', $logFileSvc)) {
 	fail('NG-M-DL1: resolveDownload must assertNcAdmin (full-file download NC-only)');

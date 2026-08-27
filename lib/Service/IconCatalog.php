@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace OCA\LogCheck\Service;
 
 /**
- * Inline Lucide-style SVG icons for LogCheck templates (prefix lck-).
+ * Inline Lucide-style SVG icons for HealthCheck templates (prefix lck-).
  * Mirrors SnackCheck / DeskCheck IconCatalog pattern for family visual parity.
  */
 final class IconCatalog

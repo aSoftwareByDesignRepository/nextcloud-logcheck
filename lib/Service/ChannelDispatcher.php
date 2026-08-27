@@ -48,7 +48,7 @@ final class ChannelDispatcher
 			// Zeus SF-D1 / Momos residual: if a prior claim already delivered, never HTTP again.
 			if ($this->deliveryStore->hasSent($row['event_id'], $channel)) {
 				if (!$this->pendingStore->markSent($row['event_id'], $channel, $claimGen)) {
-					$this->logger->warning('LogCheck markSent lost claim generation (already delivered)', [
+					$this->logger->warning('HealthCheck markSent lost claim generation (already delivered)', [
 						'app' => 'logcheck',
 						'channel' => $channel,
 						'event_id' => $row['event_id'],
@@ -58,23 +58,23 @@ final class ChannelDispatcher
 			}
 			try {
 				$this->send($channel, $row['payload'], $settings);
+				// Always record outbound success first so a reclaimer cannot HTTP again
+				// even if this claim_gen lost the race for pending markSent (LCK-01).
+				$this->deliveryStore->record($row['event_id'], $channel, 'sent');
 				if (!$this->pendingStore->markSent($row['event_id'], $channel, $claimGen)) {
-					// Claim was reclaimed; do not record success for a stolen generation.
-					$this->logger->warning('LogCheck markSent lost claim generation', [
+					$this->logger->warning('HealthCheck markSent lost claim generation (delivery already recorded)', [
 						'app' => 'logcheck',
 						'channel' => $channel,
 						'event_id' => $row['event_id'],
 					]);
-					continue;
 				}
-				$this->deliveryStore->record($row['event_id'], $channel, 'sent');
 				$this->channelStateStore->recordSuccess($channel);
 			} catch (\Throwable $e) {
 				$attempts = $row['attempts'] + 1;
 				$this->pendingStore->markFailed($row['event_id'], $channel, $attempts, $claimGen);
 				$this->deliveryStore->record($row['event_id'], $channel, 'failed');
 				$justDisabled = $this->channelStateStore->recordFailure($channel, $e->getMessage());
-				$this->logger->warning('LogCheck channel delivery failed', [
+				$this->logger->warning('HealthCheck channel delivery failed', [
 					'app' => 'logcheck',
 					'channel' => $channel,
 					'disabled' => $justDisabled,

@@ -3,7 +3,7 @@
 declare(strict_types=1);
 
 /**
- * Snapshot and restore LogCheck data before app updates.
+ * Snapshot and restore HealthCheck data before app updates.
  *
  * Snapshots are written atomically (manifest last, marked complete) under app data
  * ({@see UpgradeBackupCatalog::APPDATA_ROOT}). Restore validates integrity before any
@@ -68,7 +68,7 @@ class UpgradeBackupService
 	 */
 	private function createSnapshotInternal(string $reason, bool $rotate, array $rotationExcludeIds): array
 	{
-		return $this->runExclusive('LogCheck upgrade backup', function () use ($reason, $rotate, $rotationExcludeIds): array {
+		return $this->runExclusive('HealthCheck upgrade backup', function () use ($reason, $rotate, $rotationExcludeIds): array {
 			return $this->doCreateSnapshot($reason, $rotate, $rotationExcludeIds);
 		});
 	}
@@ -82,7 +82,7 @@ class UpgradeBackupService
 		$this->purgeIncompleteSnapshotFolders();
 
 		if (!$this->hasDataToBackup()) {
-			throw new UpgradeBackupException('No LogCheck tables exist yet; nothing to back up.');
+			throw new UpgradeBackupException('No HealthCheck tables exist yet; nothing to back up.');
 		}
 
 		$id = $this->newSnapshotId();
@@ -111,7 +111,7 @@ class UpgradeBackupService
 			}
 
 			if ($backedUpTables === []) {
-				throw new UpgradeBackupException('No LogCheck tables exist on this instance; nothing to back up.');
+				throw new UpgradeBackupException('No HealthCheck tables exist on this instance; nothing to back up.');
 			}
 
 			$this->writeJsonFile($snapshotFolder, 'appconfig.json', $this->exportAppConfig());
@@ -146,7 +146,7 @@ class UpgradeBackupService
 			throw new UpgradeBackupException('Failed to create upgrade backup snapshot: ' . $e->getMessage(), 0, $e);
 		}
 
-		$this->logger->info('LogCheck: created pre-update backup snapshot', [
+		$this->logger->info('HealthCheck: created pre-update backup snapshot', [
 			'app' => UpgradeBackupCatalog::APP_ID,
 			'snapshotId' => $id,
 			'reason' => $manifest['reason'],
@@ -166,7 +166,7 @@ class UpgradeBackupService
 			try {
 				$snapshots[] = $this->readManifest($this->getSnapshotFolder($snapshotId), $snapshotId);
 			} catch (\Throwable $e) {
-				$this->logger->warning('LogCheck: skipping unreadable upgrade backup folder', [
+				$this->logger->warning('HealthCheck: skipping unreadable upgrade backup folder', [
 					'app' => UpgradeBackupCatalog::APP_ID,
 					'folder' => $snapshotId,
 					'exception' => $e,
@@ -192,7 +192,7 @@ class UpgradeBackupService
 		$tableManifest = $manifest['tables'] ?? [];
 		$this->validateSnapshotPayload($folder, $snapshotId, $manifest, $tableManifest);
 
-		$this->runExclusive('LogCheck upgrade restore', function () use ($snapshotId, $folder, $tableManifest, $createSafetySnapshot): void {
+		$this->runExclusive('HealthCheck upgrade restore', function () use ($snapshotId, $folder, $tableManifest, $createSafetySnapshot): void {
 			$this->doRestoreSnapshot($snapshotId, $folder, $tableManifest, $createSafetySnapshot);
 		});
 	}
@@ -237,7 +237,7 @@ class UpgradeBackupService
 				$this->db->executeStatement('ALTER SESSION SET CONSTRAINTS = DEFERRED');
 				$oracleConstraintsDeferred = true;
 			} catch (\Throwable $e) {
-				$this->logger->warning('LogCheck: Oracle constraints could not be deferred for restore; relying on restore table order.', [
+				$this->logger->warning('HealthCheck: Oracle constraints could not be deferred for restore; relying on restore table order.', [
 					'exception' => $e,
 				]);
 			}
@@ -258,7 +258,7 @@ class UpgradeBackupService
 			$this->db->commit();
 		} catch (\Throwable $e) {
 			$this->db->rollBack();
-			throw new UpgradeBackupException('LogCheck restore failed; database changes were rolled back.', 0, $e);
+			throw new UpgradeBackupException('HealthCheck restore failed; database changes were rolled back.', 0, $e);
 		} finally {
 			if ($fkChecksDisabled) {
 				$this->db->executeStatement('SET FOREIGN_KEY_CHECKS=1');
@@ -279,7 +279,7 @@ class UpgradeBackupService
 			$this->restoreAppDataFolders($folder);
 		} catch (\Throwable $e) {
 			throw new UpgradeBackupException(
-				'LogCheck database was restored but app config or app data folders failed. '
+				'HealthCheck database was restored but app config or app data folders failed. '
 				. 'Re-run restore after fixing storage, or restore from a full server backup.',
 				0,
 				$e,
@@ -292,7 +292,7 @@ class UpgradeBackupService
 			$snapshotId,
 		);
 
-		$this->logger->warning('LogCheck: restored data from upgrade backup snapshot', [
+		$this->logger->warning('HealthCheck: restored data from upgrade backup snapshot', [
 			'app' => UpgradeBackupCatalog::APP_ID,
 			'snapshotId' => $snapshotId,
 			'tables' => $tables,
@@ -343,7 +343,7 @@ class UpgradeBackupService
 		}
 
 		if (!$node instanceof Folder) {
-			throw new UpgradeBackupException('LogCheck app data root is not a folder.');
+			throw new UpgradeBackupException('HealthCheck app data root is not a folder.');
 		}
 
 		return $node;
@@ -359,7 +359,7 @@ class UpgradeBackupService
 		}
 
 		if (!$node instanceof Folder) {
-			throw new UpgradeBackupException('LogCheck upgrade backup root is not a folder.');
+			throw new UpgradeBackupException('HealthCheck upgrade backup root is not a folder.');
 		}
 
 		return $node;
@@ -775,7 +775,7 @@ class UpgradeBackupService
 			$this->locking->acquireLock(self::LOCK_KEY, ILockingProvider::LOCK_EXCLUSIVE, $label);
 		} catch (LockedException $e) {
 			throw new UpgradeBackupException(
-				'Another LogCheck backup or restore is already in progress.',
+				'Another HealthCheck backup or restore is already in progress.',
 				0,
 				$e,
 			);
@@ -804,7 +804,7 @@ class UpgradeBackupService
 					$folder->delete();
 				}
 			} catch (\Throwable $e) {
-				$this->logger->warning('LogCheck: removing corrupt upgrade backup folder', [
+				$this->logger->warning('HealthCheck: removing corrupt upgrade backup folder', [
 					'app' => UpgradeBackupCatalog::APP_ID,
 					'folder' => $snapshotId,
 					'exception' => $e,

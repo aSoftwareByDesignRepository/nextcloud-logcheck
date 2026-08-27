@@ -40,7 +40,7 @@ if ($version === '' && class_exists(\OCP\Server::class)) {
 	}
 }
 if (!isset($appFeedbackLinks) || !$appFeedbackLinks instanceof AppFeedbackLinks) {
-	$appFeedbackLinks = new AppFeedbackLinks('logcheck', 'LogCheck', $version);
+	$appFeedbackLinks = new AppFeedbackLinks('logcheck', 'HealthCheck', $version);
 }
 $pageUrl = '';
 if (isset($_SERVER['REQUEST_URI']) && is_string($_SERVER['REQUEST_URI'])) {

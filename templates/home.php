@@ -110,14 +110,14 @@ include __DIR__ . '/common/page-start.php';
 
 	<?php if (!$supported): ?>
 		<div class="lck-callout lck-callout--warning" role="status">
-			<p><strong><?php p($l->t('Can\'t watch')); ?></strong> — <?php p($l->t('LogCheck only supports file-based logging.')); ?></p>
+			<p><strong><?php p($l->t('Can\'t watch')); ?></strong> — <?php p($l->t('HealthCheck only supports file-based logging.')); ?></p>
 			<p><?php p($l->t('Detected log type: %s', [(string)($status['log_type'] ?? '')])); ?></p>
 		</div>
 	<?php endif; ?>
 
 	<?php if ($supported && !$topologyOk): ?>
 		<div class="lck-callout lck-callout--warning" role="alert">
-			<p><strong><?php p($l->t('Can\'t watch')); ?></strong> — <?php p($l->t('LogCheck noticed a different server. Multi-server setups need one shared log file.')); ?></p>
+			<p><strong><?php p($l->t('Can\'t watch')); ?></strong> — <?php p($l->t('HealthCheck noticed a different server. Multi-server setups need one shared log file.')); ?></p>
 			<p><?php p($l->t('Turn watching off, or ask your host to use one shared log file for all servers.')); ?></p>
 		</div>
 	<?php endif; ?>
@@ -136,7 +136,9 @@ include __DIR__ . '/common/page-start.php';
 	<?php endif; ?>
 
 	<?php if ($supported && $topologyOk): ?>
-		<section class="lck-status-card" aria-labelledby="lck-watching-heading">
+		<section class="lck-status-card" aria-labelledby="lck-watching-title">
+			<h3 id="lck-watching-title" class="lck-status-card__title"><?php p($l->t('Watching')); ?></h3>
+			<p class="lck-muted lck-status-card__lead"><?php p($l->t('Turn this on so HealthCheck looks for new errors in the background.')); ?></p>
 			<div class="lck-watching-row">
 				<span class="lck-badge" data-state="<?php p($state); ?>">
 					<span class="lck-badge__dot" aria-hidden="true"></span>
@@ -150,7 +152,7 @@ include __DIR__ . '/common/page-start.php';
 						aria-describedby="lck-watching-desc">
 					<label class="lck-switch-field__label" for="lck-watch-toggle">
 						<span class="lck-switch-field__track" aria-hidden="true"></span>
-						<span class="lck-switch-field__text" id="lck-watching-heading"><?php p($l->t('Watch log file')); ?></span>
+						<span class="lck-switch-field__text"><?php p($l->t('Watch log file')); ?></span>
 					</label>
 				</div>
 			</div>
@@ -172,7 +174,7 @@ include __DIR__ . '/common/page-start.php';
 				<?php elseif ($watch && !empty($status['last_check_at'])): ?>
 					<?php p($l->t('Last check')); ?>: <?php p(date('Y-m-d H:i', (int)$status['last_check_at'])); ?>
 				<?php else: ?>
-					<?php p($l->t('When on, LogCheck checks for new errors in the background.')); ?>
+					<?php p($l->t('When on, HealthCheck checks for new errors in the background.')); ?>
 				<?php endif; ?>
 			</p>
 			<?php if (!empty($status['error']) && $watch): ?>

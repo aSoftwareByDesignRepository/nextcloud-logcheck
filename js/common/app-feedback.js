@@ -10,7 +10,7 @@
 	var APP_ID = 'logcheck';
 	var PREFIX = 'lck';
 	var EMAIL = 'dev@software-by-design.de';
-	var DISPLAY = 'LogCheck';
+	var DISPLAY = 'HealthCheck';
 
 	function t(key) {
 		if (typeof global.t === 'function') {

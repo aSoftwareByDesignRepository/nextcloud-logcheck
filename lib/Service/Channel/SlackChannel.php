@@ -19,7 +19,7 @@ final class SlackChannel
 		$total = (int)($payload['total_matched'] ?? 0);
 		$muted = (int)($payload['total_muted'] ?? 0);
 		$text = sprintf(
-			'LogCheck: %d matched, %d muted%s',
+			'HealthCheck: %d matched, %d muted%s',
 			$total,
 			$muted,
 			!empty($payload['truncated']) ? ' (truncated)' : ''

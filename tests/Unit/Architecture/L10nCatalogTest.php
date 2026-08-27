@@ -7,7 +7,7 @@ namespace OCA\LogCheck\Tests\Unit\Architecture;
 use PHPUnit\Framework\TestCase;
 
 /**
- * Hard gates for LogCheck localization: parity, placeholders, code coverage, formal DE, plurals.
+ * Hard gates for HealthCheck localization: parity, placeholders, code coverage, formal DE, plurals.
  */
 class L10nCatalogTest extends TestCase
 {
@@ -71,8 +71,8 @@ class L10nCatalogTest extends TestCase
 
 	public function testPolishNotifierPluralHasThreeForms(): void
 	{
-		$key = '_LogCheck found %n new error_::_LogCheck found %n new errors_';
-		$email = '_LogCheck: %n new error_::_LogCheck: %n new errors_';
+		$key = '_HealthCheck found %n new error_::_HealthCheck found %n new errors_';
+		$email = '_HealthCheck: %n new error_::_HealthCheck: %n new errors_';
 		$pl = json_decode((string)file_get_contents($this->root . '/l10n/pl.json'), true, 512, JSON_THROW_ON_ERROR);
 		self::assertCount(3, $pl['translations'][$key]);
 		self::assertCount(3, $pl['translations'][$email]);

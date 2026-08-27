@@ -7,7 +7,7 @@ namespace OCA\LogCheck\Tests\Unit\Architecture;
 use PHPUnit\Framework\TestCase;
 
 /**
- * Design-system chrome contract — LogCheck must match AZC/DeskCheck shell patterns.
+ * Design-system chrome contract — HealthCheck must match AZC/DeskCheck shell patterns.
  */
 class DesignSystemChromeTest extends TestCase
 {

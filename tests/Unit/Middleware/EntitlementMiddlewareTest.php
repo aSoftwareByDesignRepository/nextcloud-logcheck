@@ -70,7 +70,7 @@ class EntitlementMiddlewareTest extends TestCase
 		self::assertSame('admin', $user->getUID());
 	}
 
-	public function testIgnoresNonLogCheckControllers(): void
+	public function testIgnoresNonHealthCheckControllers(): void
 	{
 		$access = $this->createMock(AccessService::class);
 		$access->expects(self::never())->method('assertEntitled');

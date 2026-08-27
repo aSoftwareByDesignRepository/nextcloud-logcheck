@@ -133,7 +133,7 @@
 			} else if (status.watch_enabled && status.last_check_at) {
 				desc.textContent = t('logcheck', 'Last check') + ': ' + formatLastCheck(status.last_check_at);
 			} else {
-				desc.textContent = t('logcheck', 'When on, LogCheck checks for new errors in the background.');
+				desc.textContent = t('logcheck', 'When on, HealthCheck checks for new errors in the background.');
 			}
 		}
 		if (status.settings_version) {

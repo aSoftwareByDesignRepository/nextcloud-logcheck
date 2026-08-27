@@ -7,4 +7,3 @@
 /playwright-report/
 /.infection/
 *.original
-composer.lock

@@ -1,6 +1,6 @@
 <?php
 /**
- * LogCheck sidebar — Check-family chrome (SnackCheck / DeskCheck parity).
+ * HealthCheck sidebar — Check-family chrome (SnackCheck / DeskCheck parity).
  *
  * @var array $_
  * @var \OCP\IL10N $l

@@ -1,5 +1,18 @@
 # Changelog
 
+## 1.3.20 — 2026-08-27
+
+- Security: record delivery as sent even if pending markSent loses claim_gen (reclaim duplicate HTTP)
+- Reliability: pin watcher_node when watch is turned on; clear on disable (topology gate before first run)
+- Reliability: patchRuntime retries with backoff under contended settings saves
+- Audit: email recipient list changes (count only, no addresses)
+- UX: clearer Watching section heading and help text on Home
+- Brand: replace SnackCheck fridge icon with HealthCheck status ring + heartbeat (`app.svg`, `app-dark.svg`)
+
+## 1.3.19 — 2026-08-27
+
+- Brand: App Store listing name and navigation match the UI — **HealthCheck** everywhere users see it (technical app id remains `logcheck`)
+
 ## 1.3.18 — 2026-08-27
 
 - Security: full log download is Nextcloud system admin only (App Admins keep in-app viewer/search)
@@ -74,7 +87,7 @@
 
 - Fix dead “Check again” on the watch status card (bind all `data-lck-action="check-again"`)
 - Re-enable & test for Slack and webhook when auto-disabled (not only email)
-- Hook LogCheck error toasts into “Report this problem”
+- Hook HealthCheck error toasts into “Report this problem”
 - E2E: exhaustive shipped-control smoke (`e2e/controls.spec.js`)
 
 
@@ -100,7 +113,7 @@
 
 ## 1.3.2 — 2026-08-26
 
-- Consolidate HealthCheck + LogCheck planning into one CORE (`planning/app-ideas/logcheck` v0.8.0)
+- Consolidate HealthCheck + HealthCheck planning into one CORE (`planning/app-ideas/logcheck` v0.8.0)
 - Jobs health card: Open admin settings CTA when unhealthy
 - Health l10n coverage for summary / free-space / admin CTA strings
 
@@ -120,7 +133,7 @@
 
 ## 1.2.0 — 2026-08-26
 
-- **Multiple log files:** pick the current log or older copies (`.1` … `.50`, LogCheck start-fresh archives) in the same folder
+- **Multiple log files:** pick the current log or older copies (`.1` … `.50`, HealthCheck start-fresh archives) in the same folder
 - View/search older copies without changing alert watching (still the current file only)
 - System admins can remove an older copy with typed `DELETE_COPY` confirmation
 - Basename allowlist + realpath jail (NN-17); no client-supplied paths

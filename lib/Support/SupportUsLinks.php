@@ -19,7 +19,7 @@ final class SupportUsLinks
 	public const SITE_ORIGIN = 'https://nextcloud.software-by-design.de';
 	public const VENDOR_NAME = 'Software by Design GbR';
 
-	private string $appDisplayName = 'LogCheck';
+	private string $appDisplayName = 'HealthCheck';
 
 	public function sponsorsUrl(): string
 	{
@@ -34,8 +34,8 @@ final class SupportUsLinks
 	public function enterpriseMailto(string $languageCode): string
 	{
 		$subject = $this->isGermanLocale($languageCode)
-			? 'LogCheck: Enterprise-Anfrage'
-			: 'LogCheck: enterprise inquiry';
+			? 'HealthCheck: Enterprise-Anfrage'
+			: 'HealthCheck: enterprise inquiry';
 		return 'mailto:' . self::CONTACT_EMAIL . '?subject=' . rawurlencode($subject);
 	}
 

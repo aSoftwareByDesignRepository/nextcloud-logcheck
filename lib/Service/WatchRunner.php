@@ -61,7 +61,7 @@ final class WatchRunner
 			$runtime = is_array($settings['runtime'] ?? null) ? $settings['runtime'] : [];
 			// Can't watch must mean no processing — UI/Health already surface topology mismatch.
 			if ($this->topologyGuard->isMismatch($runtime)) {
-				$topoMsg = 'LogCheck noticed a different server. Multi-server setups need one shared log file.';
+				$topoMsg = 'HealthCheck noticed a different server. Multi-server setups need one shared log file.';
 				$this->settingsService->patchRuntime([
 					'last_run_at' => time(),
 					'last_run_ok' => false,
@@ -195,7 +195,7 @@ final class WatchRunner
 
 			return ['ok' => true, 'continuation' => $continuation];
 		} catch (\Throwable $e) {
-			$this->logger->error('LogCheck watch run failed', ['app' => 'logcheck', 'exception' => $e]);
+			$this->logger->error('HealthCheck watch run failed', ['app' => 'logcheck', 'exception' => $e]);
 			$this->settingsService->patchRuntime([
 				'last_run_at' => time(),
 				'last_run_ok' => false,

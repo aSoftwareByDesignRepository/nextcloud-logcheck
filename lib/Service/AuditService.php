@@ -35,7 +35,7 @@ final class AuditService
 				$safe[$k] = $v;
 			}
 		}
-		$message = sprintf('LogCheck %s by %s %s', $action, $actorUid, json_encode($safe, JSON_UNESCAPED_UNICODE));
+		$message = sprintf('HealthCheck %s by %s %s', $action, $actorUid, json_encode($safe, JSON_UNESCAPED_UNICODE));
 		// OCP signature: (string $logMessage, array $parameters = [], bool $obfuscateParameters = false).
 		// Never pass a bool as the 2nd argument — that TypeErrors and aborts the caller (settings save).
 		$this->dispatcher->dispatchTyped(new CriticalActionPerformedEvent($message, []));

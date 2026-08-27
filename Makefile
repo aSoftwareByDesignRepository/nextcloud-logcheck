@@ -1,4 +1,4 @@
-# Makefile for LogCheck (logcheck) app release
+# Makefile for HealthCheck (logcheck) app release
 
 app_name = logcheck
 build_dir = build

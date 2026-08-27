@@ -3,7 +3,7 @@
 declare(strict_types=1);
 
 /**
- * Real critical-path mutation runner for LogCheck.
+ * Real critical-path mutation runner for HealthCheck.
  *
  * 1) Static ban checks (Process::, Channel file_get_contents, Access open, jargon).
  * 2) Apply known-bad source mutations in place, run targeted PHPUnit, EXPECT FAILURE, restore.
@@ -696,7 +696,7 @@ function mutants(string $root): array
 			'file' => $root . '/lib/Service/ChannelDispatcher.php',
 			'search' => 'if ($this->deliveryStore->hasSent($row[\'event_id\'], $channel)) {
 				if (!$this->pendingStore->markSent($row[\'event_id\'], $channel, $claimGen)) {
-					$this->logger->warning(\'LogCheck markSent lost claim generation (already delivered)\', [
+					$this->logger->warning(\'HealthCheck markSent lost claim generation (already delivered)\', [
 						\'app\' => \'logcheck\',
 						\'channel\' => $channel,
 						\'event_id\' => $row[\'event_id\'],
@@ -708,6 +708,29 @@ function mutants(string $root): array
 				continue;
 			}',
 			'filter' => 'ChannelDispatcherTest::testAlreadySentSkipsOutboundAndCompletesPending',
+		],
+		[
+			'name' => 'ChannelDispatcher skips delivery record when markSent loses',
+			'file' => $root . '/lib/Service/ChannelDispatcher.php',
+			'search' => '$this->send($channel, $row[\'payload\'], $settings);
+				// Always record outbound success first so a reclaimer cannot HTTP again
+				// even if this claim_gen lost the race for pending markSent (LCK-01).
+				$this->deliveryStore->record($row[\'event_id\'], $channel, \'sent\');
+				if (!$this->pendingStore->markSent($row[\'event_id\'], $channel, $claimGen)) {
+					$this->logger->warning(\'HealthCheck markSent lost claim generation (delivery already recorded)\', [
+						\'app\' => \'logcheck\',
+						\'channel\' => $channel,
+						\'event_id\' => $row[\'event_id\'],
+					]);
+				}
+				$this->channelStateStore->recordSuccess($channel);',
+			'replace' => '$this->send($channel, $row[\'payload\'], $settings);
+				if (!$this->pendingStore->markSent($row[\'event_id\'], $channel, $claimGen)) {
+					continue;
+				}
+				$this->deliveryStore->record($row[\'event_id\'], $channel, \'sent\');
+				$this->channelStateStore->recordSuccess($channel);',
+			'filter' => 'ChannelDispatcherTest::testSuccessfulSendRecordsDeliveryEvenIfMarkSentLost',
 		],
 		[
 			'name' => 'LogFileService resolveDownload skips NC admin check',

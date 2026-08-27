@@ -131,6 +131,20 @@
 	box-sizing: border-box;
 }
 
+#content.app-logcheck .lck-status-card__title {
+	margin: 0 0 var(--lck-space-2);
+	font-size: var(--lck-fs-lg, 1.125rem);
+	font-weight: 600;
+	line-height: 1.3;
+	color: var(--lck-text);
+}
+
+#content.app-logcheck .lck-status-card__lead {
+	margin: 0 0 var(--lck-space-4);
+	max-width: 40rem;
+	line-height: 1.45;
+}
+
 #content.app-logcheck .lck-status-card__actions {
 	display: flex;
 	flex-wrap: wrap;

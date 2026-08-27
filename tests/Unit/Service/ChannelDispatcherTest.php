@@ -180,7 +180,8 @@ class ChannelDispatcherTest extends TestCase
 		], 'owner-1');
 	}
 
-	public function testLostMarkSentDoesNotRecordDeliverySuccess(): void
+	/** Successful outbound must record delivery even when claim_gen lost markSent (reclaim race). */
+	public function testSuccessfulSendRecordsDeliveryEvenIfMarkSentLost(): void
 	{
 		$this->pending->expects(self::exactly(2))->method('claimOne')
 			->willReturnOnConsecutiveCalls(
@@ -202,8 +203,9 @@ class ChannelDispatcherTest extends TestCase
 		$this->pending->expects(self::once())->method('markSent')
 			->with('evt-5', 'email', 5005)
 			->willReturn(false);
-		$this->delivery->expects(self::never())->method('record');
-		$this->state->expects(self::never())->method('recordSuccess');
+		$this->delivery->expects(self::once())->method('record')
+			->with('evt-5', 'email', 'sent');
+		$this->state->expects(self::once())->method('recordSuccess')->with('email');
 
 		$this->dispatcher->dispatchPending([
 			'channels' => [

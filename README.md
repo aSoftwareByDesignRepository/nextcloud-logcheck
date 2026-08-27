@@ -1,4 +1,4 @@
-# LogCheck
+# HealthCheck
 
 Watch the Nextcloud admin log and get alerted when new ERROR or FATAL lines appear — via email, Slack Incoming Webhook, generic HTTPS webhook, or in-app notifications.
 
@@ -15,7 +15,7 @@ Install from the Nextcloud App Store, or place this app in `custom_apps/logcheck
 
 ## Usage
 
-1. Open **LogCheck** as a Nextcloud admin (or a LogCheck app admin).
+1. Open **HealthCheck** as a Nextcloud admin (or a HealthCheck app admin).
 2. On Home, enter an email and choose **Send test & turn on**.
 3. Optionally configure Slack/webhook under Alerts → More ways.
 4. Open **Logs** to read the newest lines, pick older copies if present, search, copy, or (as a system admin) start a fresh log after fixing errors.

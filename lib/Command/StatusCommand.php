@@ -20,7 +20,7 @@ class StatusCommand extends Command
 	protected function configure(): void
 	{
 		$this->setName('logcheck:status')
-			->setDescription('Show LogCheck watch status');
+			->setDescription('Show HealthCheck watch status');
 	}
 
 	protected function execute(InputInterface $input, OutputInterface $output): int

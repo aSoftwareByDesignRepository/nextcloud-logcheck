@@ -31,7 +31,7 @@ final class SupportUsSectionRenderTest extends TestCase
 		self::assertStringContainsString('Enterprise inquiry', $html);
 		self::assertStringContainsString('https://github.com/sponsors/aSoftwareByDesignRepository', $html);
 		self::assertStringContainsString('mailto:info@software-by-design.de?subject=', $html);
-		self::assertStringContainsString(rawurlencode('LogCheck: enterprise inquiry'), $html);
+		self::assertStringContainsString(rawurlencode('HealthCheck: enterprise inquiry'), $html);
 		self::assertStringContainsString('noopener noreferrer', $html);
 		self::assertStringContainsString('lck-support-links', $html);
 		self::assertStringNotContainsString('PayPal', $html);
@@ -57,7 +57,7 @@ final class SupportUsSectionRenderTest extends TestCase
 		]);
 		self::assertStringContainsString('Unterstützen Sie uns', $html);
 		self::assertStringContainsString('Spenden', $html);
-		self::assertStringContainsString(rawurlencode('LogCheck: Enterprise-Anfrage'), $html);
+		self::assertStringContainsString(rawurlencode('HealthCheck: Enterprise-Anfrage'), $html);
 		self::assertStringNotContainsString('PayPal', $html);
 		self::assertStringNotContainsString('Stripe', $html);
 	}

@@ -15,7 +15,7 @@ use OCP\Migration\IOutput;
 use OCP\Migration\SimpleMigrationStep;
 
 /**
- * Initial LogCheck schema (lck_* tables).
+ * Initial HealthCheck schema (lck_* tables).
  */
 class Version1000Date20260826150000 extends SimpleMigrationStep
 {

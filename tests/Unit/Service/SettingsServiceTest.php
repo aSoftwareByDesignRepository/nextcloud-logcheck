@@ -186,7 +186,7 @@ class SettingsServiceTest extends TestCase
 		$method->setAccessible(true);
 
 		$this->expectException(ForbiddenException::class);
-		$this->expectExceptionMessage('Only Nextcloud admins can change who can open LogCheck.');
+		$this->expectExceptionMessage('Only Nextcloud admins can change who can open HealthCheck.');
 		$method->invoke($svc, SettingsService::defaults(), [
 			'access' => [
 				'mode' => 'restricted',
@@ -222,6 +222,60 @@ class SettingsServiceTest extends TestCase
 				'slack' => ['enabled' => true],
 			],
 		], 'admin', true);
+	}
+
+	public function testEnablingWatchPinsWatcherNode(): void
+	{
+		$topo = $this->createMock(TopologyGuard::class);
+		$topo->method('isMismatch')->willReturn(false);
+		$topo->method('currentNodeId')->willReturn('node-abc');
+		$svc = new SettingsService(
+			$this->createMock(IDBConnection::class),
+			$this->createMock(SecretStore::class),
+			$this->createMock(MuteRegexValidator::class),
+			$this->createMock(AccessService::class),
+			$this->createMock(SsrfGuard::class),
+			$this->createMock(AuditService::class),
+			$this->createMock(\Psr\Log\LoggerInterface::class),
+			$topo,
+			$this->createMock(ChannelTestProof::class),
+		);
+		$method = new ReflectionMethod(SettingsService::class, 'mergeAndValidate');
+		$method->setAccessible(true);
+
+		$out = $method->invoke($svc, SettingsService::defaults(), [
+			'watch_enabled' => true,
+		], 'admin', true);
+		self::assertTrue($out['watch_enabled']);
+		self::assertSame('node-abc', $out['runtime']['watcher_node']);
+	}
+
+	public function testDisablingWatchClearsWatcherNode(): void
+	{
+		$topo = $this->createMock(TopologyGuard::class);
+		$topo->method('currentNodeId')->willReturn('node-abc');
+		$svc = new SettingsService(
+			$this->createMock(IDBConnection::class),
+			$this->createMock(SecretStore::class),
+			$this->createMock(MuteRegexValidator::class),
+			$this->createMock(AccessService::class),
+			$this->createMock(SsrfGuard::class),
+			$this->createMock(AuditService::class),
+			$this->createMock(\Psr\Log\LoggerInterface::class),
+			$topo,
+			$this->createMock(ChannelTestProof::class),
+		);
+		$method = new ReflectionMethod(SettingsService::class, 'mergeAndValidate');
+		$method->setAccessible(true);
+		$current = SettingsService::defaults();
+		$current['watch_enabled'] = true;
+		$current['runtime']['watcher_node'] = 'node-abc';
+
+		$out = $method->invoke($svc, $current, [
+			'watch_enabled' => false,
+		], 'admin', true);
+		self::assertFalse($out['watch_enabled']);
+		self::assertNull($out['runtime']['watcher_node']);
 	}
 
 	public function testEnableSlackAllowedWhenPreVerified(): void

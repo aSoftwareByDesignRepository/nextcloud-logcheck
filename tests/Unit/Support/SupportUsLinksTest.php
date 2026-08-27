@@ -48,8 +48,8 @@ final class SupportUsLinksTest extends TestCase
 		$en = $links->enterpriseMailto('en');
 		$de = $links->enterpriseMailto('de_DE');
 		self::assertStringStartsWith('mailto:info@software-by-design.de?subject=', $en);
-		self::assertStringContainsString(rawurlencode('LogCheck: enterprise inquiry'), $en);
-		self::assertStringContainsString(rawurlencode('LogCheck: Enterprise-Anfrage'), $de);
+		self::assertStringContainsString(rawurlencode('HealthCheck: enterprise inquiry'), $en);
+		self::assertStringContainsString(rawurlencode('HealthCheck: Enterprise-Anfrage'), $de);
 		self::assertStringNotContainsString(' ', $en);
 		self::assertStringNotContainsString("\r", $en);
 		self::assertStringNotContainsString("\n", $en);

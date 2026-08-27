@@ -3,7 +3,7 @@
 declare(strict_types=1);
 
 /**
- * List, create, or restore LogCheck upgrade backups (CLI operator interface).
+ * List, create, or restore HealthCheck upgrade backups (CLI operator interface).
  *
  * @copyright Copyright (c) 2026, Nextcloud GmbH
  * @license AGPL-3.0-or-later
@@ -24,7 +24,7 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 
 class UpgradeBackupCommand extends Command
 {
-	private const APP_LABEL = 'LogCheck';
+	private const APP_LABEL = 'HealthCheck';
 
 	public function __construct(
 		private readonly UpgradeBackupService $backupService,
@@ -36,7 +36,7 @@ class UpgradeBackupCommand extends Command
 	{
 		$this
 			->setName('logcheck:upgrade-backup')
-			->setDescription('Manage LogCheck snapshots taken before app updates.')
+			->setDescription('Manage HealthCheck snapshots taken before app updates.')
 			->setHelp(
 				<<<'HELP'
 The <info>list</info> action shows snapshots stored under
@@ -60,7 +60,7 @@ HELP
 			)
 			->addOption('latest', null, InputOption::VALUE_NONE, 'Restore the newest complete snapshot')
 			->addOption('id', null, InputOption::VALUE_REQUIRED, 'Snapshot id to restore')
-			->addOption('force', null, InputOption::VALUE_NONE, 'Required for restore — overwrites current LogCheck data')
+			->addOption('force', null, InputOption::VALUE_NONE, 'Required for restore — overwrites current HealthCheck data')
 			->addOption('no-safety-backup', null, InputOption::VALUE_NONE, 'Skip automatic pre-restore safety snapshot (not recommended)')
 			->addOption('reason', null, InputOption::VALUE_REQUIRED, 'Reason recorded in a manual snapshot', 'manual');
 	}
@@ -118,7 +118,7 @@ HELP
 
 		if (!$input->getOption('force')) {
 			$io->error([
-				'Restore overwrites all current LogCheck database rows, app config, and configured app-data folders.',
+				'Restore overwrites all current HealthCheck database rows, app config, and configured app-data folders.',
 				'Take a full server backup first, then re-run with --force.',
 			]);
 			return Command::FAILURE;

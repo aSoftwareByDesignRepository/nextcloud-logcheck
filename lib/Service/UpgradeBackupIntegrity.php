@@ -33,7 +33,7 @@ final class UpgradeBackupIntegrity
 		}
 
 		if (($manifest['appId'] ?? '') !== UpgradeBackupCatalog::APP_ID) {
-			throw new UpgradeBackupException('Snapshot app id does not match LogCheck.');
+			throw new UpgradeBackupException('Snapshot app id does not match HealthCheck.');
 		}
 
 		if (($manifest['id'] ?? '') !== $expectedSnapshotId) {

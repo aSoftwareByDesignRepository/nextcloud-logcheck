@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * Behavioural tests for LogCheck app-feedback.js (mailto + toast hook).
+ * Behavioural tests for HealthCheck app-feedback.js (mailto + toast hook).
  *
  * Run: node tests/js/app-feedback.test.cjs
  */
@@ -41,7 +41,7 @@ function boot(extra) {
 	const { doc, nodes } = makeDom();
 	const config = {
 		appId: 'logcheck',
-		appDisplayName: 'LogCheck',
+		appDisplayName: 'HealthCheck',
 		appVersion: '1.0.0',
 		feedbackEmail: 'dev@software-by-design.de',
 		githubIssuesUrl: 'https://github.com/aSoftwareByDesignRepository/nextcloud-logcheck/issues',

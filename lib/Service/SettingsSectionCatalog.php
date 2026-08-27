@@ -12,7 +12,7 @@ namespace OCA\LogCheck\Service;
 use OCP\IL10N;
 
 /**
- * Single source of truth for LogCheck settings sections (Bachus IA).
+ * Single source of truth for HealthCheck settings sections (Bachus IA).
  */
 final class SettingsSectionCatalog
 {
@@ -74,10 +74,10 @@ final class SettingsSectionCatalog
 	public function help(IL10N $l, string $section): string
 	{
 		return match ($section) {
-			'alerts' => $l->t('Choose how LogCheck notifies you when new errors appear.'),
+			'alerts' => $l->t('Choose how HealthCheck notifies you when new errors appear.'),
 			'rules' => $l->t('Pick how serious an issue must be and how often alerts arrive.'),
-			'people' => $l->t('Choose who can manage LogCheck besides Nextcloud admins.'),
-			'support' => $l->t('Help keep LogCheck free — donations and enterprise contact.'),
+			'people' => $l->t('Choose who can manage HealthCheck besides Nextcloud admins.'),
+			'support' => $l->t('Help keep HealthCheck free — donations and enterprise contact.'),
 			default => '',
 		};
 	}

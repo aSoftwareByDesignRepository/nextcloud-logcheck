@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  SPDX-FileCopyrightText: 2026 Alexander Maeule <info@software-by-design.de>
+  SPDX-License-Identifier: AGPL-3.0-or-later
+
+  HealthCheck dark or uncoloured glyph for dashboard widgets, notifications, and unified search.
+  Per OCP Dashboard IIconWidget, icons must be black or uncoloured; clients apply
+  background invert when the UI is dark. Same geometry as app.svg.
+-->
+<svg xmlns="http://www.w3.org/2000/svg" width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="#000000" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+	<circle cx="12" cy="12" r="9"/>
+	<path d="M6.5 12h2l1.5-4 2.5 8 2-4H17.5"/>
+</svg>

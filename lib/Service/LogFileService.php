@@ -554,7 +554,7 @@ final class LogFileService
 		$owner = $this->leaseOwner('rotate', $uid);
 		if (!$this->leaseService->acquire($owner)) {
 			throw new ValidationException(
-				'LogCheck is busy checking the log. Try again in a moment.',
+				'HealthCheck is busy checking the log. Try again in a moment.',
 				[],
 				'LCK_BUSY',
 			);
@@ -632,7 +632,7 @@ final class LogFileService
 		$owner = $this->leaseOwner('delete', $uid);
 		if (!$this->leaseService->acquire($owner)) {
 			throw new ValidationException(
-				'LogCheck is busy checking the log. Try again in a moment.',
+				'HealthCheck is busy checking the log. Try again in a moment.',
 				[],
 				'LCK_BUSY',
 			);

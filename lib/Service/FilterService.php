@@ -38,7 +38,7 @@ final class FilterService
 			return ['matched' => false, 'muted' => false];
 		}
 
-		// Always mute LogCheck own noise (NN-04)
+		// Always mute HealthCheck own noise (NN-04)
 		if ($app === Application::APP_ID || $app === 'logcheck') {
 			return ['matched' => false, 'muted' => true];
 		}

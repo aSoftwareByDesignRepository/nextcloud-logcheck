@@ -16,7 +16,7 @@ $supportPageOk = $supportPageUrl !== ''
 ?>
 <section class="lck-support" aria-labelledby="lck-support-title" aria-describedby="lck-support-intro">
 	<h2 id="lck-support-title"><?php p($l->t('Support us')); ?></h2>
-	<p id="lck-support-intro"><?php p($l->t('LogCheck is free. If it helps you, you can support development.')); ?></p>
+	<p id="lck-support-intro"><?php p($l->t('HealthCheck is free. If it helps you, you can support development.')); ?></p>
 
 	<div class="lck-support__block" role="region" aria-labelledby="lck-support-donate-title">
 		<h3 id="lck-support-donate-title"><?php p($l->t('Donate')); ?></h3>

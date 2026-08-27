@@ -108,7 +108,7 @@ final class PayloadBuilder
 						'count' => 1,
 						'level' => 3,
 						'app' => 'logcheck',
-						'sample_message' => 'LogCheck test alert',
+						'sample_message' => 'HealthCheck test alert',
 					],
 				],
 			],

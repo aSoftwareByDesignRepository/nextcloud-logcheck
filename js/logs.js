@@ -257,7 +257,7 @@
 			} catch (e) {}
 		} else if (res.status === 404) {
 			data = {
-				message: t('This log action is not available yet. Reload the page. If it still fails, disable and re-enable LogCheck, then try again.')
+				message: t('This log action is not available yet. Reload the page. If it still fails, disable and re-enable HealthCheck, then try again.')
 			};
 		} else if (res.status === 401 || res.status === 403) {
 			data = { message: t('Not authorized.') };
@@ -285,7 +285,7 @@
 			} catch (e) {}
 		} else if (res.status === 404) {
 			data = {
-				message: t('This log action is not available yet. Reload the page. If it still fails, disable and re-enable LogCheck, then try again.')
+				message: t('This log action is not available yet. Reload the page. If it still fails, disable and re-enable HealthCheck, then try again.')
 			};
 		}
 		return { status: res.status, data: data };
@@ -958,7 +958,7 @@
 	async function downloadFullFile() {
 		var u = urls();
 		if (!u.apiLogDownload) {
-			toastErr(t('This log action is not available yet. Reload the page. If it still fails, disable and re-enable LogCheck, then try again.'));
+			toastErr(t('This log action is not available yet. Reload the page. If it still fails, disable and re-enable HealthCheck, then try again.'));
 			return;
 		}
 		var file = selectedFile();
@@ -982,7 +982,7 @@
 					}
 				} catch (e) {}
 			} else if (res.status === 404) {
-				errMsg = t('This log action is not available yet. Reload the page. If it still fails, disable and re-enable LogCheck, then try again.');
+				errMsg = t('This log action is not available yet. Reload the page. If it still fails, disable and re-enable HealthCheck, then try again.');
 			}
 			toastErr(errMsg);
 			return;

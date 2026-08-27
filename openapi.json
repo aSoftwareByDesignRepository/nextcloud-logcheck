@@ -1,7 +1,7 @@
 {
   "openapi": "3.0.3",
   "info": {
-    "title": "LogCheck HTTP API",
+    "title": "HealthCheck HTTP API",
     "version": "1.0.0",
     "description": "Session-authenticated JSON API for entitled operators (Nextcloud system admin or App Admin). CSRF requesttoken required on mutating methods."
   },

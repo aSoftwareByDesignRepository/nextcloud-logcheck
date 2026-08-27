@@ -17,7 +17,7 @@ use OCP\IURLGenerator;
 use OCP\L10N\IFactory;
 
 /**
- * Maps LogCheck StatusService → Health card. Never green when can't watch / topology bad /
+ * Maps HealthCheck StatusService → Health card. Never green when can't watch / topology bad /
  * never ran a check yet.
  */
 final class LogHealthProbe implements HealthProbeInterface

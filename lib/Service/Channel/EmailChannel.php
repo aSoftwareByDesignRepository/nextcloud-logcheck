@@ -26,8 +26,8 @@ final class EmailChannel
 		}
 		$total = (int)($payload['total_matched'] ?? 0);
 		$subject = $this->l10n->n(
-			'LogCheck: %n new error',
-			'LogCheck: %n new errors',
+			'HealthCheck: %n new error',
+			'HealthCheck: %n new errors',
 			$total
 		);
 		$body = $this->formatBody($payload);
@@ -42,7 +42,7 @@ final class EmailChannel
 	private function formatBody(array $payload): string
 	{
 		$lines = [];
-		$lines[] = 'LogCheck alert';
+		$lines[] = 'HealthCheck alert';
 		$lines[] = 'Total matched: ' . (int)($payload['total_matched'] ?? 0);
 		$lines[] = 'Total muted: ' . (int)($payload['total_muted'] ?? 0);
 		if (!empty($payload['truncated'])) {

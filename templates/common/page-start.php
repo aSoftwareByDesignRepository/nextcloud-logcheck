@@ -1,6 +1,6 @@
 <?php
 /**
- * LogCheck page chrome — design-system / ArbeitszeitCheck shell parity.
+ * HealthCheck page chrome — design-system / ArbeitszeitCheck shell parity.
  *
  * @var array $_
  * @var \OCP\IL10N $l
@@ -9,7 +9,7 @@
 use OCA\LogCheck\Service\IconCatalog;
 
 $pageId = (string)($_['pageId'] ?? 'home');
-$pageTitle = (string)($_['pageTitle'] ?? $l->t('LogCheck'));
+$pageTitle = (string)($_['pageTitle'] ?? $l->t('HealthCheck'));
 $pageHelp = (string)($_['pageHelp'] ?? '');
 $roleLabel = (string)($_['roleLabel'] ?? $l->t('Member'));
 $urls = $_['urls'] ?? [];

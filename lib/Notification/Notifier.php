@@ -26,7 +26,7 @@ class Notifier implements INotifier
 
 	public function getName(): string
 	{
-		return $this->l10nFactory->get(Application::APP_ID)->t('LogCheck');
+		return $this->l10nFactory->get(Application::APP_ID)->t('HealthCheck');
 	}
 
 	public function prepare(INotification $notification, string $languageCode): INotification
@@ -48,12 +48,12 @@ class Notifier implements INotifier
 				default => $channel,
 			};
 			$notification->setParsedSubject(
-				$l->t('LogCheck paused %s alerts after repeated failures. Re-enable & test in Alerts.', [$label])
+				$l->t('HealthCheck paused %s alerts after repeated failures. Re-enable & test in Alerts.', [$label])
 			);
 		} elseif ($subject === 'alert') {
 			$count = (int)($params['count'] ?? 0);
 			$notification->setParsedSubject(
-				$l->n('LogCheck found %n new error', 'LogCheck found %n new errors', $count)
+				$l->n('HealthCheck found %n new error', 'HealthCheck found %n new errors', $count)
 			);
 		} else {
 			throw new UnknownNotificationException();

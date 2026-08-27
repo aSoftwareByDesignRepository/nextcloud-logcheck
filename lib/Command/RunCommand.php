@@ -20,7 +20,7 @@ class RunCommand extends Command
 	protected function configure(): void
 	{
 		$this->setName('logcheck:run')
-			->setDescription('Run one LogCheck watch iteration');
+			->setDescription('Run one HealthCheck watch iteration');
 	}
 
 	protected function execute(InputInterface $input, OutputInterface $output): int

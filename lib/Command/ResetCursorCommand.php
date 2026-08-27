@@ -22,7 +22,7 @@ class ResetCursorCommand extends Command
 	protected function configure(): void
 	{
 		$this->setName('logcheck:reset-cursor')
-			->setDescription('Reset LogCheck log position to end of file');
+			->setDescription('Reset HealthCheck log position to end of file');
 	}
 
 	protected function execute(InputInterface $input, OutputInterface $output): int

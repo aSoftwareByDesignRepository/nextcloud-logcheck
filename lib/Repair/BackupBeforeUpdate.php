@@ -3,7 +3,7 @@
 declare(strict_types=1);
 
 /**
- * Pre-migration repair step: snapshot LogCheck data before schema migrations run.
+ * Pre-migration repair step: snapshot HealthCheck data before schema migrations run.
  *
  * Registered under {@see info.xml} `<repair-steps><pre-migration>` so every
  * `occ app:update projectcheck` and app reinstall over an existing version creates
@@ -29,26 +29,26 @@ final class BackupBeforeUpdate implements IRepairStep
 
 	public function getName(): string
 	{
-		return 'Back up LogCheck data before update migrations';
+		return 'Back up HealthCheck data before update migrations';
 	}
 
 	public function run(IOutput $output): void
 	{
 		if (!$this->backupService->hasDataToBackup()) {
-			$output->info('LogCheck: no existing tables to back up (fresh install); skipping pre-update snapshot.');
+			$output->info('HealthCheck: no existing tables to back up (fresh install); skipping pre-update snapshot.');
 			return;
 		}
 
 		try {
 			$result = $this->backupService->createSnapshot('pre-migration');
 		} catch (UpgradeBackupException $e) {
-			$output->warning('LogCheck: pre-update backup failed: ' . $e->getMessage());
+			$output->warning('HealthCheck: pre-update backup failed: ' . $e->getMessage());
 			throw $e;
 		}
 
 		$tableCount = count($result['manifest']['tables'] ?? []);
 		$output->info(sprintf(
-			'LogCheck: pre-update backup created (%s, %d table(s)). '
+			'HealthCheck: pre-update backup created (%s, %d table(s)). '
 			. 'Restore with `occ logcheck:upgrade-backup restore --latest --force` if needed.',
 			$result['id'],
 			$tableCount,

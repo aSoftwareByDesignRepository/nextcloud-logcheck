@@ -24,7 +24,7 @@ final class UpgradeBackupIntegrationTest extends TestCase
 	public function testCreateListAndRestoreRoundTrip(): void
 	{
 		if (!$this->db->tableExists('lck_accumulator')) {
-			self::markTestSkipped('LogCheck tables not present in this instance.');
+			self::markTestSkipped('HealthCheck tables not present in this instance.');
 		}
 
 		$before = $this->countRows('lck_accumulator');

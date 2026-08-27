@@ -11,12 +11,12 @@ final class AppFeedbackLinksTest extends TestCase
 {
 	public function testProblemMailtoUsesDevInboxAndEncodedSubject(): void
 	{
-		$links = new AppFeedbackLinks('logcheck', 'LogCheck', '1.2.3');
+		$links = new AppFeedbackLinks('logcheck', 'HealthCheck', '1.2.3');
 		$en = $links->problemMailto(['pageUrl' => '/apps/logcheck/today'], 'en');
 		$de = $links->problemMailto(['pageUrl' => '/apps/logcheck/today'], 'de');
 		self::assertStringStartsWith('mailto:dev@software-by-design.de?subject=', $en);
-		self::assertStringContainsString(rawurlencode('LogCheck: Problem report'), $en);
-		self::assertStringContainsString(rawurlencode('LogCheck: Fehlermeldung'), $de);
+		self::assertStringContainsString(rawurlencode('HealthCheck: Problem report'), $en);
+		self::assertStringContainsString(rawurlencode('HealthCheck: Fehlermeldung'), $de);
 		self::assertStringContainsString('body=', $en);
 		self::assertStringNotContainsString("\n", $en);
 		self::assertStringNotContainsString('info@software-by-design.de', $en);
@@ -24,14 +24,14 @@ final class AppFeedbackLinksTest extends TestCase
 
 	public function testIdeaMailtoUsesFeedbackSubject(): void
 	{
-		$links = new AppFeedbackLinks('logcheck', 'LogCheck');
+		$links = new AppFeedbackLinks('logcheck', 'HealthCheck');
 		$href = $links->ideaMailto([], 'de');
-		self::assertStringContainsString(rawurlencode('LogCheck: Feedback'), $href);
+		self::assertStringContainsString(rawurlencode('HealthCheck: Feedback'), $href);
 	}
 
 	public function testGithubIssuesUrlIsPublicVendorRepo(): void
 	{
-		$links = new AppFeedbackLinks('logcheck', 'LogCheck');
+		$links = new AppFeedbackLinks('logcheck', 'HealthCheck');
 		self::assertSame(
 			'https://github.com/aSoftwareByDesignRepository/nextcloud-logcheck/issues',
 			$links->githubIssuesUrl()
@@ -40,7 +40,7 @@ final class AppFeedbackLinksTest extends TestCase
 
 	public function testSanitizePageUrlStripsCredentialQueryKeys(): void
 	{
-		$links = new AppFeedbackLinks('logcheck', 'LogCheck');
+		$links = new AppFeedbackLinks('logcheck', 'HealthCheck');
 		$clean = $links->sanitizePageUrl('https://cloud.example/apps/logcheck/x?token=abc&keep=1&password=no');
 		self::assertStringContainsString('keep=1', $clean);
 		self::assertStringNotContainsString('token=', $clean);
@@ -56,14 +56,14 @@ final class AppFeedbackLinksTest extends TestCase
 
 	public function testSanitizePageUrlStripsNextcloudUpgradeAckQueryKey(): void
 	{
-		$links = new AppFeedbackLinks('logcheck', 'LogCheck');
+		$links = new AppFeedbackLinks('logcheck', 'HealthCheck');
 		$noisy = '/apps/logcheck/?IKnowThatThisIsABigInstanceAndTheUpdateRequestCouldRunIntoATimeoutAndHowToRestoreABackup=IAmSuperSureToDoThis';
 		self::assertSame('/apps/logcheck/', $links->sanitizePageUrl($noisy));
 	}
 
 	public function testMailtoBodyOmitsIdentityAndRejectsUnsafeErrorCodes(): void
 	{
-		$links = new AppFeedbackLinks('logcheck', 'LogCheck', '9.9.9');
+		$links = new AppFeedbackLinks('logcheck', 'HealthCheck', '9.9.9');
 		$href = $links->problemMailto([
 			'errorCode' => 'CONFLICT',
 			'pageUrl' => '/apps/logcheck/',
@@ -87,7 +87,7 @@ final class AppFeedbackLinksTest extends TestCase
 
 	public function testForLocalePayload(): void
 	{
-		$links = new AppFeedbackLinks('logcheck', 'LogCheck', '1.0.0');
+		$links = new AppFeedbackLinks('logcheck', 'HealthCheck', '1.0.0');
 		$payload = $links->forLocale('de', ['pageUrl' => '/apps/logcheck/']);
 		self::assertSame('dev@software-by-design.de', $payload['feedbackEmail']);
 		self::assertStringStartsWith('mailto:dev@software-by-design.de', $payload['problemMailto']);

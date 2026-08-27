@@ -8,7 +8,7 @@ final class UnsupportedBackendException extends \RuntimeException
 {
 	public function __construct(
 		private readonly string $logType,
-		string $message = 'LogCheck only supports file-based logging.',
+		string $message = 'HealthCheck only supports file-based logging.',
 		int $code = 0,
 		?\Throwable $previous = null,
 	) {

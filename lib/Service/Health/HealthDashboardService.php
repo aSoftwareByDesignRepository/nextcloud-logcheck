@@ -85,7 +85,7 @@ final class HealthDashboardService
 			try {
 				$out[] = $probe->probe()->toArray();
 			} catch (\Throwable $e) {
-				$this->logger->warning('LogCheck health probe failed', [
+				$this->logger->warning('HealthCheck health probe failed', [
 					'app' => 'logcheck',
 					'probe' => $probe->id(),
 					'exception' => $e,

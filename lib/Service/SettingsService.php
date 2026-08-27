@@ -212,7 +212,9 @@ final class SettingsService
 	 */
 	public function patchRuntime(array $runtimePatch): void
 	{
-		for ($attempt = 0; $attempt < 8; $attempt++) {
+		// More attempts + backoff under admin save storms (LCK-03).
+		$maxAttempts = 16;
+		for ($attempt = 0; $attempt < $maxAttempts; $attempt++) {
 			$loaded = $this->load();
 			$version = $loaded['version'];
 			$settings = $loaded['settings'];
@@ -227,12 +229,13 @@ final class SettingsService
 			if ($qb->executeStatement() === 1) {
 				return;
 			}
-			// Contended with admin save — reload and retry.
-			usleep(10000);
+			// Contended with admin save — reload and retry with short exponential backoff.
+			usleep(min(80000, 5000 * (1 << min($attempt, 4))));
 		}
 		// Zeus SF: never fail silently forever — operators need a signal.
-		$this->logger->warning('LogCheck patchRuntime gave up after contended settings writes', [
+		$this->logger->warning('HealthCheck patchRuntime gave up after contended settings writes', [
 			'app' => 'logcheck',
+			'attempts' => $maxAttempts,
 		]);
 	}
 
@@ -273,23 +276,30 @@ final class SettingsService
 
 		if (isset($input['access']) && is_array($input['access'])) {
 			if (!$isNcAdmin) {
-				throw new ForbiddenException('Only Nextcloud admins can change who can open LogCheck.');
+				throw new ForbiddenException('Only Nextcloud admins can change who can open HealthCheck.');
 			}
 			$out['access'] = $this->accessService->normalizeAccess($input['access']);
 		}
 
 		if (array_key_exists('watch_enabled', $input)) {
 			$wantOn = (bool)$input['watch_enabled'];
+			$runtime = is_array($out['runtime'] ?? null) ? $out['runtime'] : [];
 			if ($wantOn) {
-				$runtime = is_array($out['runtime'] ?? null) ? $out['runtime'] : [];
 				if ($this->topologyGuard->isMismatch($runtime)) {
 					throw new ValidationException(
-						'LogCheck noticed a different server. Multi-server setups need one shared log file.',
+						'HealthCheck noticed a different server. Multi-server setups need one shared log file.',
 						['watch_enabled' => 'Not supported on this server layout.'],
 						'LCK_UNSUPPORTED_TOPOLOGY'
 					);
 				}
+				// Pin this node immediately (not only after first successful run) so other
+				// app servers hit Can't watch before sharing the cursor (LCK-02).
+				$runtime['watcher_node'] = $this->topologyGuard->currentNodeId();
+			} else {
+				// Clear pin on disable so a deliberate host move can re-enable cleanly.
+				$runtime['watcher_node'] = null;
 			}
+			$out['runtime'] = $runtime;
 			$out['watch_enabled'] = $wantOn;
 		}
 
@@ -436,7 +446,7 @@ final class SettingsService
 					}
 					if (!isset($entitled[$uid])) {
 						throw new ValidationException(
-							'Notification recipients must be LogCheck operators.',
+							'Notification recipients must be HealthCheck operators.',
 							['channels.notification.recipient_uids' => 'Only entitled operators can receive notifications.'],
 							'LCK_VALIDATION'
 						);
@@ -683,6 +693,14 @@ final class SettingsService
 		}
 		if (($before['mutes'] ?? null) !== ($after['mutes'] ?? null)) {
 			$this->auditService->log($actorUid, 'mutes_changed', ['count' => count($after['mutes'] ?? [])]);
+		}
+		$beforeRecipients = $before['channels']['email']['recipients'] ?? [];
+		$afterRecipients = $after['channels']['email']['recipients'] ?? [];
+		if ($beforeRecipients !== $afterRecipients) {
+			// Count only — never log addresses (PII).
+			$this->auditService->log($actorUid, 'email_recipients_changed', [
+				'count' => count(array_values(array_filter($afterRecipients, 'is_string'))),
+			]);
 		}
 	}
 }
