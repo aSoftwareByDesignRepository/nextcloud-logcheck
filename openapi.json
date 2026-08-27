@@ -1,0 +1,317 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "LogCheck HTTP API",
+    "version": "1.0.0",
+    "description": "Session-authenticated JSON API for entitled operators (Nextcloud system admin or App Admin). CSRF requesttoken required on mutating methods."
+  },
+  "servers": [
+    {
+      "url": "/apps/logcheck",
+      "description": "Nextcloud app base"
+    }
+  ],
+  "paths": {
+    "/api/status": {
+      "get": {
+        "operationId": "getStatus",
+        "summary": "Watch/backend/channel status",
+        "responses": {
+          "200": { "description": "Status DTO" },
+          "401": { "description": "Not logged in" },
+          "403": { "description": "Not entitled (LCK_FORBIDDEN)" }
+        }
+      }
+    },
+    "/api/settings": {
+      "get": {
+        "operationId": "getSettings",
+        "summary": "Settings UI DTO (secrets masked)",
+        "responses": {
+          "200": { "description": "version + settings" },
+          "403": { "description": "LCK_FORBIDDEN" }
+        }
+      },
+      "put": {
+        "operationId": "saveSettings",
+        "summary": "Optimistic-concurrency settings save",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "expected_version": { "type": "integer" },
+                  "settings": { "type": "object" }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": { "description": "Saved" },
+          "403": { "description": "LCK_FORBIDDEN" },
+          "409": { "description": "LCK_CONFLICT" },
+          "422": { "description": "Validation (e.g. LCK_CHANNEL_NOT_TESTED)" }
+        }
+      }
+    },
+    "/api/turn-on-alerts": {
+      "post": {
+        "operationId": "turnOnAlerts",
+        "summary": "Test channels then enable watch (composite)",
+        "responses": {
+          "200": { "description": "ok + status" },
+          "400": { "description": "Backend/mail/http failure" },
+          "422": { "description": "Validation or rate limit" }
+        }
+      }
+    },
+    "/api/channels/{channel}/test": {
+      "post": {
+        "operationId": "testChannel",
+        "summary": "Send a test; optional plaintext URL for slack/webhook",
+        "parameters": [
+          {
+            "name": "channel",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string", "enum": ["email", "slack", "webhook", "notification"] }
+          }
+        ],
+        "responses": {
+          "200": { "description": "ok" },
+          "400": { "description": "Delivery failed (safe message)" },
+          "422": { "description": "Validation / rate limit" }
+        }
+      }
+    },
+    "/api/channels/{channel}/reenable": {
+      "post": {
+        "operationId": "reenableChannel",
+        "summary": "Clear disabled state and run test",
+        "parameters": [
+          {
+            "name": "channel",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string" }
+          }
+        ],
+        "responses": {
+          "200": { "description": "ok" },
+          "400": { "description": "Test failed" }
+        }
+      }
+    },
+    "/api/run": {
+      "post": {
+        "operationId": "runNow",
+        "summary": "Run watch cycle now (rate-limited)",
+        "responses": {
+          "200": { "description": "ok + status" },
+          "422": { "description": "Rate limit" }
+        }
+      }
+    },
+    "/api/directory/search": {
+      "get": {
+        "operationId": "searchDirectory",
+        "summary": "Search users to add as App Admins (NC system admin only)",
+        "parameters": [
+          {
+            "name": "search",
+            "in": "query",
+            "schema": { "type": "string", "minLength": 2 }
+          }
+        ],
+        "responses": {
+          "200": { "description": "users[]" },
+          "403": { "description": "Non–NC-admin" }
+        }
+      }
+    },
+    "/api/logs/meta": {
+      "get": {
+        "operationId": "getLogMeta",
+        "summary": "Logfile metadata (path only for NC system admin)",
+        "responses": {
+          "200": { "description": "Meta DTO" },
+          "403": { "description": "LCK_FORBIDDEN" }
+        }
+      }
+    },
+    "/api/logs/files": {
+      "get": {
+        "operationId": "listLogFiles",
+        "summary": "List live logfile and allowlisted siblings (basename ids only; NN-17)",
+        "responses": {
+          "200": { "description": "live + files[]" },
+          "400": { "description": "Unsupported backend" },
+          "403": { "description": "LCK_FORBIDDEN" }
+        }
+      }
+    },
+    "/api/logs/tail": {
+      "get": {
+        "operationId": "getLogTail",
+        "summary": "Newest bounded chunk of live logfile or allowlisted sibling",
+        "parameters": [
+          {
+            "name": "file",
+            "in": "query",
+            "required": false,
+            "description": "Basename id from /api/logs/files (never a path)",
+            "schema": { "type": "string", "maxLength": 200 }
+          },
+          {
+            "name": "viewer_min_level",
+            "in": "query",
+            "required": false,
+            "description": "Viewer-only severity chip (0=All, 3=Warnings+, 4=Errors+)",
+            "schema": { "type": "integer", "minimum": 0, "maximum": 5 }
+          }
+        ],
+        "responses": {
+          "200": { "description": "lines[] + size + file + is_live + viewer_min_level + filter_active" },
+          "400": { "description": "Unsupported backend" },
+          "403": { "description": "Forbidden file id" },
+          "422": { "description": "Unreadable / rate limit" }
+        }
+      }
+    },
+    "/api/logs/before": {
+      "get": {
+        "operationId": "getLogBefore",
+        "summary": "Bounded chunk ending before a byte offset (load older)",
+        "parameters": [
+          {
+            "name": "before",
+            "in": "query",
+            "required": true,
+            "description": "Exclusive end offset (from prior from_offset)",
+            "schema": { "type": "integer", "minimum": 0 }
+          },
+          {
+            "name": "file",
+            "in": "query",
+            "required": false,
+            "description": "Basename id from /api/logs/files (never a path)",
+            "schema": { "type": "string", "maxLength": 200 }
+          },
+          {
+            "name": "viewer_min_level",
+            "in": "query",
+            "required": false,
+            "description": "Viewer-only severity chip (0=All, 3=Warnings+, 4=Errors+)",
+            "schema": { "type": "integer", "minimum": 0, "maximum": 5 }
+          }
+        ],
+        "responses": {
+          "200": { "description": "lines[] + from_offset + to_offset + viewer_min_level + filter_active" },
+          "400": { "description": "Unsupported backend" },
+          "403": { "description": "Forbidden file id" },
+          "422": { "description": "Unreadable / rate limit" }
+        }
+      }
+    },
+    "/api/logs/download": {
+      "post": {
+        "operationId": "downloadLog",
+        "summary": "Stream allowlisted logfile (CSRF-bound POST; basename id in JSON body)",
+        "responses": {
+          "200": { "description": "text/plain stream" },
+          "400": { "description": "Unsupported backend" },
+          "403": { "description": "Forbidden file id" },
+          "422": { "description": "Too large / unreadable / rate limit" }
+        }
+      }
+    },
+    "/api/logs/search": {
+      "get": {
+        "operationId": "searchLog",
+        "summary": "Literal search in recent logfile window (no regex)",
+        "parameters": [
+          {
+            "name": "q",
+            "in": "query",
+            "required": true,
+            "schema": { "type": "string", "maxLength": 200 }
+          },
+          {
+            "name": "file",
+            "in": "query",
+            "required": false,
+            "description": "Basename id from /api/logs/files (never a path)",
+            "schema": { "type": "string", "maxLength": 200 }
+          },
+          {
+            "name": "viewer_min_level",
+            "in": "query",
+            "required": false,
+            "description": "Viewer-only severity chip (0=All, 3=Warnings+, 4=Errors+)",
+            "schema": { "type": "integer", "minimum": 0, "maximum": 5 }
+          }
+        ],
+        "responses": {
+          "200": { "description": "matches[] + viewer_min_level + filter_active" },
+          "403": { "description": "Forbidden file id" },
+          "422": { "description": "Validation / rate limit" }
+        }
+      }
+    },
+    "/api/logs/start-fresh": {
+      "post": {
+        "operationId": "startFreshLog",
+        "summary": "Rename live log aside and create empty replacement (NC admin + START_FRESH)",
+        "responses": {
+          "200": { "description": "ok + archive_name" },
+          "403": { "description": "LCK_FORBIDDEN" },
+          "409": { "description": "LCK_BUSY" },
+          "422": { "description": "Confirm / permissions" }
+        }
+      }
+    },
+    "/api/logs/delete": {
+      "post": {
+        "operationId": "deleteLog",
+        "summary": "Delete live logfile (NC admin + DELETE)",
+        "responses": {
+          "200": { "description": "ok" },
+          "403": { "description": "LCK_FORBIDDEN" },
+          "409": { "description": "LCK_BUSY" },
+          "422": { "description": "Confirm / permissions" }
+        }
+      }
+    },
+    "/api/logs/delete-copy": {
+      "post": {
+        "operationId": "deleteLogCopy",
+        "summary": "Delete older allowlisted copy (NC admin + DELETE_COPY + file basename)",
+        "responses": {
+          "200": { "description": "ok" },
+          "403": { "description": "LCK_FORBIDDEN" },
+          "422": { "description": "Confirm / live file / permissions" }
+        }
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "nextcloudSession": {
+        "type": "apiKey",
+        "in": "cookie",
+        "name": "nc_session_id"
+      },
+      "requesttoken": {
+        "type": "apiKey",
+        "in": "header",
+        "name": "requesttoken"
+      }
+    }
+  },
+  "security": [
+    { "nextcloudSession": [], "requesttoken": [] }
+  ]
+}

@@ -1,0 +1,701 @@
+/* Shell chrome parity with arbeitszeitcheck (prefix dc-). */
+/* ── Skip link / live regions ─────────────────────────────── */
+.lck-skip-link {
+	min-height: var(--lck-touch, 44px);
+	position: absolute;
+	left: -9999px;
+	top: var(--lck-space-2);
+	padding: var(--lck-space-2) var(--lck-space-4);
+	background: var(--color-primary-element);
+	color: var(--color-primary-element-text);
+	border-radius: var(--lck-radius-sm);
+	z-index: 1000;
+	font-weight: 600;
+	text-decoration: none;
+}
+.lck-skip-link:focus,
+.lck-skip-link:focus-visible {
+	left: var(--lck-space-3);
+	outline: 3px solid var(--color-primary-element-text);
+	outline-offset: 2px;
+}
+
+/* ===== Skip links (AZ parity) — CRITICAL =====
+ * The nav skip link is the first child of the flex app wrapper. Without
+ * position:absolute it becomes a full-height flex column and destroys the
+ * sidebar/content layout. Hide off-screen until :focus / :focus-visible.
+ */
+#content.app-logcheck .skip-link,
+#content.app-logcheck a.lck-skip-link--nav {
+	position: absolute !important;
+	left: -9999px;
+	top: var(--lck-space-2, 8px);
+	z-index: 10000;
+	display: inline-flex;
+	align-items: center;
+	gap: 0.35rem;
+	min-height: 44px;
+	width: max-content;
+	max-width: calc(100vw - 1rem);
+	height: auto;
+	margin: 0;
+	padding: var(--lck-space-2, 8px) var(--lck-space-4, 16px);
+	flex: none;
+	align-self: flex-start;
+	box-sizing: border-box;
+	background: var(--color-primary-element);
+	color: var(--color-primary-element-text);
+	border-radius: var(--lck-radius-sm, 6px);
+	font-weight: 600;
+	text-decoration: none;
+	line-height: 1.3;
+}
+#content.app-logcheck .skip-link:focus,
+#content.app-logcheck .skip-link:focus-visible,
+#content.app-logcheck a.lck-skip-link--nav:focus,
+#content.app-logcheck a.lck-skip-link--nav:focus-visible {
+	left: 6px;
+	top: 6px;
+	outline: 3px solid var(--color-primary-element-text);
+	outline-offset: 2px;
+}
+#content.app-logcheck #logcheck-app,
+#content.app-logcheck .logcheck-app {
+	position: relative;
+}
+
+/* Buttons — AZ components.css touch targets (WCAG 2.5.5) */
+#content.app-logcheck .lck-btn,
+#content.app-logcheck .button,
+#content.app-logcheck button.button,
+#content.app-logcheck a.button {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	gap: var(--lck-space-2, 0.5rem);
+	min-height: 2.75rem;
+	min-width: 2.75rem;
+	padding: 0.625rem 1.15rem;
+	box-sizing: border-box;
+	border-radius: var(--lck-radius-md, 12px);
+	font-weight: 600;
+	line-height: 1.25;
+	text-decoration: none;
+	cursor: pointer;
+}
+#content.app-logcheck .lck-btn--sm,
+#content.app-logcheck .button.small,
+#content.app-logcheck .button--sm {
+	/* WCAG / product: touch targets ≥44×44 — never ship 36px “compact” chrome */
+	min-height: var(--lck-touch, 44px);
+	min-width: var(--lck-touch, 44px);
+	padding: 0.35rem 0.75rem;
+}
+/* ===== END AZ skip/btn parity ===== */
+
+/* ===== AZ content surfaces — cards/sections/buttons (match azc-card / azc-btn) ===== */
+#content.app-logcheck #app-content .lck-card,
+#content.app-logcheck #app-content .lck-section,
+#content.app-logcheck #app-content .lck-filter-panel {
+	background: var(--lck-bg-card, var(--color-main-background));
+	border: 1px solid var(--lck-border, var(--color-border));
+	border-radius: var(--lck-radius-md, 12px);
+	box-shadow: var(--lck-shadow-sm, 0 1px 2px color-mix(in srgb, var(--color-main-text) 8%, transparent));
+	box-sizing: border-box;
+}
+#content.app-logcheck #app-content .lck-card,
+#content.app-logcheck #app-content .lck-section {
+	padding: var(--lck-space-5, 24px);
+	margin-top: var(--lck-space-5, 24px);
+}
+#content.app-logcheck #app-content .lck-section:first-child,
+#content.app-logcheck #app-content .lck-main > .lck-section:first-of-type,
+#content.app-logcheck #app-content .lck-main > .lck-card:first-of-type,
+#content.app-logcheck #app-content .lck-main > .lck-filter-panel:first-of-type {
+	margin-top: 0;
+}
+#content.app-logcheck #app-content .lck-section__title,
+#content.app-logcheck #app-content .lck-card__title {
+	margin: 0 0 var(--lck-space-3, 12px);
+	font-size: var(--lck-fs-lg, 1.125rem);
+	font-weight: 600;
+	line-height: var(--lck-line-tight, 1.2);
+	color: var(--lck-text, var(--color-main-text));
+}
+/*
+ * Bachus / AZ parity: structured cards must match Filter panel chrome.
+ * Plain .lck-card { padding } above is (2,2,0) — without this peer rule, list
+ * headers stay inset on white and look nothing like dc-filter-panel__head.
+ */
+#content.app-logcheck #app-content .lck-card:has(.lck-card__header),
+#content.app-logcheck #app-content .lck-card:has(.lck-card__body),
+#content.app-logcheck #app-content .lck-filter-panel {
+	padding: 0;
+	overflow: hidden;
+}
+#content.app-logcheck #app-content .lck-filter-panel__head,
+#content.app-logcheck #app-content .lck-filter-panel > header,
+#content.app-logcheck #app-content .lck-card__header {
+	padding: var(--lck-space-5, 24px);
+	border-bottom: 1px solid var(--lck-border, var(--color-border));
+	background: var(--lck-bg-soft, color-mix(in srgb, var(--color-main-background) 96%, var(--color-main-text) 4%));
+}
+#content.app-logcheck #app-content .lck-card__header {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: flex-start;
+	justify-content: space-between;
+	gap: var(--lck-space-3, 12px) var(--lck-space-4, 16px);
+}
+#content.app-logcheck #app-content .lck-card__header .lck-card__title {
+	margin: 0;
+}
+#content.app-logcheck #app-content .lck-card__header .lck-card__lead {
+	margin: var(--lck-space-2, 8px) 0 0;
+	max-width: 65ch;
+	font-size: var(--lck-fs-sm, 0.875rem);
+	line-height: var(--lck-line-base, 1.5);
+	color: var(--lck-muted, var(--color-text-maxcontrast));
+}
+#content.app-logcheck #app-content .lck-card__body {
+	display: flex;
+	flex-direction: column;
+	gap: var(--lck-space-4, 16px);
+	padding: var(--lck-space-5, 24px);
+}
+#content.app-logcheck #app-content .lck-card__body--table {
+	padding: 0;
+}
+#content.app-logcheck #app-content .lck-filter-panel__form,
+#content.app-logcheck #app-content .lck-filter-panel__body,
+#content.app-logcheck #app-content .lck-filter-panel > form,
+#content.app-logcheck #app-content .lck-filter-panel > .form {
+	padding: var(--lck-space-5, 24px);
+}
+/* Body already pads — nested form must not double the inset (Claim / Assets). */
+#content.app-logcheck #app-content .lck-filter-panel__body > .lck-filter-panel__form,
+#content.app-logcheck #app-content .lck-filter-panel__body > form.lck-filter-panel__form,
+#content.app-logcheck #app-content .lck-filter-panel__body > form {
+	padding: 0;
+}
+/* Buttons — AZ azc-btn uses radius-md (12px), not sm */
+#content.app-logcheck #app-content .lck-btn,
+#content.app-logcheck #app-content .button,
+#content.app-logcheck #app-content button.button,
+#content.app-logcheck #app-content a.button {
+	border-radius: var(--lck-radius-md, 12px);
+	min-height: 2.75rem;
+	padding: 0.625rem 1.15rem;
+	font-weight: 600;
+}
+#content.app-logcheck #app-content .lck-btn--sm,
+#content.app-logcheck #app-content .button.small,
+#content.app-logcheck #app-content .button--sm {
+	border-radius: var(--lck-radius-sm, 6px);
+	min-height: 44px;
+	min-width: 44px;
+	padding: 0.35rem 0.75rem;
+}
+#content.app-logcheck #app-content .lck-table-wrap {
+	border: 1px solid var(--lck-border, var(--color-border));
+	border-radius: var(--lck-radius-md, 12px);
+	overflow: hidden;
+	background: var(--lck-bg-card, var(--color-main-background));
+}
+/* Empty states — AZ-like bordered soft panel (never page how-to guides) */
+#content.app-logcheck #app-content .lck-empty:not(.lck-page-guide),
+#content.app-logcheck #app-content .lck-empty-state {
+	border: 1px solid var(--lck-border-strong, var(--color-border));
+	border-radius: var(--lck-radius-md, 12px);
+	padding: var(--lck-space-7, 48px) var(--lck-space-5, 24px);
+	text-align: center;
+	background: var(--lck-bg-soft, transparent);
+}
+/* ===== END AZ content surfaces ===== */
+
+
+/* ===== AZ table parity (prefix dc) =====
+ * Matches arbeitszeitcheck/css/common/components.css table chrome.
+ * Covers both .lck-table and legacy .table / .grid-table.
+ */
+#content.app-logcheck .lck-table-wrap,
+#content.app-logcheck .table-container,
+#content.app-logcheck .table-responsive {
+	overflow-x: auto;
+	border: 1px solid var(--lck-border, var(--color-border));
+	border-radius: var(--lck-radius-md, 12px);
+	background-color: var(--lck-bg-card, var(--color-main-background));
+	-webkit-overflow-scrolling: touch;
+	width: 100%;
+	box-sizing: border-box;
+}
+#content.app-logcheck .lck-table,
+#content.app-logcheck .table,
+#content.app-logcheck .grid-table {
+	width: 100%;
+	border-collapse: collapse;
+	font-size: var(--lck-fs-sm, 0.875rem);
+	margin-bottom: 0;
+}
+#content.app-logcheck .lck-table thead,
+#content.app-logcheck .table thead,
+#content.app-logcheck .grid-table thead {
+	background-color: var(--color-background-dark, var(--lck-bg-stripe, transparent));
+}
+#content.app-logcheck .lck-table th,
+#content.app-logcheck .table th,
+#content.app-logcheck .grid-table th {
+	padding: var(--lck-space-3, 0.75rem) var(--lck-space-4, 1rem);
+	text-align: left;
+	font-weight: 600;
+	color: var(--lck-text, var(--color-main-text));
+	border-bottom: 1px solid var(--lck-border, var(--color-border));
+	white-space: nowrap;
+	vertical-align: middle;
+	background-color: var(--color-background-dark, var(--lck-bg-stripe, color-mix(in srgb, var(--color-main-text) 12%, transparent)));
+}
+#content.app-logcheck .lck-table td,
+#content.app-logcheck .table td,
+#content.app-logcheck .grid-table td {
+	padding: var(--lck-space-3, 0.75rem) var(--lck-space-4, 1rem);
+	border-bottom: 1px solid var(--lck-border, var(--color-border));
+	color: var(--lck-text, var(--color-main-text));
+	vertical-align: middle;
+}
+#content.app-logcheck .lck-table tbody tr:last-child td,
+#content.app-logcheck .table tbody tr:last-child td,
+#content.app-logcheck .grid-table tbody tr:last-child td {
+	border-bottom: none;
+}
+#content.app-logcheck .lck-table.table--hover tbody tr:hover,
+#content.app-logcheck .lck-table--hover tbody tr:hover,
+#content.app-logcheck .table--hover tbody tr:hover,
+#content.app-logcheck .grid-table.table--hover tbody tr:hover {
+	background-color: var(--color-background-hover);
+}
+/* ===== END AZ table parity ===== */
+
+
+.lck-sr-only {
+	position: absolute !important;
+	width: 1px !important;
+	height: 1px !important;
+	min-width: 0 !important;
+	min-height: 0 !important;
+	max-width: 1px !important;
+	max-height: 1px !important;
+	margin: -1px !important;
+	padding: 0 !important;
+	border: 0 !important;
+	overflow: hidden !important;
+	clip: rect(0 0 0 0) !important;
+	clip-path: inset(50%) !important;
+	white-space: nowrap !important;
+	inset-inline-start: 0 !important;
+	inset-block-start: 0 !important;
+}
+
+/* ── App shell ─────────────────────────────────────────────── */
+/* Sidebar alignment: see navigation.css (canonical); keep minimal guard here too */
+#content.app-logcheck #app-navigation .nav-menu a,
+#content.app-logcheck #app-navigation .nav-submenu a,
+#content.app-logcheck #app-navigation .nav-parent-toggle {
+	justify-content: flex-start;
+	text-align: left;
+}
+
+#app-content.lck-app {
+	display: flex;
+	flex-direction: column;
+	align-items: stretch;
+	text-align: left;
+	min-height: 100%;
+	background: var(--lck-bg-soft);
+}
+#app-content.lck-app #app-content-wrapper.lck-shell {
+	display: flex;
+	flex-direction: column;
+	align-items: stretch;
+	text-align: left;
+	width: 100%;
+	max-width: none;
+	margin: 0;
+	padding: var(--lck-space-5) var(--lck-space-5) var(--lck-space-7);
+	/* Notched phones: keep CTAs clear of home indicator (NC mobile) */
+	padding-left: max(var(--lck-space-5), env(safe-area-inset-left, 0px));
+	padding-right: max(var(--lck-space-5), env(safe-area-inset-right, 0px));
+	padding-bottom: max(var(--lck-space-7), env(safe-area-inset-bottom, 0px));
+	box-sizing: border-box;
+}
+#app-content.lck-app--dashboard .lck-dashboard-alerts .lck-callout {
+	margin: 0;
+}
+#app-content.lck-app #lck-main-content.lck-main,
+#app-content.lck-app #lck-main-content.lck-main {
+	flex: 1 1 auto;
+	min-width: 0;
+	display: flex;
+	flex-direction: column;
+	align-items: stretch;
+	text-align: left;
+	gap: var(--lck-space-5);
+	outline: none;
+}
+#app-content.lck-app--admin-notifications #lck-main-content,
+#app-content.lck-app--admin-settings #lck-main-content {
+	gap: var(--lck-space-4);
+}
+#lck-main-content.lck-main:focus-visible,
+#lck-main-content.lck-main:focus-visible {
+	outline: var(--lck-focus, 3px solid var(--color-primary-element));
+	outline-offset: var(--lck-focus-offset, 2px);
+}
+
+/* Heading contrast in all NC themes */
+#app-content.lck-app h1,
+#app-content.lck-app h2,
+#app-content.lck-app h3 {
+	color: var(--lck-text) !important;
+	opacity: 1 !important;
+}
+
+/* ── Header / breadcrumb ───────────────────────────────────── */
+.lck-page-header {
+	display: flex;
+	flex-direction: column;
+	gap: var(--lck-space-3);
+	margin-bottom: var(--lck-space-5);
+}
+#app-content.lck-app .lck-breadcrumb {
+	font-size: var(--lck-fs-sm);
+	line-height: var(--lck-line-tight);
+	color: var(--lck-muted);
+}
+#app-content.lck-app .lck-breadcrumb__list {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: 0;
+	margin: 0;
+	padding: 0;
+	list-style: none;
+}
+#app-content.lck-app .lck-breadcrumb__item {
+	display: inline-flex;
+	align-items: center;
+	margin: 0;
+	padding: 0;
+	list-style: none;
+	max-width: 100%;
+}
+#app-content.lck-app .lck-breadcrumb__item:not(:last-child)::after {
+	content: '/';
+	margin-inline: var(--lck-space-2);
+	color: var(--lck-muted);
+	font-weight: 400;
+	opacity: 0.65;
+	pointer-events: none;
+	user-select: none;
+}
+#app-content.lck-app .lck-breadcrumb__link {
+	color: var(--color-primary-element);
+	font-weight: 600;
+	text-decoration: none;
+	border-radius: var(--lck-radius-sm);
+	padding-block: 2px;
+}
+#app-content.lck-app .lck-breadcrumb__link:hover {
+	text-decoration: underline;
+}
+#app-content.lck-app .lck-breadcrumb__link:focus-visible {
+	outline: var(--lck-focus);
+	outline-offset: var(--lck-focus-offset);
+}
+#app-content.lck-app .lck-breadcrumb__text {
+	color: var(--lck-muted);
+	font-weight: 500;
+}
+#app-content.lck-app .lck-breadcrumb__item--current {
+	color: var(--lck-text);
+	min-width: 0;
+}
+#app-content.lck-app .lck-breadcrumb__current {
+	font-weight: 600;
+	color: var(--lck-text);
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	max-width: min(100%, 28rem);
+}
+/* Mobile-first: icon + title; actions full-width below (no 3-col squeeze at 320px) */
+.lck-page-header__main {
+	display: grid;
+	grid-template-columns: 56px minmax(0, 1fr);
+	gap: var(--lck-space-3) var(--lck-space-4);
+	align-items: start;
+}
+.lck-page-header__actions {
+	grid-column: 1 / -1;
+	justify-content: flex-start;
+}
+/* ≥768px tablet+: icon | title | actions on one row (NC tablet / desktop) */
+@media (min-width: 768px) {
+	.lck-page-header__main {
+		grid-template-columns: 56px 1fr auto;
+		gap: var(--lck-space-4);
+	}
+	.lck-page-header__actions {
+		grid-column: auto;
+		justify-content: flex-end;
+	}
+}
+.lck-page-header__icon {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 56px;
+	height: 56px;
+	border-radius: var(--lck-radius-md);
+	background: var(--lck-tint-info);
+	color: var(--color-primary-element);
+}
+.lck-page-header__icon-svg {
+	width: 28px;
+	height: 28px;
+	max-width: none;
+	stroke: currentColor;
+	fill: none;
+	color: inherit;
+	stroke-width: var(--lck-icon-stroke, 2);
+}
+.lck-page-header__text h1 {
+	margin: 0 0 var(--lck-space-1);
+	font-size: var(--lck-fs-2xl);
+	line-height: var(--lck-line-tight);
+}
+.lck-page-header__lead {
+	margin: 0;
+	color: var(--lck-muted);
+	font-size: var(--lck-fs-md);
+	line-height: var(--lck-line-base);
+	max-width: 60ch;
+}
+.lck-page-header__actions {
+	display: flex;
+	flex-wrap: wrap;
+	gap: var(--lck-space-2);
+	align-items: center;
+	/* grid-column / justify set with .lck-page-header__main (mobile-first above) */
+}
+
+/* ── Scope strip ───────────────────────────────────────────── */
+.lck-scope-strip {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: var(--lck-space-2);
+	padding: var(--lck-space-2) var(--lck-space-3);
+	border: 1px solid var(--lck-border);
+	border-radius: var(--lck-radius-sm);
+	background: var(--lck-bg-card);
+	font-size: var(--lck-fs-sm);
+}
+.lck-scope-strip--quiet {
+	padding: var(--lck-space-1) var(--lck-space-3);
+	border-style: dashed;
+	/* Never dim the whole strip — opacity tanks WCAG contrast on muted labels. */
+}
+.lck-scope-strip__label {
+	color: var(--lck-text, var(--color-main-text));
+	font-weight: 600;
+}
+.lck-scope-strip__value {
+	font-weight: 600;
+	color: var(--lck-text);
+}
+.lck-scope-strip__sep {
+	color: var(--lck-muted);
+}
+.lck-scope-strip__chip {
+	text-decoration: none;
+}
+.lck-scope-strip__select {
+	min-height: 44px;
+	min-width: min(12rem, 100%);
+	padding: 0.5rem 2.25rem 0.5rem 0.75rem;
+	border: 1px solid var(--lck-border-strong);
+	border-radius: var(--lck-radius-sm);
+	background: var(--lck-bg-card);
+	color: var(--lck-text);
+	font: inherit;
+	font-weight: 600;
+}
+.lck-scope-strip__select:focus-visible {
+	outline: 3px solid var(--color-primary-element);
+	outline-offset: 2px;
+}
+
+/* ── Buttons (dc-btn taxonomy) ──────────────────────────────── */
+.lck-btn,
+.lck-app .btn {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	gap: var(--lck-space-2);
+	min-height: 44px;
+	min-width: 44px;
+	padding: var(--lck-space-2) var(--lck-space-4);
+	border-radius: var(--lck-radius-sm);
+	font-size: var(--lck-fs-md);
+	font-weight: 600;
+	line-height: 1.2;
+	text-decoration: none;
+	cursor: pointer;
+	border: 1px solid transparent;
+	transition: background-color 0.15s ease, border-color 0.15s ease;
+}
+.lck-btn:focus-visible,
+.lck-app .btn:focus-visible {
+	outline: var(--lck-focus, 3px solid var(--color-primary-element));
+	outline-offset: var(--lck-focus-offset, 2px);
+}
+.lck-btn--primary,
+.lck-app .btn--primary {
+	background: var(--color-primary-element);
+	color: var(--color-primary-element-text);
+}
+.lck-btn--secondary,
+.lck-app .btn--secondary {
+	background: color-mix(in srgb, var(--color-main-background) 82%, var(--color-main-text) 18%);
+	color: var(--lck-text);
+	border-color: var(--lck-border);
+}
+.lck-btn--danger,
+.lck-app .btn--danger {
+	/* Solid fill — never pale --color-error tint (WCAG 1.4.3 / design-system §3.3) */
+	background: var(--lck-danger-fill);
+	color: var(--lck-danger-on-fill);
+	border-color: transparent;
+}
+.lck-btn--danger:hover,
+.lck-app .btn--danger:hover {
+	filter: brightness(0.92);
+}
+.lck-btn--danger:focus-visible,
+.lck-app .btn--danger:focus-visible {
+	filter: brightness(0.92);
+	outline: 3px solid var(--lck-danger-fill);
+	outline-offset: var(--lck-focus-offset);
+}
+.lck-btn--ghost {
+	background: transparent;
+	color: var(--lck-text);
+	border-color: transparent;
+}
+.lck-btn--sm {
+	min-height: 44px;
+	min-width: 44px;
+	padding: var(--lck-space-1) var(--lck-space-3);
+	font-size: var(--lck-fs-sm);
+}
+.lck-btn[aria-busy="true"] {
+	opacity: 0.7;
+	pointer-events: none;
+}
+
+/* Badges: css/common/badges.css (loaded after app-vanilla to override legacy rules) */
+
+/* ── Cards / callouts ──────────────────────────────────────── */
+.lck-card {
+	background: var(--lck-bg-card);
+	border: 1px solid var(--lck-border);
+	border-radius: var(--lck-radius-md);
+	padding: var(--lck-space-5);
+	box-shadow: var(--lck-shadow-sm);
+}
+#app-content.lck-app .lck-card:has(.lck-card__header),
+#app-content.lck-app .lck-card:has(.lck-card__body) {
+	padding: 0;
+}
+#app-content.lck-app .lck-card__header {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: flex-start;
+	justify-content: space-between;
+	gap: var(--lck-space-3) var(--lck-space-4);
+	padding: var(--lck-space-5);
+	border-bottom: 1px solid var(--lck-border);
+	background: var(--lck-bg-soft);
+}
+#app-content.lck-app .lck-card__header-text {
+	flex: 1 1 14rem;
+	min-width: 0;
+}
+#app-content.lck-app .lck-card__header-actions {
+	flex: 0 0 auto;
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	justify-content: flex-end;
+	gap: var(--lck-space-2);
+}
+#app-content.lck-app .lck-card__title {
+	margin: 0;
+	font-size: var(--lck-fs-lg);
+	font-weight: 600;
+	line-height: var(--lck-line-tight);
+	color: var(--lck-text);
+}
+#app-content.lck-app .lck-card__lead {
+	margin: var(--lck-space-2) 0 0;
+	max-width: 52rem;
+	font-size: var(--lck-fs-sm);
+	line-height: var(--lck-line-base);
+	color: var(--lck-muted);
+}
+#app-content.lck-app .lck-card__body {
+	display: flex;
+	flex-direction: column;
+	gap: var(--lck-space-4);
+	padding: var(--lck-space-5);
+}
+#app-content.lck-app .lck-btn .lck-btn__icon,
+#app-content.lck-app .lck-btn .lck-icon {
+	width: var(--lck-icon-md);
+	height: var(--lck-icon-md);
+	flex-shrink: 0;
+}
+#app-content.lck-app .lck-btn--sm .lck-btn__icon,
+#app-content.lck-app .lck-btn--sm .lck-icon {
+	width: var(--lck-icon-sm);
+	height: var(--lck-icon-sm);
+}
+/* Legacy card header shim (compliance/dashboard until fully migrated) */
+#app-content.lck-app .card-header--with-actions {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	justify-content: space-between;
+	gap: var(--lck-space-3) var(--lck-space-4);
+	padding: var(--lck-space-4) var(--lck-space-5);
+	margin-bottom: 0;
+	border-bottom: 1px solid var(--lck-border);
+	background: var(--lck-bg-soft);
+}
+#app-content.lck-app .card-header--with-actions .card-title {
+	margin: 0;
+	font-size: var(--lck-fs-lg);
+	font-weight: 600;
+	color: var(--lck-text);
+}
+#app-content.lck-app .card-header--with-actions .lck-btn {
+	flex-shrink: 0;
+	white-space: nowrap;
+}
+#app-content.lck-app .lck-card + .lck-card {
+	margin-top: var(--lck-space-5);
+}
+#app-content.lck-app .compliance-dashboard__status .lck-callout {
+	margin-bottom: 0;
+}
+

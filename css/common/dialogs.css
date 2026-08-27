@@ -1,0 +1,681 @@
+/* Dialog/toast/form surfaces adapted from arbeitszeitcheck components.css */
+/* ===== MODAL COMPONENTS ===== */
+
+/* Modal Backdrop */
+.modal-backdrop {
+  position: fixed;
+  inset-inline: 0;
+  inset-block-start: var(--lck-overlay-top, var(--header-height, 50px));
+  inset-block-end: 0;
+  min-height: var(--lck-overlay-height, calc(100dvh - var(--header-height, 50px)));
+  background-color: color-mix(in srgb, var(--color-main-text) 50%, transparent);
+  z-index: var(--z-modal-backdrop);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-4);
+  box-sizing: border-box;
+  /* When the modal is taller than the viewport, keep it reachable (flex + overflow). */
+  overflow-x: hidden;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+@supports (align-items: safe center) {
+  .modal-backdrop {
+    align-items: safe center;
+  }
+}
+
+/* Keep the panel from shrinking when the backdrop scrolls (flex + overflow). */
+.modal-backdrop > .modal {
+  flex-shrink: 0;
+}
+
+/* Modal */
+.modal,
+.lck-dialog {
+  background-color: var(--logcheck-color-modal-background, var(--lck-bg-card, var(--color-main-background)));
+  color: var(--logcheck-color-text-maxcontrast, var(--color-text-maxcontrast, var(--logcheck-color-text, var(--color-main-text))));
+  border: 1px solid var(--lck-border, var(--color-border));
+  border-radius: var(--lck-radius-lg, 16px);
+  box-shadow: var(--lck-shadow-md, 0 8px 24px color-mix(in srgb, var(--color-main-text) 12%, transparent));
+  max-width: 90vw;
+  max-height: 90vh;
+  max-height: 90dvh;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  z-index: var(--z-modal);
+}
+
+/* Native <dialog> must stay hidden until showModal() sets [open] */
+#content.app-logcheck dialog.lck-dialog:not([open]),
+#app-content.lck-app dialog.lck-dialog:not([open]) {
+	display: none;
+}
+
+#content.app-logcheck dialog.lck-dialog[open],
+#app-content.lck-app dialog.lck-dialog[open] {
+	display: flex;
+	margin: auto;
+	position: fixed;
+	inset: 0;
+	max-width: min(28rem, calc(100vw - 2rem));
+}
+
+/* Modal Variants — use vw caps, never width:% of an indefinite flex/grid track. */
+.modal--sm {
+  width: min(400px, calc(100vw - 2rem));
+}
+
+.modal--md {
+  width: min(600px, calc(100vw - 2rem));
+}
+
+.modal--lg {
+  width: min(800px, calc(100vw - 2rem));
+}
+
+.modal--xl {
+  width: min(1000px, calc(100vw - 2rem));
+}
+
+.modal--fullscreen {
+  width: 100vw;
+  width: 100%;
+  height: var(--lck-overlay-height, calc(100dvh - var(--header-height, 50px)));
+  max-width: none;
+  max-height: none;
+  border-radius: 0;
+}
+
+/* Mobile-first modal: full-bleed pad; ≥769px restores sized dialogs */
+.modal {
+  max-width: min(95vw, 100%);
+  max-height: 95dvh;
+  margin: var(--space-2, 0.5rem);
+}
+
+.modal--sm,
+.modal--md,
+.modal--lg,
+.modal--xl {
+  width: 100%;
+  max-width: min(95vw, 100%);
+}
+
+.modal-header,
+.modal-body,
+.modal-footer {
+  padding: var(--space-3, 0.75rem);
+}
+
+.modal-title {
+  font-size: var(--logcheck-font-size-base, 1rem);
+}
+
+.modal-close {
+  width: 2.5rem;
+  height: 2.5rem;
+  min-width: 44px;
+  min-height: 44px;
+}
+
+/* ≥769px: roomier dialog chrome (desktop dialogs unchanged ≥1024) */
+@media (min-width: 769px) {
+  .modal {
+    max-width: min(40rem, calc(100vw - 2rem));
+    max-height: min(90vh, 90dvh);
+    margin: auto;
+  }
+
+  .modal--sm {
+    width: min(400px, calc(100vw - 2rem));
+    max-width: min(400px, calc(100vw - 2rem));
+  }
+
+  .modal--md {
+    width: min(600px, calc(100vw - 2rem));
+    max-width: min(600px, calc(100vw - 2rem));
+  }
+
+  .modal--lg {
+    width: min(800px, calc(100vw - 2rem));
+    max-width: min(800px, calc(100vw - 2rem));
+  }
+
+  .modal--xl {
+    width: min(1000px, calc(100vw - 2rem));
+    max-width: min(1000px, calc(100vw - 2rem));
+  }
+
+  .modal-header,
+  .modal-body,
+  .modal-footer {
+    padding: var(--space-5, 1.25rem);
+  }
+
+  .modal-title {
+    font-size: var(--logcheck-font-size-lg, 1.125rem);
+  }
+}
+
+/* Modal Header */
+.modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--lck-space-3, var(--space-3, 0.75rem));
+  padding: var(--lck-space-4, var(--space-4));
+  border-bottom: 1px solid var(--lck-border, var(--logcheck-color-modal-border));
+  background-color: transparent;
+}
+
+.confirm-dialog .modal-header,
+.lck-dialog.confirm-dialog .modal-header {
+  background-color: transparent;
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+.modal-title {
+  font-size: var(--logcheck-font-size-lg);
+  font-weight: var(--logcheck-font-weight-semibold);
+  color: var(--logcheck-color-text, var(--color-main-text));
+  margin: 0;
+}
+
+.modal-close {
+  background: none;
+  border: none;
+  font-size: var(--logcheck-font-size-xl);
+  color: var(--logcheck-color-text-muted, var(--color-text-maxcontrast));
+  cursor: pointer;
+  padding: var(--space-1);
+  border-radius: var(--radius-base, 6px);
+  transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out;
+  width: 2rem;
+  height: 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.modal-close:hover {
+  color: var(--logcheck-color-text, var(--color-main-text));
+  background-color: var(--logcheck-color-background-tertiary);
+}
+
+/* Modal Body */
+.modal-body {
+  padding: var(--space-4);
+  color: var(--logcheck-color-text-maxcontrast, var(--color-text-maxcontrast, var(--logcheck-color-text, var(--color-main-text))));
+  overflow-y: auto;
+  flex: 1;
+}
+
+/* Modal Footer */
+.modal-footer {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: var(--space-2, 0.5rem);
+  padding: var(--space-4);
+  border-top: 1px solid var(--logcheck-color-modal-border);
+  background-color: var(--logcheck-color-modal-footer-background);
+}
+
+.modal-footer--left {
+  justify-content: flex-start;
+}
+
+.modal-footer--single {
+  justify-content: center;
+}
+
+.modal-footer--center {
+  justify-content: center;
+}
+
+.modal-footer--space-between {
+  justify-content: space-between;
+}
+
+
+/* ===== ALERT COMPONENTS (see common/legacy-alert.css) ===== */
+
+.alert__link {
+	display: inline-block;
+	margin-top: var(--space-2, 0.5rem);
+	font-weight: var(--logcheck-font-weight-semibold, 600);
+	text-decoration: underline;
+	text-underline-offset: 0.15em;
+	color: var(--color-main-text);
+}
+
+.alert__link:focus-visible {
+	outline: 2px solid var(--color-primary-element, var(--logcheck-color-primary));
+	outline-offset: 2px;
+}
+
+.alert--dismissible {
+	padding-right: var(--space-8);
+	position: relative;
+}
+
+.alert-close {
+	position: absolute;
+	top: var(--space-3, 0.75rem);
+	right: var(--space-3, 0.75rem);
+	background: none;
+	border: none;
+	font-size: var(--logcheck-font-size-lg);
+	color: var(--color-main-text);
+	cursor: pointer;
+	padding: var(--space-1);
+	border-radius: var(--radius-base, 6px);
+	opacity: 0.9;
+	transition: opacity 0.15s ease-in-out;
+}
+
+.alert-close:hover,
+.alert-close:focus-visible {
+	opacity: 1;
+}
+
+/* Inline notices + toasts: common/notification-surfaces.css (icon wells: common/icons.css) */
+
+
+/* ===== FORM COMPONENTS ===== */
+
+/* Form Container */
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.form--horizontal {
+  flex-direction: row;
+  align-items: flex-end;
+  gap: var(--space-4);
+}
+
+.form--inline {
+  flex-direction: row;
+  align-items: center;
+  gap: var(--space-3, 0.75rem);
+}
+
+/* Form Group */
+/* Combobox listbox — not a document list (avoid global ul bullets) */
+#app-content-wrapper .user-picker__list {
+	list-style: none;
+	padding-left: 0;
+	margin-bottom: 0;
+}
+
+#app-content-wrapper .user-picker__list .user-picker__item {
+	margin-bottom: 0;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2, 0.5rem);
+  margin-bottom: var(--space-6, 1.5rem);
+  position: relative;
+}
+
+.form-group:last-child {
+  margin-bottom: 0;
+}
+
+.form-group--horizontal {
+  flex-direction: row;
+  align-items: center;
+  gap: var(--space-3, 0.75rem);
+}
+
+/* Form Label */
+.form-label,
+.form-group label {
+  font-family: var(--logcheck-font-family-sans, inherit);
+  font-size: var(--logcheck-font-size-sm);
+  font-weight: var(--logcheck-font-weight-medium);
+  color: var(--logcheck-color-form-label, var(--color-main-text));
+  line-height: var(--logcheck-line-height-normal, 1.45);
+  display: block;
+  margin-bottom: var(--space-2, 0.5rem);
+  margin-top: 0;
+}
+
+.form-label--required::after,
+.form-group label.required::after {
+  content: ' *';
+  color: var(--logcheck-color-form-required, var(--color-error));
+}
+
+.form-required {
+  color: var(--logcheck-color-error);
+  margin-left: var(--space-1);
+  font-weight: var(--logcheck-font-weight-semibold);
+}
+
+/* Legend for required markers — keep inside form header/meta rows */
+#app-content.lck-app .form-required-note {
+  margin: 0;
+  font-size: var(--lck-fs-sm, 0.875rem);
+  line-height: var(--lck-line-base, 1.45);
+  color: var(--lck-muted, var(--color-text-maxcontrast));
+}
+
+/* Form Input */
+.form-input,
+.form-group input[type="text"],
+.form-group input[type="email"],
+.form-group input[type="number"],
+.form-group input[type="date"],
+.form-group input[type="time"],
+.form-group input[type="datetime-local"],
+.form-group input[type="password"],
+.form-group input[type="url"],
+.form-group input[type="tel"] {
+  display: block;
+  width: 100%;
+  min-height: 44px; /* Minimum touch target size for accessibility (WCAG 2.5.5) */
+  padding: var(--space-2, 0.5rem) var(--space-3, 0.75rem);
+  font-family: var(--logcheck-font-family-sans, inherit);
+  font-size: var(--logcheck-font-size-base, 1rem);
+  line-height: var(--logcheck-line-height-normal, 1.45);
+  color: var(--logcheck-color-text, var(--color-main-text));
+  background-color: var(--logcheck-color-form-background, var(--color-main-background));
+  border: 1px solid var(--logcheck-color-form-border, var(--color-border));
+  border-radius: var(--radius-base, 6px);
+  transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+  box-sizing: border-box;
+}
+
+.form-input:focus,
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+  border-color: var(--logcheck-color-form-border-focus, var(--color-primary-element));
+  box-shadow: 0 0 0 3px var(--logcheck-color-primary-light, color-mix(in srgb, var(--color-primary-element) 28%, transparent));
+  outline: none;
+}
+
+.form-input:disabled,
+.form-group input:disabled,
+.form-group select:disabled,
+.form-group textarea:disabled {
+  background-color: var(--logcheck-color-background-secondary, var(--color-background-dark));
+  color: var(--logcheck-color-text-muted, var(--color-text-maxcontrast));
+  cursor: not-allowed;
+}
+
+.form-input--error,
+.form-group input.error,
+.form-group select.error,
+.form-group textarea.error {
+  border-color: var(--logcheck-color-form-border-error, var(--color-error));
+}
+
+.form-input--error:focus,
+.form-group input.error:focus,
+.form-group select.error:focus,
+.form-group textarea.error:focus {
+  border-color: var(--logcheck-color-form-border-error, var(--color-error));
+  box-shadow: 0 0 0 3px var(--logcheck-color-error-light, color-mix(in srgb, var(--color-error) 28%, transparent));
+}
+
+.form-input--success {
+  border-color: var(--logcheck-color-form-border-success, var(--color-success));
+}
+
+.form-input--success:focus {
+  border-color: var(--logcheck-color-form-border-success, var(--color-success));
+  box-shadow: 0 0 0 3px var(--logcheck-color-success-light, color-mix(in srgb, var(--color-success) 28%, transparent));
+}
+
+.form-input--warning {
+  border-color: var(--logcheck-color-border-warning, var(--color-warning));
+}
+
+.form-input--warning:focus {
+  border-color: var(--logcheck-color-border-warning, var(--color-warning));
+  box-shadow: 0 0 0 3px var(--logcheck-color-warning-light, color-mix(in srgb, var(--color-warning) 28%, transparent));
+}
+
+/* Placeholder — theme-aware (WCAG contrast in light/dark) */
+.form-input::placeholder,
+.form-group input::placeholder,
+.form-textarea::placeholder,
+.form-group textarea::placeholder {
+  color: var(--color-text-maxcontrast);
+}
+.form-select:invalid,
+.form-group select:invalid {
+  color: var(--color-text-maxcontrast);
+}
+
+/* Form Textarea */
+.form-textarea,
+.form-group textarea {
+  min-height: 100px;
+  resize: vertical;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.form-textarea--large {
+  min-height: 150px;
+  width: 100%;
+}
+
+/* Form Select — uses Nextcloud theme icon for arrow (light/dark compatible)
+ * Explicit padding ensures vertical centering; overrides Nextcloud core select styles */
+.form-select,
+.form-group select {
+  background-image: var(--icon-triangle-s-dark, url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b6b6b' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='m6 8 4 4 4-4'/%3e%3c/svg%3e"));
+  background-position: right 0.75rem center;
+  background-repeat: no-repeat;
+  background-size: 1.25em 1.25em;
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  /* 44px height, symmetric vertical padding for clean text centering */
+  height: 44px;
+  padding: 0.625rem 2.5rem 0.625rem 1rem;
+  line-height: 1.5;
+  font-size: 1rem;
+  box-sizing: border-box;
+}
+
+.form-input.form-select {
+  padding: 0.625rem 2.5rem 0.625rem 1rem;
+  background-position: right 0.75rem center;
+  background-size: 1.25em 1.25em;
+  height: 44px;
+  line-height: 1.5;
+}
+
+.form-select::-ms-expand {
+  display: none;
+}
+
+.form-select option {
+  padding: 0.5rem;
+  line-height: 1.4;
+  background-color: var(--logcheck-color-background, var(--color-main-background));
+  color: var(--logcheck-color-text, var(--color-main-text));
+}
+
+html[data-theme="dark"] .form-select,
+html[data-theme="dark"] .form-select option,
+html[data-theme="dark"] .form-input.form-select,
+html[data-theme="dark"] .form-input.form-select option,
+body[data-theme-dark] .form-select,
+body[data-theme-dark] .form-select option,
+body[data-theme-dark-highcontrast] .form-select,
+body[data-theme-dark-highcontrast] .form-select option,
+body[data-theme-dark] .form-input.form-select,
+body[data-theme-dark] .form-input.form-select option,
+body[data-theme-dark-highcontrast] .form-input.form-select,
+body[data-theme-dark-highcontrast] .form-input.form-select option {
+  background-color: var(--logcheck-color-background, var(--color-main-background));
+  color: var(--logcheck-color-text, var(--color-main-text));
+}
+
+/* Form Checkbox and Radio */
+.form-checkbox,
+.form-radio {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2, 0.5rem);
+  cursor: pointer;
+  user-select: none;
+}
+
+.form-checkbox input[type="checkbox"],
+.form-radio input[type="radio"] {
+  width: 1.25rem;
+  height: 1.25rem;
+  min-width: 1.25rem;
+  min-height: 1.25rem;
+  max-width: 1.25rem;
+  max-height: 1.25rem;
+  margin: 0;
+  padding: 0;
+  cursor: pointer;
+  background-color: var(--logcheck-color-form-background, var(--color-main-background));
+  border: 1px solid var(--logcheck-color-form-border, var(--color-border));
+  border-radius: 3px;
+  box-sizing: border-box;
+  accent-color: var(--color-primary-element);
+  color-scheme: inherit;
+  appearance: auto;
+  -webkit-appearance: auto;
+}
+.form-radio input[type="radio"] {
+  border-radius: 50%;
+}
+
+/* Ensure checkbox/radio labels are vertically centered with the control */
+.form-checkbox .form-label,
+.form-radio .form-label,
+.form-checkbox label,
+.form-radio label {
+  margin-bottom: 0;
+  line-height: 1.3;
+}
+
+.form-checkbox input[type="checkbox"]:focus,
+.form-radio input[type="radio"]:focus {
+  outline: 2px solid var(--logcheck-color-border-focus);
+  outline-offset: 2px;
+}
+
+/* Form Input Group (for inputs with buttons) */
+.form-in
+/* ===== EMPTY STATE COMPONENTS ===== */
+
+.empty-state {
+  text-align: center;
+  padding: var(--space-12) var(--space-6);
+  color: var(--logcheck-color-text-tertiary);
+}
+
+.empty-state__icon {
+  width: 4rem;
+  height: 4rem;
+  background-color: var(--logcheck-color-primary-light, color-mix(in srgb, var(--color-primary-element) 28%, transparent));
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto var(--space-6) auto;
+  font-size: 2rem;
+  color: var(--logcheck-color-primary-element);
+}
+
+.empty-state__title {
+  font-size: var(--logcheck-font-size-xl);
+  font-weight: var(--logcheck-font-weight-semibold);
+  margin: 0 0 var(--space-2, 0.5rem) 0;
+  color: var(--logcheck-color-text, var(--color-main-text));
+}
+
+.empty-state__description {
+  font-size: var(--logcheck-font-size-base, 1rem);
+  margin: 0 0 var(--space-6) 0;
+  line-height: var(--logcheck-line-height-relaxed);
+  color: var(--logcheck-color-text-secondary);
+  max-width: 32rem;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.empty-state .btn {
+  margin-top: var(--space-4);
+}
+
+/* Responsive: mobile-first stacked forms; ≥769px restores horizontal layouts */
+.form--horizontal,
+.form--inline,
+.form-group--horizontal {
+  flex-direction: column;
+  align-items: stretch;
+}
+
+.card-actions,
+.modal-footer {
+  flex-direction: column;
+  gap: var(--space-2, 0.5rem);
+}
+
+.toast-container {
+  left: calc(var(--space-4) + env(safe-area-inset-left, 0px));
+  right: calc(var(--space-4) + env(safe-area-inset-right, 0px));
+  max-width: none;
+}
+
+@media (min-width: 769px) {
+  .form--horizontal,
+  .form--inline {
+    flex-direction: row;
+    align-items: flex-end;
+  }
+
+  .form-group--horizontal {
+    flex-direction: row;
+    align-items: center;
+  }
+
+  .card-actions,
+  .modal-footer {
+    flex-direction: row;
+    gap: var(--space-3, 0.75rem);
+  }
+
+  .toast-container {
+    left: auto;
+    right: var(--space-4);
+    max-width: 24rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .btn,
+  .card,
+  .modal,
+  .toast,
+  .loading-spinner,
+  .loading {
+    animation: none !important;
+    transition: none !important;
+  }
+}
+

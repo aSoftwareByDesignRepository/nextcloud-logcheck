@@ -1,0 +1,52 @@
+/*
+ * LogCheck badges — SnackCheck/AZC info pill + leading cue (WCAG 1.4.1).
+ */
+#content.app-logcheck .lck-badge,
+#app-content.lck-app .lck-badge {
+	display: inline-flex;
+	align-items: center;
+	gap: var(--lck-space-1, 4px);
+	min-height: 0;
+	padding: var(--lck-space-1, 4px) var(--lck-space-2, 8px);
+	font-size: var(--lck-fs-xs, 0.75rem);
+	font-weight: 700;
+	line-height: 1.35;
+	border-radius: var(--lck-radius-pill, 999px);
+	border: none;
+	background: var(--lck-tint-info);
+	color: var(--lck-text, var(--color-main-text));
+	box-sizing: border-box;
+}
+
+/* Leading dot for brand / scope pills (status badges use .lck-badge__dot) */
+#content.app-logcheck .lck-brand .lck-badge::before,
+#content.app-logcheck .lck-scope-strip__badge::before,
+#app-content.lck-app .lck-scope-strip__badge::before {
+	content: '';
+	display: inline-block;
+	width: 0.45em;
+	height: 0.45em;
+	border-radius: 50%;
+	flex-shrink: 0;
+	background: var(--lck-primary, var(--color-primary-element));
+}
+
+#content.app-logcheck .lck-badge--neutral,
+#app-content.lck-app .lck-badge--neutral {
+	background: var(--lck-tint-info);
+	color: var(--lck-text, var(--color-main-text));
+}
+
+#content.app-logcheck .lck-badge__dot,
+#app-content.lck-app .lck-badge__dot {
+	width: 0.5rem;
+	height: 0.5rem;
+	border-radius: 50%;
+	flex: 0 0 auto;
+	background: var(--color-border-maxcontrast, var(--lck-muted));
+}
+
+#content.app-logcheck .lck-scope-strip__badge,
+#app-content.lck-app .lck-scope-strip__badge {
+	font-size: var(--lck-fs-xs, 0.75rem);
+}

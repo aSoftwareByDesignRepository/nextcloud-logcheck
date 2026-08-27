@@ -1,0 +1,220 @@
+/**
+ * LogCheck sidebar — SnackCheck/DeskCheck family chrome (brand + icon rows).
+ *
+ * Responsive: mobile-first. Below 1024px Nextcloud core owns the drawer
+ * (#app-navigation-toggle + body.snapjs-left). Do not invent a custom open
+ * class or override transform with !important — that blocks NC snap.js.
+ */
+
+/* Base chrome (all viewports). Width/position for the in-flow desktop shell
+ * are applied at min-width: 1024px so NC mobile.css can position:fixed + slide. */
+#content.app-logcheck > #app-navigation.lck-nav,
+#app-navigation.lck-nav {
+	display: flex;
+	flex-direction: column;
+	align-self: stretch;
+	min-height: 0;
+	max-height: none;
+	background: var(--lck-bg-card, var(--color-main-background));
+	border-inline-end: 1px solid var(--lck-border);
+	overflow: hidden;
+	box-sizing: border-box;
+	z-index: 100;
+	/* Intentionally no position/transform here — NC mobile.css (<1024) sets
+	 * position:fixed + translateX(-300px); body.snapjs-left slides it open. */
+}
+
+/* ≥1024px: restore sticky sidebar in the grid track (NC desktop layout) */
+@media (min-width: 1024px) {
+	#content.app-logcheck > #app-navigation.lck-nav,
+	#app-navigation.lck-nav {
+		position: relative !important;
+		transform: none !important;
+		flex: 0 0 var(--lck-nav-width, 280px);
+		width: var(--lck-nav-width, 280px);
+		min-width: var(--lck-nav-width, 280px);
+		max-width: var(--lck-nav-width, 280px);
+		height: 100%;
+		overflow: hidden;
+	}
+}
+
+#content.app-logcheck #app-navigation.lck-nav .lck-brand {
+	display: flex;
+	align-items: center;
+	gap: var(--lck-space-3);
+	padding: var(--lck-space-4);
+	border-bottom: 1px solid var(--lck-border);
+	flex-shrink: 0;
+}
+
+#content.app-logcheck #app-navigation.lck-nav .lck-brand__icon {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	width: 2.75rem;
+	height: 2.75rem;
+	border-radius: var(--lck-radius-md);
+	background: var(--lck-tint-info);
+	color: var(--lck-primary, var(--color-primary-element));
+	flex-shrink: 0;
+}
+
+#content.app-logcheck #app-navigation.lck-nav .lck-brand__icon-svg,
+#content.app-logcheck #app-navigation.lck-nav .lck-brand__icon .lck-icon {
+	width: 1.5rem;
+	height: 1.5rem;
+	display: block;
+}
+
+#content.app-logcheck #app-navigation.lck-nav .lck-brand__text {
+	min-width: 0;
+	display: grid;
+	gap: var(--lck-space-1);
+}
+
+#content.app-logcheck #app-navigation.lck-nav .lck-brand__title {
+	margin: 0;
+	font-size: var(--lck-fs-md);
+	font-weight: 700;
+	line-height: var(--lck-line-tight);
+	color: var(--lck-text, var(--color-main-text));
+}
+
+#content.app-logcheck #app-navigation.lck-nav .lck-brand__subtitle {
+	margin: 0;
+	color: var(--lck-muted);
+	font-size: var(--lck-fs-xs);
+	line-height: var(--lck-line-base);
+}
+
+#content.app-logcheck #app-navigation.lck-nav .lck-brand .lck-badge {
+	justify-self: start;
+}
+
+#content.app-logcheck #app-navigation.lck-nav .lck-nav__body {
+	flex: 1 1 auto;
+	min-height: 0;
+	overflow-y: auto;
+	-webkit-overflow-scrolling: touch;
+}
+
+#content.app-logcheck #app-navigation.lck-nav .lck-nav__group {
+	padding: 0 var(--lck-space-2);
+}
+
+#content.app-logcheck #app-navigation.lck-nav .lck-nav__group + .lck-nav__group {
+	margin-top: var(--lck-space-2);
+	padding-top: var(--lck-space-2);
+	border-top: 1px solid var(--lck-border);
+}
+
+#content.app-logcheck #app-navigation.lck-nav .lck-nav__group-label {
+	margin: var(--lck-space-2) var(--lck-space-2) var(--lck-space-1);
+	font-size: var(--lck-fs-xs);
+	font-weight: 600;
+	letter-spacing: 0.06em;
+	text-transform: uppercase;
+	color: var(--lck-muted);
+}
+
+#content.app-logcheck #app-navigation.lck-nav .lck-nav__list {
+	display: flex;
+	flex-direction: column;
+	gap: var(--lck-space-1);
+	list-style: none;
+	margin: 0;
+	padding: var(--lck-space-1) var(--lck-space-2) var(--lck-space-2);
+}
+
+#content.app-logcheck #app-navigation.lck-nav .lck-nav__item {
+	min-width: 0;
+}
+
+#content.app-logcheck #app-navigation.lck-nav .lck-nav__link {
+	display: grid;
+	grid-template-columns: 1.5rem 1fr;
+	gap: var(--lck-space-2);
+	align-items: center;
+	min-height: var(--lck-touch-lg, 48px);
+	padding: var(--lck-space-2) var(--lck-space-3);
+	border-radius: var(--lck-radius-sm);
+	text-decoration: none;
+	color: var(--lck-text, var(--color-main-text));
+	box-sizing: border-box;
+}
+
+#content.app-logcheck #app-navigation.lck-nav .lck-nav__link:hover {
+	background: var(--lck-bg-soft, var(--color-background-hover));
+	text-decoration: none;
+}
+
+#content.app-logcheck #app-navigation.lck-nav .lck-nav__link.is-active,
+#content.app-logcheck #app-navigation.lck-nav .lck-nav__item.is-active .lck-nav__link {
+	background: var(--lck-tint-info);
+	color: var(--lck-text, var(--color-main-text));
+	font-weight: 700;
+	box-shadow: inset 3px 0 0 var(--lck-primary, var(--color-primary-element));
+}
+
+#content.app-logcheck #app-navigation.lck-nav .lck-nav__link:focus-visible {
+	outline: var(--lck-focus, 3px solid var(--color-primary-element));
+	outline-offset: var(--lck-focus-offset, 2px);
+}
+
+#content.app-logcheck #app-navigation.lck-nav .lck-nav__icon {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	width: 1.5rem;
+	height: 1.5rem;
+	color: inherit;
+}
+
+#content.app-logcheck #app-navigation.lck-nav .lck-nav__icon .lck-icon {
+	width: 1.25rem;
+	height: 1.25rem;
+	display: block;
+}
+
+#content.app-logcheck #app-navigation.lck-nav .lck-nav__label {
+	display: flex;
+	flex-direction: column;
+	gap: 0;
+	min-width: 0;
+}
+
+#content.app-logcheck #app-navigation.lck-nav .lck-nav__name {
+	display: block;
+	font-size: var(--lck-fs-md);
+	line-height: var(--lck-line-tight);
+}
+
+#content.app-logcheck #app-navigation.lck-nav .lck-nav__hint {
+	display: block;
+	font-size: var(--lck-fs-xs);
+	color: var(--lck-muted);
+	font-weight: 400;
+	line-height: var(--lck-line-base);
+}
+
+#content.app-logcheck #app-navigation.lck-nav .lck-nav__item.is-active .lck-nav__hint,
+#content.app-logcheck #app-navigation.lck-nav .lck-nav__link.is-active .lck-nav__hint {
+	color: var(--lck-text, var(--color-main-text));
+	font-weight: 500;
+}
+
+/* Help footer sticks under scrollable body */
+#content.app-logcheck #app-navigation.lck-nav .lck-nav-footer {
+	flex-shrink: 0;
+	margin-top: auto;
+	border-top: 1px solid var(--lck-border);
+}
+
+@media (forced-colors: active) {
+	#content.app-logcheck #app-navigation.lck-nav .lck-nav__link.is-active,
+	#content.app-logcheck #app-navigation.lck-nav .lck-nav__item.is-active .lck-nav__link {
+		outline: 2px solid CanvasText;
+		box-shadow: none;
+	}
+}

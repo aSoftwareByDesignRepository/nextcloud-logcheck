@@ -1,0 +1,774 @@
+/* Auto-adapted from arbeitszeitcheck/css/common/page-patterns.css for LogCheck shell parity. Do not invent divergent layout rules here. */
+/**
+ * Shared page layout patterns (stack, grid, filters, empty states).
+ * Shell width modifiers live here; #app-content-wrapper.lck-shell in app.css sets base padding.
+ */
+
+/* ── Shell width ───────────────────────────────────────────── */
+#app-content.lck-app #app-content-wrapper.lck-shell--wide {
+	max-width: none;
+	margin-inline: 0;
+}
+
+#app-content.lck-app #app-content-wrapper.lck-shell--constrained {
+	max-width: 72rem;
+	margin-inline: auto;
+}
+
+#app-content.lck-app #app-content-wrapper.lck-shell--minimal {
+	max-width: 40rem;
+	margin-inline: auto;
+	padding: var(--lck-space-6) var(--lck-space-5);
+}
+
+/* ── Page stack (vertical rhythm inside main) ───────────────── */
+#app-content.lck-app .lck-page-stack {
+	display: flex;
+	flex-direction: column;
+	align-items: stretch;
+	gap: var(--lck-space-5);
+	width: 100%;
+	min-width: 0;
+}
+
+#app-content.lck-app .lck-page-stack > * {
+	margin: 0;
+}
+
+/* ── Two-column page grid (admin stats, side-by-side cards) ─── */
+/* Mobile-first: single column; ≥769px restores 2-col desktop grid */
+#app-content.lck-app .lck-page-grid {
+	display: grid;
+	grid-template-columns: 1fr;
+	gap: var(--lck-space-5);
+	width: 100%;
+	min-width: 0;
+}
+
+@media (min-width: 769px) {
+	#app-content.lck-app .lck-page-grid {
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+	}
+}
+
+/* ── Legacy .section reset inside app shell ─────────────────── */
+#app-content.lck-app #lck-main-content .section {
+	margin: 0;
+	padding: 0;
+	border: none;
+	border-radius: 0;
+	background: transparent;
+	box-shadow: none;
+}
+
+#app-content.lck-app #lck-main-content .section::before {
+	display: none;
+}
+
+/* ── Filter panel (list pages — AZC parity, fluid ProjectCheck grid) ── */
+#app-content.lck-app .lck-filter-panel {
+	border-left: 4px solid var(--color-primary-element);
+}
+
+#app-content.lck-app .lck-filter-panel__head {
+	margin-bottom: 0;
+}
+
+#app-content.lck-app .lck-filter-panel__head h2 {
+	margin: 0 0 var(--lck-space-2);
+	font-size: var(--lck-fs-lg);
+	font-weight: 600;
+	line-height: var(--lck-line-tight);
+}
+
+#app-content.lck-app .lck-filter-panel__intro {
+	margin: 0;
+	max-width: 65ch;
+	font-size: var(--lck-fs-sm);
+	line-height: var(--lck-line-base);
+	color: var(--lck-muted);
+}
+
+/*
+ * Filter body: padded stack for panel chrome. The form itself is a CSS
+ * grid (not flex column) so nested .lck-form-grid / field grids keep their
+ * columns — ID-scoped flex on __form used to flatten every child to 1 col.
+ */
+#app-content.lck-app .lck-filter-panel__body {
+	display: flex;
+	flex-direction: column;
+	gap: var(--lck-space-4);
+	min-width: 0;
+}
+
+#app-content.lck-app .lck-filter-panel__form {
+	display: grid;
+	gap: var(--lck-space-4);
+	min-width: 0;
+	align-content: start;
+}
+
+/*
+ * Filter field grid — one even responsive grid for every Filters panel
+ * (Claim, Assets, Utilisation, On-site report). ProjectCheck pattern:
+ * auto-fit + minmax(…, 1fr) so columns share the full width with equal
+ * gaps — no capped tracks leaving a dead strip on the right, no empty
+ * auto-fill ghost columns. AZC subgrid keeps labels/controls on one baseline.
+ * Legacy modifiers (--fill/--record/--compact/--extended) resolve to the
+ * same grid so old markup cannot drift into a second layout.
+ * Fallback without subgrid: top-align cells (same as .lck-fieldset__grid).
+ */
+#app-content.lck-app .lck-filter-grid,
+#app-content.lck-app .lck-filter-grid--compact,
+#app-content.lck-app .lck-filter-grid--extended,
+#app-content.lck-app .lck-filter-grid--fill,
+#app-content.lck-app .lck-filter-grid--record {
+	display: grid;
+	/* Mobile-first: one field per row (<768); auto-fit from tablet up */
+	grid-template-columns: 1fr;
+	grid-auto-rows: auto minmax(44px, auto);
+	column-gap: var(--lck-space-3);
+	row-gap: var(--lck-space-3);
+	justify-content: stretch;
+	align-items: stretch;
+	width: 100%;
+	min-width: 0;
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
+}
+
+/* ≥769px: even auto-fit columns (NC tablet+ / desktop filter panels) */
+@media (min-width: 769px) {
+	#app-content.lck-app .lck-filter-grid,
+	#app-content.lck-app .lck-filter-grid--compact,
+	#app-content.lck-app .lck-filter-grid--extended,
+	#app-content.lck-app .lck-filter-grid--fill,
+	#app-content.lck-app .lck-filter-grid--record {
+		grid-template-columns: repeat(auto-fit, minmax(12rem, 1fr));
+		column-gap: var(--lck-space-4);
+		row-gap: var(--lck-space-4);
+	}
+}
+
+/*
+ * Exact two-field toolbars (Assets Site|Name). auto-fit can still wrap under
+ * ~24rem+gutter and look like a broken stacked form — pin two equal columns
+ * from tablet up; mobile stays 1fr from base rule.
+ */
+#app-content.lck-app .lck-filter-grid--pair {
+	grid-template-columns: 1fr;
+}
+
+@media (min-width: 769px) {
+	#app-content.lck-app .lck-filter-grid--pair {
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+	}
+}
+
+#app-content.lck-app .lck-filter-field {
+	display: grid;
+	grid-template-rows: subgrid;
+	grid-row: span 2;
+	gap: var(--lck-space-2);
+	min-width: 0;
+	margin: 0;
+	align-self: stretch;
+}
+
+#app-content.lck-app .lck-filter-field__label {
+	display: block;
+	margin: 0;
+	padding: 0;
+	font-size: 0.8125rem;
+	font-weight: 700;
+	line-height: 1.3;
+	color: var(--color-text-maxcontrast, var(--lck-muted));
+	min-height: 1.3em;
+}
+
+#app-content.lck-app .lck-filter-field__control {
+	display: flex;
+	flex-direction: column;
+	gap: var(--lck-space-1);
+	min-width: 0;
+	min-height: 44px;
+	/* Top of the shared control track — never flex-end (hints would shove siblings down). */
+	justify-content: flex-start;
+}
+
+#app-content.lck-app .lck-filter-field__control > .lck-input,
+#app-content.lck-app .lck-filter-field__control > input,
+#app-content.lck-app .lck-filter-field__control > select,
+#app-content.lck-app .lck-filter-field__control > textarea {
+	width: 100%;
+	max-width: 100%;
+	min-width: 0;
+	box-sizing: border-box;
+	min-height: 44px;
+}
+
+#app-content.lck-app .lck-filter-field__control > .lck-form-row__hint {
+	margin: 0;
+	font-size: var(--lck-fs-xs, 0.75rem);
+	line-height: 1.35;
+	color: var(--lck-muted);
+}
+
+#app-content.lck-app .lck-filter-field.has-error .lck-form-row__error {
+	display: block;
+}
+
+#app-content.lck-app .lck-filter-field.has-error input,
+#app-content.lck-app .lck-filter-field.has-error select,
+#app-content.lck-app .lck-filter-field.has-error textarea {
+	border-color: var(--color-error-text, var(--color-element-error));
+	box-shadow: 0 0 0 1px var(--color-error-text, var(--color-element-error));
+}
+
+/* Checkbox: spacer label keeps the control on the shared input row */
+#app-content.lck-app .lck-filter-field--checkbox .lck-filter-field__control {
+	min-height: 44px;
+	justify-content: flex-start;
+}
+
+#app-content.lck-app .lck-filter-field--checkbox .lck-checkbox-row {
+	min-height: 44px;
+	align-items: center;
+}
+
+#app-content.lck-app .lck-filter-field--wide,
+#app-content.lck-app .lck-filter-field--full,
+#app-content.lck-app .lck-filter-grid > .lck-choice-group {
+	grid-column: 1 / -1;
+}
+
+/* Choice groups are not label/control pairs — still occupy one logical field row */
+#app-content.lck-app .lck-filter-grid > .lck-choice-group {
+	grid-row: span 2;
+}
+
+#app-content.lck-app .lck-filter-actions {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: var(--lck-space-3);
+	min-height: 44px;
+	min-width: 0;
+	/* Mobile: full-width action row */
+	width: 100%;
+}
+
+#app-content.lck-app .lck-filter-actions .lck-btn,
+#app-content.lck-app .lck-filter-actions .button {
+	min-height: 44px;
+	min-width: 44px;
+	flex: 1 1 auto;
+}
+
+/* ≥769px: actions shrink to content beside filter fields */
+@media (min-width: 769px) {
+	#app-content.lck-app .lck-filter-actions {
+		width: auto;
+	}
+
+	#app-content.lck-app .lck-filter-actions .lck-btn,
+	#app-content.lck-app .lck-filter-actions .button {
+		flex: 0 0 auto;
+	}
+}
+
+/* Action row under the field grid — even separator, never jammed against inputs */
+#app-content.lck-app .lck-filter-panel__form > .lck-filter-actions {
+	margin-top: var(--lck-space-2);
+	padding-top: var(--lck-space-4);
+	border-top: 1px solid var(--lck-border, var(--color-border));
+}
+
+#app-content.lck-app .lck-filter-grid > .lck-filter-actions {
+	grid-row: span 2;
+	align-self: end;
+	margin-top: 0;
+	padding-top: 0;
+	border-top: 0;
+}
+
+@supports not (grid-template-rows: subgrid) {
+	#app-content.lck-app .lck-filter-grid {
+		grid-auto-rows: auto;
+		align-items: start;
+	}
+
+	#app-content.lck-app .lck-filter-field {
+		display: flex;
+		flex-direction: column;
+		grid-row: auto;
+		gap: var(--lck-space-2);
+	}
+
+	#app-content.lck-app .lck-filter-grid > .lck-choice-group,
+	#app-content.lck-app .lck-filter-grid > .lck-filter-actions {
+		grid-row: auto;
+	}
+}
+
+#app-content.lck-app .lck-filter-field__control .form-input[aria-invalid='true'],
+#app-content.lck-app .lck-filter-field__control .form-select[aria-invalid='true'],
+#app-content.lck-app .lck-filter-field__control [aria-invalid='true'] {
+	border-color: var(--color-error-text, var(--color-element-error));
+	outline-color: var(--color-error-text, var(--color-element-error));
+}
+
+/* Claim / multi-section filters: calm fieldsets inside the panel body */
+#app-content.lck-app .lck-filter-panel__form .lck-fieldset {
+	border: 0;
+	margin: 0;
+	padding: 0;
+	min-width: 0;
+	display: flex;
+	flex-direction: column;
+	gap: var(--lck-space-3);
+	background: transparent;
+}
+
+#app-content.lck-app .lck-filter-panel__form .lck-fieldset > .lck-fieldset__legend {
+	font-size: 0.9375rem;
+	font-weight: 700;
+	padding-bottom: var(--lck-space-2);
+	margin: 0;
+	border-bottom: 1px solid var(--lck-border);
+	color: var(--lck-text);
+}
+
+#app-content.lck-app .lck-date-range {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: flex-end;
+	gap: var(--lck-space-2) var(--lck-space-3);
+}
+
+#app-content.lck-app .lck-date-range__part {
+	display: flex;
+	flex-direction: column;
+	gap: var(--lck-space-1);
+	min-width: 0;
+	flex: 1 1 8rem;
+}
+
+#app-content.lck-app .lck-date-range__sublabel {
+	font-size: var(--lck-fs-xs);
+	font-weight: 500;
+	color: var(--lck-muted);
+}
+
+#app-content.lck-app .lck-date-range__sep {
+	align-self: flex-end;
+	padding-bottom: 0.65rem;
+	color: var(--lck-muted);
+	font-size: var(--lck-fs-sm);
+}
+
+/* ── Empty / loading states ─────────────────────────────────── */
+#app-content.lck-app .lck-empty-state {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	gap: var(--lck-space-3);
+	padding: var(--lck-space-7) var(--lck-space-5);
+	text-align: center;
+	color: var(--lck-muted);
+}
+
+#app-content.lck-app .lck-empty-state__title {
+	margin: 0;
+	font-size: var(--lck-fs-lg);
+	font-weight: 600;
+	color: var(--lck-text);
+}
+
+#app-content.lck-app .lck-empty-state__text {
+	margin: 0;
+	max-width: 42ch;
+	font-size: var(--lck-fs-sm);
+	line-height: var(--lck-line-base);
+}
+
+#app-content.lck-app .lck-loading {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	gap: var(--lck-space-3);
+	padding: var(--lck-space-6);
+	color: var(--lck-muted);
+	font-size: var(--lck-fs-sm);
+}
+
+#app-content.lck-app .lck-loading[aria-busy="true"]::before {
+	content: '';
+	width: 1.25rem;
+	height: 1.25rem;
+	border: 2px solid var(--lck-border);
+	border-top-color: var(--color-primary-element);
+	border-radius: 50%;
+	animation: dc-spin 0.8s linear infinite;
+}
+
+@keyframes dc-spin {
+	to {
+		transform: rotate(360deg);
+	}
+}
+
+@media (prefers-reduced-motion: reduce) {
+	#app-content.lck-app .lck-loading[aria-busy="true"]::before {
+		animation: none;
+		border-top-color: var(--lck-border);
+	}
+}
+
+/* Nextcloud personal settings panel (outside app shell) */
+#logcheck-personal-settings.lck-nc-settings-panel {
+	max-width: 52rem;
+}
+
+#logcheck-personal-settings .settings-hint {
+	max-width: 60ch;
+	line-height: var(--lck-line-base, 1.5);
+	color: var(--color-text-maxcontrast, var(--lck-muted));
+}
+
+#logcheck-personal-settings .settings-subheading {
+	margin: var(--lck-space-5, 1.25rem) 0 var(--lck-space-2, 0.5rem);
+	font-size: var(--lck-fs-md, 1rem);
+	font-weight: 600;
+}
+
+#logcheck-personal-settings .lck-btn + .lck-btn {
+	margin-inline-start: var(--lck-space-2, 0.5rem);
+}
+
+/* Filter panel cards use dc-card header/body padding (app.css); accent bar only on .lck-filter-panel */
+
+/* ── Data tables (single convention app-wide) ─────────────────
+   Markup: .table-container > .table.table--hover
+   Legacy aliases: .table-responsive, .lck-table-wrap, .grid-table, .logcheck-table
+   Actions column: .lck-table-actions-col + .lck-table-actions
+   Matrix tables: .lck-table--matrix (admin notification grids)
+   Card layout on narrow screens: .lck-table--responsive + data-label on td
+   ───────────────────────────────────────────────────────────── */
+#app-content.lck-app .table-container,
+#app-content.lck-app .table-responsive,
+#app-content.lck-app .lck-table-wrap {
+	margin: 0;
+	width: 100%;
+	min-width: 0;
+	max-width: 100%;
+	box-sizing: border-box;
+	overflow-x: auto;
+	overflow-y: visible;
+	-webkit-overflow-scrolling: touch;
+	scroll-padding-inline-end: var(--lck-space-4, 1rem);
+}
+
+#app-content.lck-app .lck-card__body > .table-container,
+#app-content.lck-app .lck-card__body > .table-responsive,
+#app-content.lck-app .lck-card__body > .lck-table-wrap {
+	margin-block: 0;
+}
+
+#app-content.lck-app .table-container .table,
+#app-content.lck-app .table-container .grid-table,
+#app-content.lck-app .table-container .logcheck-table,
+#app-content.lck-app .table-container .report-table,
+#app-content.lck-app .table-responsive .table,
+#app-content.lck-app .table-responsive .grid-table,
+#app-content.lck-app .lck-table-wrap .table,
+#app-content.lck-app .lck-table-wrap .grid-table {
+	margin-bottom: 0;
+	width: 100%;
+	table-layout: auto;
+}
+
+/* Desktop: fill available width; scroll horizontally only when columns need more space */
+@media (min-width: 769px) {
+	#app-content.lck-app .table-container .table:not(.lck-table--matrix),
+	#app-content.lck-app .table-container .grid-table:not(.lck-table--matrix),
+	#app-content.lck-app .table-container .logcheck-table:not(.lck-table--matrix),
+	#app-content.lck-app .table-responsive .table:not(.lck-table--matrix),
+	#app-content.lck-app .table-responsive .grid-table:not(.lck-table--matrix),
+	#app-content.lck-app .lck-table-wrap .table:not(.lck-table--matrix),
+	#app-content.lck-app .lck-table-wrap .grid-table:not(.lck-table--matrix) {
+		width: 100%;
+		min-width: max-content;
+	}
+}
+
+#app-content.lck-app .table thead th,
+#app-content.lck-app .grid-table thead th,
+#app-content.lck-app .lck-table thead th {
+	position: sticky;
+	top: 0;
+	z-index: 1;
+	background-color: var(--logcheck-color-table-header-background, var(--color-background-dark));
+	box-shadow: 0 1px 0 var(--logcheck-color-table-border, var(--color-border));
+}
+
+#app-content.lck-app .table tbody tr:focus-within,
+#app-content.lck-app .grid-table tbody tr:focus-within {
+	outline: 2px solid var(--color-primary-element);
+	outline-offset: -2px;
+}
+
+#app-content.lck-app .table td.lck-table-empty,
+#app-content.lck-app .table td.lck-table-loading,
+#app-content.lck-app .grid-table td.lck-table-empty,
+#app-content.lck-app .grid-table td.lck-table-loading,
+#app-content.lck-app .table td.text-center:not(:only-child),
+#app-content.lck-app .grid-table td.text-center:not(:only-child) {
+	text-align: center;
+	color: var(--lck-muted, var(--color-text-maxcontrast));
+	font-size: var(--lck-fs-sm, 0.875rem);
+	padding: var(--lck-space-5, 1.25rem) var(--lck-space-4, 1rem);
+}
+
+#app-content.lck-app .table td .lck-empty-state,
+#app-content.lck-app .grid-table td .lck-empty-state {
+	padding: var(--lck-space-5, 1.25rem) var(--lck-space-3, 0.75rem);
+}
+
+#app-content.lck-app .table .lck-table-actions,
+#app-content.lck-app .grid-table .lck-table-actions,
+#app-content.lck-app .table .admin-holidays__row-actions {
+	display: flex;
+	flex-wrap: wrap;
+	gap: var(--lck-space-2, 0.5rem);
+	align-items: center;
+	justify-content: flex-end;
+}
+
+/* Actions column: never shrink below button labels (avoid width:1% clipping) */
+#app-content.lck-app .table th.lck-table-actions-col,
+#app-content.lck-app .table th.actions-col,
+#app-content.lck-app .table td.actions-cell,
+#app-content.lck-app .table td.lck-table-actions-col,
+#app-content.lck-app .table td.admin-ot-audit__actions,
+#app-content.lck-app .table td.admin-tariff-rules__row-actions,
+#app-content.lck-app .table td.layer-card__history-actions,
+#app-content.lck-app .grid-table th.lck-table-actions-col,
+#app-content.lck-app .grid-table td.actions-cell,
+#app-content.lck-app .grid-table td.lck-table-actions-col {
+	text-align: right;
+	vertical-align: middle;
+	white-space: nowrap;
+	width: auto;
+	min-width: max-content;
+	max-width: none;
+	overflow: visible;
+}
+
+#app-content.lck-app .table td.actions-cell,
+#app-content.lck-app .table td.lck-table-actions-col,
+#app-content.lck-app .table td.admin-ot-audit__actions,
+#app-content.lck-app .table td.admin-tariff-rules__row-actions,
+#app-content.lck-app .table td.layer-card__history-actions,
+#app-content.lck-app .grid-table td.actions-cell,
+#app-content.lck-app .grid-table td.lck-table-actions-col {
+	display: table-cell;
+}
+
+#app-content.lck-app .table td.lck-table-actions-col .btn,
+#app-content.lck-app .table td.actions-cell .btn,
+#app-content.lck-app .table .lck-table-actions .btn,
+#app-content.lck-app .grid-table td.actions-cell .btn,
+#app-content.lck-app .grid-table .lck-table-actions .btn {
+	flex-shrink: 0;
+	white-space: nowrap;
+}
+
+/* Truncated text columns — do not steal space from actions */
+#app-content.lck-app .table td.description-cell,
+#app-content.lck-app .table td.reason-cell {
+	max-width: min(20rem, 30vw);
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+
+#app-content.lck-app .lck-table-meta {
+	margin: var(--lck-space-3, 0.75rem) 0 0;
+	font-size: var(--lck-fs-sm, 0.875rem);
+	color: var(--lck-muted, var(--color-text-maxcontrast));
+}
+
+/* Report preview + dynamic HTML tables */
+#app-content.lck-app .report-preview-content .table-container,
+#app-content.lck-app .report-preview-content .report-table {
+	margin-top: var(--lck-space-3, 0.75rem);
+}
+
+#app-content.lck-app .report-preview-content .report-table {
+	border-collapse: collapse;
+	font-size: var(--lck-fs-sm, 0.875rem);
+}
+
+#app-content.lck-app .report-preview-content .table-container .report-table {
+	margin-bottom: 0;
+}
+
+/* Notification matrices — not row lists; keep compact grid */
+#app-content.lck-app .lck-table--matrix {
+	font-size: var(--lck-fs-sm, 0.875rem);
+}
+
+#app-content.lck-app .lck-table--matrix th,
+#app-content.lck-app .lck-table--matrix td {
+	text-align: center;
+	vertical-align: middle;
+	padding: var(--lck-space-2, 0.5rem);
+}
+
+#app-content.lck-app .lck-table--matrix thead th {
+	position: static;
+	box-shadow: none;
+}
+
+@media (max-width: 768px) {
+	/* Dense list tables without card reflow: horizontal scroll */
+	#app-content.lck-app .table-container .table:not(.lck-table--matrix):not(.lck-table--responsive),
+	#app-content.lck-app .table-container .grid-table:not(.lck-table--matrix):not(.lck-table--responsive) {
+		min-width: 36rem;
+	}
+
+	#app-content.lck-app .table .lck-table-actions {
+		justify-content: flex-start;
+	}
+
+	/* Card reflow: every field + action reachable without sideways scrolling */
+	#app-content.lck-app .table-container:has(.lck-table--responsive) {
+		overflow-x: visible;
+	}
+
+	#app-content.lck-app .table.lck-table--responsive,
+	#app-content.lck-app .table.lck-table--responsive tbody,
+	#app-content.lck-app .table.lck-table--responsive tr,
+	#app-content.lck-app .table.lck-table--responsive td {
+		display: block;
+		width: 100%;
+	}
+
+	#app-content.lck-app .table.lck-table--responsive {
+		min-width: 0;
+		border-collapse: collapse;
+	}
+
+	#app-content.lck-app .table.lck-table--responsive thead {
+		position: absolute;
+		width: 1px;
+		height: 1px;
+		padding: 0;
+		margin: -1px;
+		overflow: hidden;
+		clip-path: inset(50%);
+		white-space: nowrap;
+		border: 0;
+	}
+
+	#app-content.lck-app .table.lck-table--responsive tbody tr {
+		margin-bottom: var(--lck-space-4, 1rem);
+		padding: var(--lck-space-3, 0.75rem) var(--lck-space-4, 1rem);
+		border: 1px solid var(--lck-border, var(--color-border));
+		border-radius: var(--lck-radius-sm, 8px);
+		background: var(--lck-bg-card, var(--color-main-background));
+	}
+
+	#app-content.lck-app .table.lck-table--responsive tbody tr:last-child {
+		margin-bottom: 0;
+	}
+
+	#app-content.lck-app .table.lck-table--responsive tbody td {
+		display: flex;
+		justify-content: space-between;
+		align-items: baseline;
+		gap: var(--lck-space-4, 1rem);
+		padding: var(--lck-space-2, 0.5rem) 0;
+		border-bottom: 1px solid var(--lck-border, var(--color-border));
+		text-align: right;
+		max-width: none;
+		overflow: visible;
+		white-space: normal;
+		text-overflow: clip;
+	}
+
+	#app-content.lck-app .table.lck-table--responsive tbody td:last-child {
+		border-bottom: none;
+		padding-bottom: 0;
+	}
+
+	#app-content.lck-app .table.lck-table--responsive tbody td::before {
+		content: attr(data-label);
+		flex: 0 0 auto;
+		text-align: left;
+		font-weight: 600;
+		color: var(--lck-muted, var(--color-text-maxcontrast));
+	}
+
+	#app-content.lck-app .table.lck-table--responsive tbody td.description-cell,
+	#app-content.lck-app .table.lck-table--responsive tbody td.reason-cell,
+	#app-content.lck-app .table.lck-table--responsive tbody td.actions-cell,
+	#app-content.lck-app .table.lck-table--responsive tbody td.admin-ot-audit__actions,
+	#app-content.lck-app .table.lck-table--responsive tbody td.admin-tariff-rules__row-actions,
+	#app-content.lck-app .table.lck-table--responsive tbody td.layer-card__history-actions {
+		flex-direction: column;
+		align-items: stretch;
+		text-align: left;
+	}
+
+	#app-content.lck-app .table.lck-table--responsive tbody td.actions-cell .lck-table-actions {
+		width: 100%;
+		justify-content: stretch;
+		flex-direction: column;
+	}
+
+	#app-content.lck-app .table.lck-table--responsive tbody td.actions-cell .lck-table-actions .btn,
+	#app-content.lck-app .table.lck-table--responsive tbody td.actions-cell .btn,
+	#app-content.lck-app .table.lck-table--responsive tbody td.admin-ot-audit__actions .btn,
+	#app-content.lck-app .table.lck-table--responsive tbody td.admin-tariff-rules__row-actions .btn,
+	#app-content.lck-app .table.lck-table--responsive tbody td.layer-card__history-actions .btn {
+		width: 100%;
+		justify-content: center;
+		min-height: 44px;
+	}
+
+	#app-content.lck-app .table.lck-table--responsive tbody td.actions-cell .btn-icon {
+		width: 46px;
+		height: 46px;
+		min-width: 46px;
+		min-height: 46px;
+		align-self: flex-end;
+	}
+
+	#app-content.lck-app .table.lck-table--responsive tbody td[colspan] {
+		display: block;
+		justify-content: center;
+		text-align: center;
+	}
+
+	#app-content.lck-app .table.lck-table--responsive tbody td[colspan]::before {
+		content: none;
+	}
+}
+
+@media (forced-colors: active) {
+	#app-content.lck-app .table-container,
+	#app-content.lck-app .table-responsive,
+	#app-content.lck-app .lck-table-wrap {
+		border-color: CanvasText;
+	}
+
+	#app-content.lck-app .table--hover tbody tr:hover,
+	#app-content.lck-app .grid-table.table--hover tbody tr:hover {
+		background: Highlight;
+		color: HighlightText;
+	}
+}

@@ -1,0 +1,238 @@
+/* Auto-adapted from arbeitszeitcheck/css/common/tokens.css for LogCheck shell parity. Do not invent divergent layout rules here. */
+/*
+ * LogCheck design tokens (--lck-*).
+ * Colors derive from Nextcloud theme variables; no raw hex in feature CSS.
+ * Spacing/typography on :root; theme colors on body + themed app surfaces
+ * (NC sets --color-* on body [data-theme-*]).
+ */
+:root {
+	--lck-space-1: 4px;
+	--lck-space-2: 8px;
+	--lck-space-3: 12px;
+	--lck-space-4: 16px;
+	--lck-space-5: 24px;
+	--lck-space-6: 32px;
+	--lck-space-7: 48px;
+	--lck-space-8: 64px;
+
+	/* Legacy --space-* aliases used by ported AZC layout/dialog sheets */
+	--space-1: var(--lck-space-1);
+	--space-2: var(--lck-space-2);
+	--space-3: var(--lck-space-3);
+	--space-4: var(--lck-space-4);
+	--space-5: var(--lck-space-5);
+	--space-6: var(--lck-space-6);
+	--space-7: var(--lck-space-7);
+	--space-8: var(--lck-space-8);
+	--space-10: 80px;
+	--space-12: 96px;
+
+	/* Radii — design-system scale, bound to NC --border-radius-* when present */
+	--lck-radius-sm: var(--border-radius, 6px);
+	--lck-radius-md: var(--border-radius-element, var(--border-radius-large, 12px));
+	--lck-radius-lg: var(--border-radius-large, 16px);
+	--lck-radius-pill: var(--border-radius-pill, 999px);
+
+	/* Legacy --radius-* used by ported app-layout / dialogs sheets */
+	--radius-base: var(--lck-radius-sm);
+	--radius-lg: var(--lck-radius-md);
+	--radius-xl: var(--lck-radius-lg);
+	--radius-2xl: var(--lck-radius-lg);
+	--radius-full: var(--lck-radius-pill);
+
+	/* Floor 0.875rem (14px) — no type below 14px on mobile (responsive directive) */
+	--lck-fs-xs: 0.875rem;
+	--lck-fs-sm: 0.875rem;
+	--lck-fs-md: 1rem;
+	--lck-fs-lg: 1.125rem;
+	--lck-fs-xl: 1.5rem;
+	--lck-fs-2xl: 1.875rem;
+
+	--lck-line-tight: 1.2;
+	--lck-line-base: 1.45;
+
+	--lck-breakpoint-sm: 480px;
+	--lck-breakpoint-md: 768px;
+	--lck-breakpoint-lg: 1024px;
+
+	/* Inline SVG catalogue (IconCatalog / AzcCatalog) */
+	--lck-icon-sm: 1rem;
+	--lck-icon-md: 1.125rem;
+	--lck-icon-lg: 1.375rem;
+	--lck-icon-well: 2.25rem;
+	--lck-icon-stroke: 2;
+
+	--lck-tab-num: tabular-nums;
+	/* Touch targets (WCAG 2.5.5 / design-system) */
+	--lck-touch: 44px;
+	--lck-touch-lg: 48px;
+
+	/*
+	 * QR / barcode canvas must stay light for scannability in every theme.
+	 * This is the only intentional non-theme surface in LogCheck feature CSS.
+	 */
+	--lck-qr-canvas: #ffffff;
+}
+
+/*
+ * Theme-dependent tokens MUST resolve where Nextcloud sets --color-* (body /
+ * [data-theme-*]) and on themed app surfaces. Resolving color-mix only on
+ * :root can fall back to light surfaces while text inherits dark-theme ink.
+ */
+body,
+#content.app-logcheck,
+#app-content.lck-app,
+.lck-app,
+.lck-dialog,
+.lck-modal,
+.lck-toast-region,
+.lck-toasts,
+.lck-license-modal {
+	/* Fixed overlays (panels, backdrops, mobile nav) sit below NC #header */
+	--lck-overlay-top: var(--header-height, 50px);
+	--lck-overlay-height: calc(100dvh - var(--header-height, 50px));
+
+	--lck-bg-soft: color-mix(in srgb, var(--color-main-background) 96%, var(--color-main-text) 4%);
+	--lck-bg-card: var(--color-main-background);
+	--lck-bg-stripe: color-mix(in srgb, var(--color-main-background) 92%, var(--color-main-text) 8%);
+	--lck-text: var(--color-main-text);
+	--lck-muted: var(--color-text-maxcontrast);
+	--lck-border: color-mix(in srgb, var(--color-main-text) 12%, transparent);
+	--lck-border-strong: color-mix(in srgb, var(--color-main-text) 24%, transparent);
+
+	/* Primary / focus — track NC accent for custom branding */
+	--lck-primary: var(--color-primary-element);
+	--lck-primary-text: var(--color-primary-element-text);
+	--lck-focus: 3px solid var(--color-primary-element);
+	--lck-focus-offset: 2px;
+
+	/* Mix with main background — not transparent — so callouts stay visible on all NC themes */
+	--lck-tint-success: color-mix(in srgb, var(--color-success-text, var(--color-success)) 18%, var(--color-main-background));
+	--lck-tint-warning: color-mix(in srgb, var(--color-warning-text, var(--color-warning)) 22%, var(--color-main-background));
+	--lck-tint-danger: color-mix(in srgb, var(--color-error-text, var(--color-error)) 18%, var(--color-main-background));
+	/* Alias used by badges/callouts/toasts — mix into main-bg (never transparent) so dark themes stay visible */
+	--lck-tint-critical: var(--lck-tint-danger);
+	--lck-tint-info: color-mix(in srgb, var(--color-primary-element) 16%, var(--color-main-background));
+
+	/*
+	 * Solid danger CTA fill (design-system §3.3 / WCAG 1.4.3).
+	 * NC 30+ maps --color-error to a pale tint — never put on-fill text on that.
+	 */
+	--lck-danger-fill: var(--color-element-error, var(--color-error));
+	--lck-danger-on-fill: var(--color-primary-element-text, var(--color-primary-text));
+	--lck-danger-ink: var(--color-error-text, var(--color-error));
+
+	/*
+	 * Notification icon wells — pale tint + semantic stroke (see .lck-page-header__icon).
+	 * NC *-text tokens are tuned per theme for contrast on main-background.
+	 */
+	--lck-notif-fg-info: var(--color-primary-element);
+	--lck-notif-fg-warning: var(--color-warning-text, var(--color-warning));
+	--lck-notif-fg-success: var(--color-success-text, var(--color-success));
+	--lck-notif-fg-danger: var(--color-error-text, var(--color-error));
+
+	--lck-shadow-sm: 0 1px 2px color-mix(in srgb, var(--color-main-text) 8%, transparent);
+	--lck-shadow-md: 0 8px 24px color-mix(in srgb, var(--color-main-text) 12%, transparent);
+	--lck-shadow-lg: 0 1rem 3rem color-mix(in srgb, var(--color-main-text) 28%, transparent);
+
+	/* Overlay scrims — theme ink, never hardcoded #000 */
+	--lck-scrim: color-mix(in srgb, var(--color-main-text) 45%, transparent);
+	--lck-scrim-strong: color-mix(in srgb, var(--color-main-text) 55%, transparent);
+
+	/*
+	 * Legacy --logcheck-* aliases (shell dialogs / app-layout ported from AZC).
+	 * Feature CSS should prefer --lck-*; every alias maps to NC/--lck-* so
+	 * undefined custom properties never blank out surfaces in any theme.
+	 */
+	--logcheck-color-modal-background: var(--lck-bg-card);
+	--logcheck-color-modal-border: var(--lck-border);
+	--logcheck-color-modal-footer-background: var(--lck-bg-soft);
+	--logcheck-color-background: var(--color-main-background);
+	--logcheck-color-background-elevated: var(--lck-bg-card);
+	--logcheck-color-background-secondary: var(--lck-bg-soft);
+	--logcheck-color-background-tertiary: var(--lck-bg-soft);
+	--logcheck-color-text: var(--lck-text);
+	--logcheck-color-text-muted: var(--lck-muted);
+	--logcheck-color-text-maxcontrast: var(--lck-muted);
+	--logcheck-color-text-secondary: var(--lck-muted);
+	--logcheck-color-text-tertiary: var(--lck-muted);
+	--logcheck-color-primary: var(--color-primary-element);
+	--logcheck-color-primary-element: var(--color-primary-element);
+	--logcheck-color-primary-light: color-mix(in srgb, var(--color-primary-element) 28%, transparent);
+	--logcheck-color-border: var(--lck-border);
+	--logcheck-color-border-focus: var(--color-primary-element);
+	--logcheck-color-border-warning: var(--color-warning-text, var(--color-warning));
+	--logcheck-color-error: var(--lck-danger-ink);
+	--logcheck-color-error-light: color-mix(in srgb, var(--lck-danger-ink) 28%, transparent);
+	--logcheck-color-success-light: color-mix(in srgb, var(--color-success-text, var(--color-success)) 28%, transparent);
+	--logcheck-color-warning-light: color-mix(in srgb, var(--color-warning-text, var(--color-warning)) 28%, transparent);
+	--logcheck-color-form-required: var(--lck-danger-ink);
+	--logcheck-color-form-label: var(--lck-text);
+	--logcheck-color-form-background: var(--color-main-background);
+	--logcheck-color-form-border: var(--color-border, var(--lck-border));
+	--logcheck-color-form-border-focus: var(--color-primary-element);
+	--logcheck-color-form-border-error: var(--lck-danger-ink);
+	--logcheck-color-form-border-success: var(--color-success-text, var(--color-success));
+	--logcheck-color-table-border: var(--lck-border);
+	--logcheck-color-table-header-background: var(--color-background-dark, var(--lck-bg-stripe));
+	--logcheck-font-family-sans: var(--font-face, inherit);
+	--logcheck-font-size-sm: var(--lck-fs-sm);
+	--logcheck-font-size-base: var(--lck-fs-md);
+	--logcheck-font-size-lg: var(--lck-fs-lg);
+	--logcheck-font-size-xl: var(--lck-fs-xl);
+	--logcheck-font-size-3xl: var(--lck-fs-2xl);
+	--logcheck-font-weight-medium: 500;
+	--logcheck-font-weight-semibold: 600;
+	--logcheck-font-weight-bold: 700;
+	--logcheck-letter-spacing-tight: -0.02em;
+	--logcheck-line-height-tight: var(--lck-line-tight);
+	--logcheck-line-height-normal: var(--lck-line-base);
+	--logcheck-line-height-relaxed: 1.6;
+}
+
+/* Bright accent fills on dark themes fail AA with white ink — darken fill + use main-text. */
+body[data-theme-dark],
+body[data-theme-dark-highcontrast],
+body[data-theme-dark] #content.app-logcheck,
+body[data-theme-dark-highcontrast] #content.app-logcheck {
+	--lck-danger-fill: color-mix(
+		in srgb,
+		var(--color-element-error, var(--color-error)) 40%,
+		var(--color-main-background)
+	);
+	--lck-danger-on-fill: var(--color-main-text);
+}
+
+/* NC high-contrast themes: stronger borders / shadows for 3:1 UI chrome */
+body[data-theme-light-highcontrast],
+body[data-theme-dark-highcontrast],
+body[data-theme-light-highcontrast] #content.app-logcheck,
+body[data-theme-dark-highcontrast] #content.app-logcheck {
+	--lck-border: color-mix(in srgb, var(--color-main-text) 32%, transparent);
+	--lck-border-strong: color-mix(in srgb, var(--color-main-text) 48%, transparent);
+	--lck-shadow-sm: 0 0 0 1px var(--lck-border-strong);
+	--lck-shadow-md: 0 0 0 2px var(--lck-border-strong);
+	--logcheck-color-border: var(--lck-border);
+	--logcheck-color-modal-border: var(--lck-border);
+}
+
+@media (prefers-contrast: more) {
+	:root {
+		--lck-icon-stroke: 2.25;
+	}
+
+	body,
+	#content.app-logcheck,
+	#app-content.lck-app,
+	.lck-app,
+	.lck-dialog,
+	.lck-modal,
+	.lck-toast-region,
+	.lck-toasts,
+	.lck-license-modal {
+		--lck-border: color-mix(in srgb, var(--color-main-text) 28%, transparent);
+		--lck-border-strong: color-mix(in srgb, var(--color-main-text) 40%, transparent);
+		--lck-shadow-sm: 0 0 0 1px var(--lck-border-strong);
+		--lck-shadow-md: 0 0 0 1px var(--lck-border-strong);
+	}
+}
