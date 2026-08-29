@@ -76,7 +76,7 @@ final class SettingsSectionCatalog
 		return match ($section) {
 			'alerts' => $l->t('Choose how HealthCheck notifies you when new errors appear.'),
 			'rules' => $l->t('Pick how serious an issue must be and how often alerts arrive.'),
-			'people' => $l->t('Choose who can manage HealthCheck besides Nextcloud admins.'),
+			'people' => $l->t('Who can open HealthCheck — Nextcloud admins always can; add app admins below.'),
 			'support' => $l->t('Help keep HealthCheck free — donations and enterprise contact.'),
 			default => '',
 		};

@@ -54,6 +54,19 @@ class DesignSystemChromeTest extends TestCase
 		self::assertStringNotContainsString('app-navigation', $src);
 	}
 
+	public function testPeopleSettingsExplainsWhoHasAccess(): void
+	{
+		$src = (string)file_get_contents($this->root . '/templates/parts/settings/people.php');
+		self::assertStringContainsString('lck-access-explain', $src);
+		self::assertStringContainsString("\$l->t('Who can open HealthCheck?')", $src);
+		self::assertStringContainsString('Only Nextcloud admins and the people below can open HealthCheck', $src);
+		self::assertStringContainsString('Nextcloud admins always have access', $src);
+		self::assertStringContainsString('App admins can open HealthCheck', $src);
+		self::assertStringContainsString('Everyone else cannot open HealthCheck', $src);
+		$catalog = (string)file_get_contents($this->root . '/lib/Service/SettingsSectionCatalog.php');
+		self::assertStringContainsString('Who can open HealthCheck — Nextcloud admins always can; add app admins below.', $catalog);
+	}
+
 	public function testAlertsUsesMoreOptionsNotAdvancedSummary(): void
 	{
 		$src = (string)file_get_contents($this->root . '/templates/parts/settings/alerts.php');

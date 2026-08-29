@@ -1,5 +1,14 @@
 # Changelog
 
+## 1.3.22 — 2026-08-27
+
+- Fix: in-app notification icon must be an absolute URL (NC 34) — stops InvalidValueException / deprecation spam when the bell loads
+- UX: alert notifications open Logs; paused-channel notifications open Alerts; clearer notification body text
+
+## 1.3.21 — 2026-08-27
+
+- UX: People settings explain who can open HealthCheck (Nextcloud admins, app admins, everyone else)
+
 ## 1.3.20 — 2026-08-27
 
 - Security: record delivery as sent even if pending markSent loses claim_gen (reclaim duplicate HTTP)

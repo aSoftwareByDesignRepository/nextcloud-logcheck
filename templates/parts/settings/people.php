@@ -10,6 +10,16 @@ $isNcAdmin = !empty($_['isNcAdmin']);
 	<input type="hidden" name="expected_version" value="<?php p((string)($_['settingsVersion'] ?? '1')); ?>">
 	<input type="hidden" name="access[mode]" value="restricted">
 
+	<section class="lck-callout lck-callout--info lck-access-explain" aria-labelledby="lck-access-explain-title">
+		<h2 id="lck-access-explain-title" class="lck-callout__title"><?php p($l->t('Who can open HealthCheck?')); ?></h2>
+		<p><?php p($l->t('Only Nextcloud admins and the people below can open HealthCheck. Open access is not available.')); ?></p>
+		<ul class="lck-access-explain__list">
+			<li><?php p($l->t('Nextcloud admins always have access. They can also change this list, download the full log file, start a fresh log, and turn on raw excerpts in alerts.')); ?></li>
+			<li><?php p($l->t('App admins can open HealthCheck, view and search logs, and manage alerts and rules — but not those Nextcloud-admin-only actions.')); ?></li>
+			<li><?php p($l->t('Everyone else cannot open HealthCheck.')); ?></li>
+		</ul>
+	</section>
+
 	<?php if ($isNcAdmin): ?>
 		<label for="lck-people-search"><?php p($l->t('Add app admin')); ?></label>
 		<input class="form-input" type="search" id="lck-people-search" autocomplete="off"

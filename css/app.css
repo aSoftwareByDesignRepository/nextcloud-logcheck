@@ -347,7 +347,27 @@
 	max-width: 40rem;
 }
 
-/* People combobox results (was orphaned CSS — selector restored) */
+/* People — access explanation + combobox results */
+#content.app-logcheck .lck-access-explain {
+	margin: 0 0 var(--lck-space-4);
+	max-width: 40rem;
+}
+
+#content.app-logcheck .lck-access-explain .lck-callout__title {
+	margin: 0 0 var(--lck-space-2);
+	font-size: 1rem;
+	font-weight: 600;
+}
+
+#content.app-logcheck .lck-access-explain__list {
+	margin: var(--lck-space-2) 0 0;
+	padding-left: 1.25rem;
+}
+
+#content.app-logcheck .lck-access-explain__list li + li {
+	margin-top: var(--lck-space-2);
+}
+
 #content.app-logcheck .lck-people-results {
 	list-style: none;
 	margin: 0 0 var(--lck-space-3);
