@@ -57,7 +57,8 @@ if (!class_exists(\Test\TestCase::class)) {
 }
 
 if (!class_exists(\Symfony\Component\Console\Command\Command::class, false)) {
-	eval('namespace Symfony\Component\Console\Command; class Command {}');
+	// Must define a constructor — PHP 8+ errors on parent::__construct() when parent has none.
+	eval('namespace Symfony\Component\Console\Command; class Command { public const SUCCESS = 0; public const FAILURE = 1; public function __construct() {} }');
 }
 
 if ($base === null && !interface_exists(\OC\Hooks\Emitter::class, false)) {

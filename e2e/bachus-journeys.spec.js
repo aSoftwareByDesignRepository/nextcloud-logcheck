@@ -117,24 +117,33 @@ test.describe('J-BACH Bachus journeys', () => {
 		await expect(search).not.toHaveAttribute('aria-busy', 'true');
 	});
 
-	test('J-BACH-05 / AC-B07 access denied HealthCheck copy and axe', async ({ page }) => {
+	test('J-BACH-05 / AC-B07 access denied HealthCheck copy and axe', async ({ page, browser }) => {
 		const deniedUser = process.env.E2E_DENIED_USER || process.env.LOGCHECK_E2E_DENIED_USER;
 		const deniedPass = process.env.E2E_DENIED_PASS || process.env.LOGCHECK_E2E_DENIED_PASS;
 		test.skip(!deniedUser || !deniedPass, 'Set E2E_DENIED_USER + E2E_DENIED_PASS for access-denied journey');
 
 		const base = (process.env.LOGCHECK_BASE_URL || process.env.E2E_BASE || 'http://localhost:8081').replace(/\/$/, '');
-		await page.goto(base + '/login', { waitUntil: 'domcontentloaded' });
-		await page.locator('#user, input[name="user"]').first().fill(deniedUser);
-		await page.locator('#password, input[name="password"]').first().fill(deniedPass);
-		await page.locator('button[type="submit"], input[type="submit"]').first().click();
-		await page.waitForURL(/apps\/|index\.php/, { timeout: 45000 });
+		// Fresh context — avoid entitled session from beforeEach blocking /login form.
+		const ctx = await browser.newContext();
+		const deniedPage = await ctx.newPage();
+		try {
+			await deniedPage.goto(base + '/login', { waitUntil: 'domcontentloaded' });
+			const userInput = deniedPage.locator('#user, input[name="user"]').first();
+			await userInput.waitFor({ state: 'visible', timeout: 45000 });
+			await userInput.fill(deniedUser);
+			await deniedPage.locator('#password, input[name="password"]').first().fill(deniedPass);
+			await deniedPage.locator('button[type="submit"], input[type="submit"], button.login-button').first().click();
+			await deniedPage.waitForURL(/apps\/|index\.php/, { timeout: 45000 });
 
-		await page.goto(base + '/index.php/apps/logcheck/', { waitUntil: 'domcontentloaded' });
-		await expect(page.locator('#lck-page-title')).toContainText(/Not authorized|Nicht berechtigt/i);
-		const body = await page.locator('#lck-main-content').innerText();
-		expect(body).toMatch(/HealthCheck/i);
-		expect(body).not.toMatch(/\bLogCheck app admins\b/);
-		await axeSeriousZero(page);
+			await deniedPage.goto(base + '/index.php/apps/logcheck/', { waitUntil: 'domcontentloaded' });
+			await expect(deniedPage.locator('#lck-page-title')).toContainText(/Not authorized|Nicht berechtigt/i);
+			const body = await deniedPage.locator('#lck-main-content').innerText();
+			expect(body).toMatch(/HealthCheck/i);
+			expect(body).not.toMatch(/\bLogCheck app admins\b/);
+			await axeSeriousZero(deniedPage);
+		} finally {
+			await ctx.close();
+		}
 	});
 
 	test('J-BACH-06 / AC-B06 NC admin can reach all sections; single Check again', async ({ page }) => {

@@ -53,13 +53,37 @@ async function api(page, method, path, data) {
 }
 
 test.describe('Momos API/Auth matrix', () => {
-	test('unauthenticated API returns 401 (not 200)', async ({ request }) => {
-		const res = await request.get(base + '/index.php/apps/logcheck/api/status');
-		expect(res.status()).toBe(401);
-		const put = await request.put(base + '/index.php/apps/logcheck/api/settings', {
-			data: { expected_version: 0, watch_enabled: true },
-		});
-		expect(put.status()).toBe(401);
+	test('unauthenticated API returns 401 (not 200) on every shipping API', async ({ request }) => {
+		const endpoints = [
+			{ method: 'get', path: '/index.php/apps/logcheck/api/status' },
+			{ method: 'get', path: '/index.php/apps/logcheck/api/settings' },
+			{ method: 'get', path: '/index.php/apps/logcheck/api/logs/meta' },
+			{ method: 'get', path: '/index.php/apps/logcheck/api/logs/files' },
+			{ method: 'get', path: '/index.php/apps/logcheck/api/logs/tail' },
+			{ method: 'get', path: '/index.php/apps/logcheck/api/logs/before' },
+			{ method: 'get', path: '/index.php/apps/logcheck/api/logs/search?q=x' },
+			{ method: 'get', path: '/index.php/apps/logcheck/api/directory/search?search=ad' },
+			{ method: 'put', path: '/index.php/apps/logcheck/api/settings', data: { expected_version: 0 } },
+			{ method: 'post', path: '/index.php/apps/logcheck/api/run', data: {} },
+			{ method: 'post', path: '/index.php/apps/logcheck/api/turn-on-alerts', data: { email: 'x@example.com', expected_version: 0 } },
+			{ method: 'post', path: '/index.php/apps/logcheck/api/channels/email/test', data: {} },
+			{ method: 'post', path: '/index.php/apps/logcheck/api/channels/slack/reenable', data: {} },
+			{ method: 'post', path: '/index.php/apps/logcheck/api/logs/download', data: { file: 'nextcloud.log' } },
+			{ method: 'post', path: '/index.php/apps/logcheck/api/logs/start-fresh', data: { confirm: 'START_FRESH' } },
+			{ method: 'post', path: '/index.php/apps/logcheck/api/logs/delete', data: { confirm: 'DELETE' } },
+			{ method: 'post', path: '/index.php/apps/logcheck/api/logs/delete-copy', data: { confirm: 'DELETE_COPY', file: 'nextcloud.log.1' } },
+		];
+		for (const ep of endpoints) {
+			let res;
+			if (ep.method === 'get') {
+				res = await request.get(base + ep.path);
+			} else if (ep.method === 'put') {
+				res = await request.put(base + ep.path, { data: ep.data || {} });
+			} else {
+				res = await request.post(base + ep.path, { data: ep.data || {} });
+			}
+			expect(res.status(), `${ep.method.toUpperCase()} ${ep.path}`).toBe(401);
+		}
 	});
 
 	test('non-entitled user gets 403 on every mutating and read API', async ({ page }) => {

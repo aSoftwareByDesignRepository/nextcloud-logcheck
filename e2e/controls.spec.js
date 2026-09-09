@@ -129,11 +129,11 @@ test.describe('All shipped controls work', () => {
 		await expect(page.locator('#lck-email-recipients')).toBeVisible();
 		await expect(page.locator('.lck-test-turn-on[data-channel="email"]')).toBeVisible();
 
-		// Open Slack & webhook details
-		const slackSummary = page.locator('details.lck-more summary').filter({ hasText: /Slack/i }).first();
-		if (await slackSummary.count()) {
-			await slackSummary.click();
-		}
+		// Open Slack & webhook details (closed by default when no URLs saved)
+		const outbound = page.locator('details.lck-more').filter({ has: page.locator('#lck-slack-url') }).first();
+		await outbound.evaluate((el) => {
+			el.open = true;
+		});
 		await expect(page.locator('#lck-slack-url')).toBeVisible();
 		await expect(page.locator('#lck-webhook-url')).toBeVisible();
 		await expect(page.locator('.lck-test-turn-on[data-channel="slack"]')).toBeVisible();

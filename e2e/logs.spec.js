@@ -59,8 +59,12 @@ test.describe('J-LCK-20 Logs browser', () => {
 		if (await actions.count()) {
 			await expect(actions).toHaveAttribute('hidden', /.*/);
 		}
+		// Remove-copy lives under More; un-hidden but not visible until menu opens.
+		await page.locator('#lck-logs-more-menu summary').click();
 		await expect(page.locator('#lck-logs-delete-copy')).toBeVisible();
-		await expect(page.locator('#lck-logs-name')).not.toHaveText(/^\s*$/);
+		await expect(
+			page.locator('label.lck-logs-file:has(input[name="lck-logs-file"]:checked) .lck-logs-file__name')
+		).not.toHaveText(/^\s*$/);
 		await axeSeriousZero(page);
 	});
 
@@ -91,6 +95,8 @@ test.describe('J-LCK-20 Logs browser', () => {
 		await older.check();
 		const btn = page.locator('#lck-logs-delete-copy');
 		test.skip(!(await btn.count()), 'Remove copy not available');
+		await page.locator('#lck-logs-more-menu summary').click();
+		await expect(btn).toBeVisible();
 		await btn.click();
 		const dialog = page.locator('#lck-logs-confirm-dialog');
 		await expect(dialog).toBeVisible();
