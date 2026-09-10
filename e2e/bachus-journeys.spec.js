@@ -118,8 +118,9 @@ test.describe('J-BACH Bachus journeys', () => {
 	});
 
 	test('J-BACH-05 / AC-B07 access denied HealthCheck copy and axe', async ({ page, browser }) => {
-		const deniedUser = process.env.E2E_DENIED_USER || process.env.LOGCHECK_E2E_DENIED_USER;
-		const deniedPass = process.env.E2E_DENIED_PASS || process.env.LOGCHECK_E2E_DENIED_PASS;
+		// Defaults match docs capture scripts + farm seed (lck_denied); override via env if needed.
+		const deniedUser = process.env.E2E_DENIED_USER || process.env.LOGCHECK_E2E_DENIED_USER || 'lck_denied';
+		const deniedPass = process.env.E2E_DENIED_PASS || process.env.LOGCHECK_E2E_DENIED_PASS || 'LckDenied!2026';
 		test.skip(!deniedUser || !deniedPass, 'Set E2E_DENIED_USER + E2E_DENIED_PASS for access-denied journey');
 
 		const base = (process.env.LOGCHECK_BASE_URL || process.env.E2E_BASE || 'http://localhost:8081').replace(/\/$/, '');

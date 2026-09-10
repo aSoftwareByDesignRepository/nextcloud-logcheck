@@ -1,5 +1,15 @@
 # Changelog
 
+## 1.3.24 — 2026-09-09
+
+- App Store: shorten EN/DE `<summary>` to ≤128 characters (info.xml schema)
+
+## 1.3.23 — 2026-09-09
+
+- UX: sticky Save on Alerts/People/Rules forms so the primary action stays reachable when long sections expand
+- UX: Watching / health cards expose a **Try again** action that re-runs the log check; degraded cards prefer Try again over a blind Alerts link
+- Reliability: health probe routes secret/webhook/mail failures to Alerts setup and permission/read failures to Logs
+
 ## 1.3.22 — 2026-08-27
 
 - Fix: in-app notification icon must be an absolute URL (NC 34) — stops InvalidValueException / deprecation spam when the bell loads

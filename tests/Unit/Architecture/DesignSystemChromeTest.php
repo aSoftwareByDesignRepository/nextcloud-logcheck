@@ -74,6 +74,12 @@ class DesignSystemChromeTest extends TestCase
 		self::assertStringNotContainsString("\$l->t('Advanced')", $src);
 		self::assertStringContainsString('lck-switch-field__track', $src);
 		self::assertStringContainsString('role="switch"', $src);
+		self::assertStringContainsString('lck-form-actions', $src);
+		$rules = (string)file_get_contents($this->root . '/templates/parts/settings/rules.php');
+		self::assertStringContainsString('lck-form-actions', $rules);
+		$css = (string)file_get_contents($this->root . '/css/app.css');
+		self::assertStringContainsString('.lck-form-actions', $css);
+		self::assertStringContainsString('position: sticky', $css);
 	}
 
 	public function testHomeWatchingUsesTrackSwitch(): void
@@ -87,13 +93,32 @@ class DesignSystemChromeTest extends TestCase
 		self::assertStringContainsString('Watch log file', $src);
 		self::assertStringContainsString('lck-alerts-checklist', $src);
 		self::assertStringContainsString('id="lck-alerts-checklist"', $src);
+		// Visual MF: Set up alerts CTA must sit before the checklist bullets (no dead-end crop).
+		self::assertStringContainsString('lck-alerts-checklist__cta', $src);
+		$ctaPos = strpos($src, 'lck-alerts-checklist__cta');
+		$listPos = strpos($src, 'lck-alerts-checklist__list');
+		self::assertNotFalse($ctaPos);
+		self::assertNotFalse($listPos);
+		self::assertLessThan($listPos, $ctaPos);
+		// Visual MF: Set up alerts (checklist) XOR Manage alerts (ready actions) — never dual owners.
+		self::assertStringContainsString('id="lck-watching-actions-error"', $src);
+		self::assertStringContainsString('id="lck-watching-actions-ready"', $src);
+		self::assertStringContainsString('id="lck-watching-actions-setup"', $src);
+		self::assertStringContainsString('!$alertsReady', $src);
+		// display:flex on actions must not defeat [hidden] (dual Set up + Manage craft FAIL).
+		$css = (string)file_get_contents($this->root . '/css/app.css');
+		self::assertStringContainsString('.lck-status-card__actions[hidden]', $css);
+		self::assertStringContainsString('display: none !important', $css);
 		self::assertStringNotContainsString('lck-topology-note', $src);
 		self::assertStringNotContainsString('lck-summary-title', $src);
 		self::assertStringNotContainsString('lck-setup-title', $src);
 		$js = (string)file_get_contents($this->root . '/js/app.js');
 		self::assertStringContainsString('lck-check-again', $js);
+		self::assertStringContainsString('data-lck-action="check-again"', $js);
 		self::assertStringContainsString('refreshHomeStatus', $js);
 		self::assertStringContainsString('applyHomeStatus', $js);
+		self::assertStringContainsString('lck-watching-actions-ready', $js);
+		self::assertStringContainsString('lck-watching-actions-setup', $js);
 		$feedback = (string)file_get_contents($this->root . '/js/common/app-feedback.js');
 		self::assertStringContainsString('LogCheckToasts', $feedback);
 	}
@@ -107,6 +132,7 @@ class DesignSystemChromeTest extends TestCase
 		$settings = (string)file_get_contents($this->root . '/js/settings.js');
 		self::assertStringNotContainsString("LogCheckToasts.showSuccess(t('logcheck', 'Saved.'));\n\t\t\t\twindow.location.reload();", $settings);
 		self::assertStringContainsString('App.setSettingsVersion', $settings);
+		self::assertStringContainsString('bindClearUrlButton', $settings);
 
 		$support = (string)file_get_contents($this->root . '/templates/parts/settings/support.php');
 		self::assertStringNotContainsString('Several servers each with their own log file are not supported', $support);
@@ -120,7 +146,18 @@ class DesignSystemChromeTest extends TestCase
 		self::assertStringContainsString('data-channel="webhook"', $src);
 		self::assertSame(3, substr_count($src, 'lck-reenable-channel'));
 		self::assertStringContainsString('lck-test-turn-on', $src);
+		// Visual MF: runtime-disabled channels must not render the switch ON.
+		self::assertStringContainsString('$slackRuntimeOff', $src);
+		self::assertStringContainsString('$slackShowsOn', $src);
+		self::assertStringContainsString('aria-disabled="true"', $src);
+		self::assertStringContainsString('Channel disabled after repeated failures.', $src);
 		self::assertStringContainsString('Send test & turn on', $src);
+		// Visual MF: Clear saved URL is an explicit danger button, not a switch/toggle.
+		self::assertStringContainsString('id="lck-slack-clear-btn"', $src);
+		self::assertStringContainsString('id="lck-webhook-clear-btn"', $src);
+		self::assertStringContainsString('Saved URL will be removed when you save.', $src);
+		self::assertStringNotContainsString('id="lck-slack-clear" name="channels[slack][clear_url]" value="1" role="switch"', $src);
+		self::assertStringNotContainsString('id="lck-webhook-clear" name="channels[webhook][clear_url]" value="1" role="switch"', $src);
 	}
 
 	public function testRadiusTokensBindToNextcloudWithDesignSystemFallbacks(): void

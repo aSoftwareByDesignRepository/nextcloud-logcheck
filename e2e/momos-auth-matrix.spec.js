@@ -137,7 +137,9 @@ test.describe('Momos API/Auth matrix', () => {
 		}
 
 		await page.goto(base + '/index.php/apps/logcheck/', { waitUntil: 'domcontentloaded' });
-		await expect(page.locator('body')).toContainText(/not authorized|don.?t have access|Access denied|Only Nextcloud admins/i);
+		await expect(page.locator('body')).toContainText(
+			/not authorized|don.?t have access|Access denied|Only Nextcloud admins|Nicht berechtigt|Nur Nextcloud-Admins|pas autoris|No autorizado|geen toegang/i,
+		);
 		await expect(page.locator('.lck-home, #lck-alerts-checklist, .lck-status-card')).toHaveCount(0);
 	});
 

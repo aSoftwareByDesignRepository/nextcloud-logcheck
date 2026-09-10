@@ -7,3 +7,4 @@
 /playwright-report/
 /.infection/
 *.original
+.atlas-runtime-seed.tmp.php

@@ -152,6 +152,16 @@
 	margin: var(--lck-space-4) 0 0;
 }
 
+/*
+ * display:flex/block utilities beat the UA [hidden] { display:none }.
+ * Without this, Watching shows Set up + Manage×2 (error+ready) in one frame.
+ */
+#content.app-logcheck .lck-status-card__actions[hidden],
+#content.app-logcheck .lck-alerts-checklist[hidden],
+#content.app-logcheck .lck-callout[hidden] {
+	display: none !important;
+}
+
 #content.app-logcheck .lck-watching-row {
 	display: flex;
 	flex-direction: column;
@@ -617,6 +627,27 @@
 #content.app-logcheck .lck-form {
 	min-width: 0;
 	max-width: 100%;
+	padding-bottom: calc(var(--lck-space-6, 1.5rem) + 4.5rem);
+}
+
+/* Sticky primary Save — always reachable when Slack/webhook/advanced sections expand */
+#content.app-logcheck .lck-form-actions {
+	position: sticky;
+	bottom: 0;
+	z-index: 5;
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: var(--lck-space-3, 0.75rem);
+	margin: var(--lck-space-4, 1rem) 0 0;
+	padding: var(--lck-space-3, 0.75rem) var(--lck-space-2, 0.5rem) calc(var(--lck-space-4, 1rem) + env(safe-area-inset-bottom, 0px));
+	background: var(--color-main-background);
+	border-top: 1px solid var(--color-border, var(--lck-border));
+	box-shadow: 0 -8px 20px color-mix(in srgb, var(--color-main-text) 10%, transparent);
+}
+
+#content.app-logcheck .lck-form-actions .lck-btn--primary {
+	min-width: 8rem;
 }
 
 /* Field titles only — switch track labels stay flex (see switch-field.css) */

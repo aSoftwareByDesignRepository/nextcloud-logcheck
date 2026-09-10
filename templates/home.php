@@ -162,11 +162,12 @@ include __DIR__ . '/common/page-start.php';
 			<div class="lck-callout lck-callout--info lck-alerts-checklist" id="lck-alerts-checklist" role="status" hidden>
 			<?php endif; ?>
 				<p><?php p($l->t('Watching the log file does not send alerts by itself.')); ?></p>
+				<?php /* CTA before checklist so the teacher well is never a Bachus dead-end when clipped. */ ?>
+				<p class="lck-alerts-checklist__cta"><a class="lck-btn lck-btn--secondary" href="<?php p((string)($urls['alerts'] ?? '#')); ?>"><?php p($l->t('Set up alerts')); ?></a></p>
 				<ul class="lck-alerts-checklist__list">
 					<li><?php p($l->t('Set up at least one alert channel')); ?></li>
 					<li><?php p($l->t('Watch log file is on')); ?></li>
 				</ul>
-				<p><a class="lck-btn lck-btn--secondary" href="<?php p((string)($urls['alerts'] ?? '#')); ?>"><?php p($l->t('Set up alerts')); ?></a></p>
 			</div>
 			<p id="lck-watching-desc" class="lck-muted">
 				<?php if (!empty($status['error'])): ?>
@@ -177,16 +178,20 @@ include __DIR__ . '/common/page-start.php';
 					<?php p($l->t('When on, HealthCheck checks for new errors in the background.')); ?>
 				<?php endif; ?>
 			</p>
-			<?php if (!empty($status['error']) && $watch): ?>
-				<p class="lck-status-card__actions">
-					<a class="lck-btn lck-btn--ghost" href="<?php p((string)($urls['alerts'] ?? '#')); ?>"><?php p($l->t('Manage alerts')); ?></a>
-				</p>
-			<?php elseif ($watch): ?>
-				<p class="lck-status-card__actions">
-					<a class="lck-btn lck-btn--secondary" href="<?php p((string)($urls['alerts'] ?? '#')); ?>"><?php p($l->t('Manage alerts')); ?></a>
-					<a class="lck-btn lck-btn--ghost" href="<?php p((string)($urls['logs'] ?? '#')); ?>"><?php p($l->t('Logs')); ?></a>
-				</p>
-			<?php endif; ?>
+			<?php /* One alert CTA owner: Set up (checklist) XOR Manage (actions). Never both. */ ?>
+			<p class="lck-status-card__actions" id="lck-watching-actions-error"<?php if (empty($status['error']) || !$watch): ?> hidden<?php endif; ?>>
+				<button type="button" class="lck-btn lck-btn--primary" id="lck-watching-try-again">
+					<?php p($l->t('Try again')); ?>
+				</button>
+				<a class="lck-btn lck-btn--ghost" href="<?php p((string)($urls['alerts'] ?? '#')); ?>"><?php p($l->t('Manage alerts')); ?></a>
+			</p>
+			<p class="lck-status-card__actions" id="lck-watching-actions-ready"<?php if (!$watch || !$alertsReady || !empty($status['error'])): ?> hidden<?php endif; ?>>
+				<a class="lck-btn lck-btn--secondary" href="<?php p((string)($urls['alerts'] ?? '#')); ?>"><?php p($l->t('Manage alerts')); ?></a>
+				<a class="lck-btn lck-btn--ghost" href="<?php p((string)($urls['logs'] ?? '#')); ?>"><?php p($l->t('Logs')); ?></a>
+			</p>
+			<p class="lck-status-card__actions" id="lck-watching-actions-setup"<?php if (!$watch || $alertsReady || !empty($status['error'])): ?> hidden<?php endif; ?>>
+				<a class="lck-btn lck-btn--ghost" href="<?php p((string)($urls['logs'] ?? '#')); ?>"><?php p($l->t('Logs')); ?></a>
+			</p>
 			<form id="lck-watch-form" hidden></form>
 		</section>
 	<?php endif; ?>

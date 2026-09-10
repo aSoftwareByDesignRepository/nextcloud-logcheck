@@ -75,6 +75,39 @@ class LogHealthProbeTest extends TestCase
 		self::assertSame('view-logs', $card->actions[0]['id'] ?? null);
 	}
 
+	public function testGenericTryAgainOffersCheckAgainNotSetupAlerts(): void
+	{
+		$card = LogHealthProbe::mapStatus([
+			'backend_supported' => true,
+			'topology_ok' => true,
+			'watch_enabled' => true,
+			'stale' => false,
+			'state' => 'degraded',
+			'last_check_at' => time(),
+			'error' => 'Something went wrong. Try again.',
+		], null, '/alerts', null, '/logs');
+		self::assertSame('Needs attention', $card->label);
+		self::assertSame('check-again', $card->actions[0]['id'] ?? null);
+		self::assertSame('Try again', $card->actions[0]['label'] ?? null);
+		self::assertArrayHasKey('href', $card->actions[0]);
+		self::assertNull($card->actions[0]['href']);
+		self::assertStringContainsString('Try again', $card->detail);
+	}
+
+	public function testWebhookErrorOffersSetupAlerts(): void
+	{
+		$card = LogHealthProbe::mapStatus([
+			'backend_supported' => true,
+			'topology_ok' => true,
+			'watch_enabled' => true,
+			'stale' => false,
+			'state' => 'degraded',
+			'last_check_at' => time(),
+			'error' => 'Webhook failed. Check the URL and try again.',
+		], null, '/alerts', null, '/logs');
+		self::assertSame('setup-alerts', $card->actions[0]['id'] ?? null);
+	}
+
 	public function testWatchingIsOk(): void
 	{
 		$card = LogHealthProbe::mapStatus([

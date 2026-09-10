@@ -113,10 +113,24 @@ test.describe('All shipped controls work', () => {
 	test('Logs: severity chips and raw toggle in More menu', async ({ page }) => {
 		await gotoLogCheck(page, '/logs');
 		await expect(page.locator('#lck-logs-viewer')).toBeVisible({ timeout: 15000 });
-		await expect(page.locator('#lck-logs-filter-chips')).toBeVisible();
-		await page.locator('#lck-logs-filter-chips').getByText(/Errors/i).click();
+		const chips = page.locator('#lck-logs-filter-chips');
+		await expect(chips).toBeVisible();
+
+		// Each radiogroup value: All → Warnings+ → Errors+ (click labels; inputs are sr-only).
+		const allLabel = chips.locator('label.lck-logs-filter-chip').filter({ has: page.locator('input[value="0"]') });
+		const warnLabel = chips.locator('label.lck-logs-filter-chip').filter({ has: page.locator('input[value="3"]') });
+		const errLabel = chips.locator('label.lck-logs-filter-chip').filter({ has: page.locator('input[value="4"]') });
+		await allLabel.click();
+		await expect(chips.locator('input[name="lck-logs-filter"]:checked')).toHaveValue('0');
+		await warnLabel.click();
+		await expect(chips.locator('input[name="lck-logs-filter"]:checked')).toHaveValue('3');
+		await errLabel.click();
+		await expect(chips.locator('input[name="lck-logs-filter"]:checked')).toHaveValue('4');
 		await page.locator('#lck-logs-reload').click();
 		await page.waitForResponse((r) => r.url().includes('/api/logs/tail') && r.status() < 500);
+		await allLabel.click();
+		await expect(chips.locator('input[name="lck-logs-filter"]:checked')).toHaveValue('0');
+
 		await page.locator('#lck-logs-more-menu summary').click();
 		await page.locator('#lck-logs-raw-toggle').click();
 		await expect(page.locator('#lck-logs-raw-toggle')).toHaveAttribute('aria-pressed', 'true');

@@ -136,6 +136,22 @@
 				desc.textContent = t('logcheck', 'When on, HealthCheck checks for new errors in the background.');
 			}
 		}
+		// One alert CTA owner: Set up (checklist) XOR Manage (actions). Sync after toggle without reload.
+		var errActions = document.getElementById('lck-watching-actions-error');
+		var readyActions = document.getElementById('lck-watching-actions-ready');
+		var setupActions = document.getElementById('lck-watching-actions-setup');
+		var showErr = !!(status.watch_enabled && status.error);
+		var showReady = !!(status.watch_enabled && status.alerts_ready && !status.error);
+		var showSetup = !!(status.watch_enabled && !status.alerts_ready && !status.error);
+		if (errActions) {
+			if (showErr) { errActions.removeAttribute('hidden'); } else { errActions.setAttribute('hidden', 'hidden'); }
+		}
+		if (readyActions) {
+			if (showReady) { readyActions.removeAttribute('hidden'); } else { readyActions.setAttribute('hidden', 'hidden'); }
+		}
+		if (setupActions) {
+			if (showSetup) { setupActions.removeAttribute('hidden'); } else { setupActions.setAttribute('hidden', 'hidden'); }
+		}
 		if (status.settings_version) {
 			setSettingsVersion(status.settings_version);
 		}
@@ -209,6 +225,17 @@
 				runCheckAgain(checkAgain);
 			});
 		}
+		var watchingTryAgain = document.getElementById('lck-watching-try-again');
+		if (watchingTryAgain) {
+			watchingTryAgain.addEventListener('click', function () {
+				runCheckAgain(watchingTryAgain);
+			});
+		}
+		document.querySelectorAll('.lck-health-card__action[data-lck-action="check-again"]').forEach(function (btn) {
+			btn.addEventListener('click', function () {
+				runCheckAgain(btn);
+			});
+		});
 	}
 
 	document.addEventListener('DOMContentLoaded', function () {

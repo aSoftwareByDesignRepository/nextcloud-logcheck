@@ -58,5 +58,7 @@ $mutes = $settings['mutes'] ?? [];
 		?>">
 	</details>
 
-	<button type="submit" class="lck-btn lck-btn--primary"><?php p($l->t('Save')); ?></button>
+	<div class="lck-form-actions">
+		<button type="submit" class="lck-btn lck-btn--primary"><?php p($l->t('Save')); ?></button>
+	</div>
 </form>

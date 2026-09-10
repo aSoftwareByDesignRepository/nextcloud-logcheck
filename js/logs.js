@@ -510,10 +510,13 @@
 		}
 		if (hint) {
 			var canDownload = !!document.getElementById('lck-logs-download');
+			var rowCount = (viewState.rows && viewState.rows.length) || 0;
 			if (viewState.mode === 'search') {
 				hint.textContent = canDownload
 					? t('Search looks in the recent part of the file. Download the full file to search everything offline.')
 					: t('Search looks in the recent part of the file.');
+			} else if (rowCount === 0) {
+				hint.textContent = t('No log lines loaded yet. Use Reload, or wait for Nextcloud to write to the log.');
 			} else if (!viewState.truncated && viewState.fromOffset === 0) {
 				hint.textContent = t('Showing the full file.');
 			} else if (viewState.accumBytes >= VIEWER_ACCUM_MAX && viewState.truncated) {

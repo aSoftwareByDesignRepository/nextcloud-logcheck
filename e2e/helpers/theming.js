@@ -15,6 +15,11 @@ const USER_THEMES = ['light', 'dark', 'light-highcontrast', 'dark-highcontrast']
  * @param {import('@playwright/test').Page} page
  * @param {string} themeId
  */
+/**
+ * Prefer OCS theming API; on 5xx (lab contention / stale enabled-themes type) fall back to occ.
+ * @param {import('@playwright/test').Page} page
+ * @param {string} themeId
+ */
 async function setUserTheme(page, themeId) {
 	const failures = await page.evaluate(async ({ target, all }) => {
 		const token = (typeof window.OC !== 'undefined' && window.OC.requestToken)
@@ -39,16 +44,33 @@ async function setUserTheme(page, themeId) {
 		return problems;
 	}, { target: themeId, all: USER_THEMES });
 	if (failures.length > 0) {
-		throw new Error(`Theme switch to "${themeId}" failed: ${failures.join('; ')}`);
+		const user = process.env.E2E_USER || process.env.LOGCHECK_E2E_USER || 'admin';
+		try {
+			occ(['user:setting', user, 'theming', 'enabled-themes', '--delete']);
+		} catch {
+			/* missing key ok */
+		}
+		occ(['user:setting', user, 'theming', 'enabled-themes', JSON.stringify([themeId])]);
 	}
 	await page.reload({ waitUntil: 'domcontentloaded' });
-	await page.waitForSelector(`body[data-theme-${themeId}]`, { timeout: 15_000 });
+	await page.waitForSelector(`body[data-theme-${themeId}]`, { timeout: 20_000 });
 }
 
 /**
  * @param {import('@playwright/test').Page} page
  */
 async function resetUserTheme(page) {
+	const user = process.env.E2E_USER || process.env.LOGCHECK_E2E_USER || 'admin';
+	try {
+		occ(['user:setting', user, 'theming', 'enabled-themes', '--delete']);
+	} catch {
+		/* ok */
+	}
+	try {
+		occ(['user:setting', user, 'theming', 'enabled-themes', JSON.stringify(['light'])]);
+	} catch {
+		/* ok */
+	}
 	await page.evaluate(async (all) => {
 		const token = (typeof window.OC !== 'undefined' && window.OC.requestToken)
 			|| document.querySelector('head[data-requesttoken]')?.getAttribute('data-requesttoken')
@@ -59,7 +81,7 @@ async function resetUserTheme(page) {
 				method: 'DELETE', credentials: 'same-origin', headers,
 			}).catch(() => {});
 		}
-	}, USER_THEMES);
+	}, USER_THEMES).catch(() => {});
 	await page.reload({ waitUntil: 'domcontentloaded' });
 }
 

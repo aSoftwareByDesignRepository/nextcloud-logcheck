@@ -1,6 +1,7 @@
 // @ts-check
 const { test, expect } = require('@playwright/test');
 const { login, gotoLogCheck, axeSeriousZero } = require('./helpers');
+const { patchOlderLogCopy } = require('./helpers/atlas-log-seed');
 
 test.describe('J-LCK-20 Logs browser', () => {
 	test.beforeEach(async ({ page }) => {
@@ -87,11 +88,65 @@ test.describe('J-LCK-20 Logs browser', () => {
 		await page.click('#lck-logs-confirm-cancel');
 	});
 
+	test('delete log file dialog open cancel and confirm', async ({ page }) => {
+		await gotoLogCheck(page, '/logs');
+		const btn = page.locator('#lck-logs-delete');
+		test.skip(!(await btn.count()), 'Delete log not available (permissions / backend)');
+		const actions = page.locator('#lck-logs-actions');
+		if (await actions.count()) {
+			await actions.locator('summary').click();
+		}
+		test.skip(!(await btn.isVisible()), 'Delete log hidden (permissions / backend)');
+
+		await btn.click();
+		const dialog = page.locator('#lck-logs-confirm-dialog');
+		await expect(dialog).toBeVisible();
+		await expect(page.locator('#lck-logs-confirm-title')).toContainText(/Delete the log file/i);
+		await page.fill('#lck-logs-confirm-input', 'wrong');
+		await page.click('#lck-logs-confirm-ok');
+		await expect(dialog).toBeVisible();
+		await page.click('#lck-logs-confirm-cancel');
+		await expect(dialog).toBeHidden();
+
+		// Confirm path: intercept mutate so e2e does not wipe the live instance log.
+		await actions.evaluate((el) => {
+			if (el instanceof HTMLDetailsElement) {
+				el.open = true;
+			}
+		});
+		await expect(btn).toBeVisible();
+		await btn.click();
+		await expect(dialog).toBeVisible();
+		await page.fill('#lck-logs-confirm-input', 'DELETE');
+		await page.route('**/api/logs/delete', async (route) => {
+			await route.fulfill({
+				status: 200,
+				contentType: 'application/json',
+				body: JSON.stringify({ ok: true, name: 'nextcloud.log' }),
+			});
+		});
+		await Promise.all([
+			page.waitForResponse((r) => r.url().includes('/api/logs/delete') && r.request().method() === 'POST'),
+			page.click('#lck-logs-confirm-ok'),
+		]);
+		await page.unroute('**/api/logs/delete');
+	});
+
 	test('remove copy deletes and reloads the page', async ({ page }) => {
+		let seeded = '';
+		try {
+			seeded = patchOlderLogCopy();
+		} catch (e) {
+			test.skip(true, `env_gap: cannot seed older log copy (${e && e.message ? e.message : e})`);
+		}
 		await gotoLogCheck(page, '/logs');
 		const older = page.locator('input[name="lck-logs-file"][data-live="0"]:not([disabled])').first();
-		test.skip(!(await older.count()), 'No older copies present on this instance');
+		test.skip(!(await older.count()), 'env_gap: seeded older copy not listed');
 		const deletedId = await older.inputValue();
+		expect(deletedId).toBeTruthy();
+		if (seeded) {
+			expect(deletedId).toBe(seeded);
+		}
 		await older.check();
 		const btn = page.locator('#lck-logs-delete-copy');
 		test.skip(!(await btn.count()), 'Remove copy not available');

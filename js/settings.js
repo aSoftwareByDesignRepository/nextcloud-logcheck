@@ -72,6 +72,27 @@
 		return settings;
 	}
 
+	function bindClearUrlButton(btnId, hiddenId, hintId) {
+		var btn = document.getElementById(btnId);
+		var hidden = document.getElementById(hiddenId);
+		var hint = document.getElementById(hintId);
+		if (!btn || !hidden) {
+			return;
+		}
+		btn.addEventListener('click', function () {
+			var on = hidden.value !== '1';
+			hidden.value = on ? '1' : '0';
+			btn.setAttribute('aria-pressed', on ? 'true' : 'false');
+			if (hint) {
+				if (on) {
+					hint.removeAttribute('hidden');
+				} else {
+					hint.setAttribute('hidden', 'hidden');
+				}
+			}
+		});
+	}
+
 	document.addEventListener('DOMContentLoaded', function () {
 		var form = document.getElementById('lck-settings-form');
 		if (!form || !window.LogCheckApp) {
@@ -80,6 +101,8 @@
 		var App = window.LogCheckApp;
 		App.chipGroup(document.getElementById('lck-level-chips'), document.getElementById('lck-min-level'));
 		App.chipGroup(document.getElementById('lck-pace-chips'), document.getElementById('lck-pace-seconds'));
+		bindClearUrlButton('lck-slack-clear-btn', 'lck-slack-clear', 'lck-slack-clear-hint');
+		bindClearUrlButton('lck-webhook-clear-btn', 'lck-webhook-clear', 'lck-webhook-clear-hint');
 
 		form.addEventListener('submit', async function (ev) {
 			ev.preventDefault();

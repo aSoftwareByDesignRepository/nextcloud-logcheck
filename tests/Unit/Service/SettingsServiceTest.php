@@ -278,6 +278,36 @@ class SettingsServiceTest extends TestCase
 		self::assertNull($out['runtime']['watcher_node']);
 	}
 
+	public function testDisablingNotificationChannelSetsEnabledFalse(): void
+	{
+		$svc = new SettingsService(
+			$this->createMock(IDBConnection::class),
+			$this->createMock(SecretStore::class),
+			$this->createMock(MuteRegexValidator::class),
+			$this->createMock(AccessService::class),
+			$this->createMock(SsrfGuard::class),
+			$this->createMock(AuditService::class),
+			$this->createMock(\Psr\Log\LoggerInterface::class),
+			$this->createMock(TopologyGuard::class),
+			$this->createMock(ChannelTestProof::class),
+		);
+		$method = new ReflectionMethod(SettingsService::class, 'mergeAndValidate');
+		$method->setAccessible(true);
+		$current = SettingsService::defaults();
+		$current['channels']['notification']['enabled'] = true;
+		$current['channels']['notification']['recipient_uids'] = ['admin'];
+
+		$out = $method->invoke($svc, $current, [
+			'channels' => [
+				'notification' => [
+					'enabled' => false,
+				],
+			],
+		], 'admin', true);
+		self::assertFalse($out['channels']['notification']['enabled']);
+		self::assertSame(['admin'], $out['channels']['notification']['recipient_uids']);
+	}
+
 	public function testEnableSlackAllowedWhenPreVerified(): void
 	{
 		$secret = $this->createMock(SecretStore::class);

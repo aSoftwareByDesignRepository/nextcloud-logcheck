@@ -83,6 +83,12 @@ final class LogHealthProbe implements HealthProbeInterface
 			'label' => $t('View logs'),
 			'href' => $logsHref,
 		]] : [];
+		// Button action (no href): home.php + app.js bind data-lck-action="check-again".
+		$tryAgainAction = [[
+			'id' => 'check-again',
+			'label' => $t('Try again'),
+			'href' => null,
+		]];
 
 		if (!$supported || !$topologyOk) {
 			return new HealthCard(
@@ -129,9 +135,18 @@ final class LogHealthProbe implements HealthProbeInterface
 
 		$statusState = isset($status['state']) && is_string($status['state']) ? $status['state'] : '';
 		if ($error !== '' || $statusState === 'degraded') {
-			$attentionAction = $setupAlertsAction;
-			if ($error !== '' && (stripos($error, 'log') !== false || stripos($error, 'read') !== false || stripos($error, 'permission') !== false)) {
-				$attentionAction = $viewLogsAction !== [] ? $viewLogsAction : $setupAlertsAction;
+			$attentionAction = $tryAgainAction;
+			if ($error !== '') {
+				$errLower = strtolower($error);
+				if (str_contains($errLower, 'secret') || str_contains($errLower, 'webhook')
+					|| str_contains($errLower, 'email') || str_contains($errLower, 'mail ')
+					|| str_contains($errLower, 'mail.') || $error === ChannelStateStore::ERR_MAIL
+					|| $error === ChannelStateStore::ERR_HTTP || $error === ChannelStateStore::ERR_SECRETS) {
+					$attentionAction = $setupAlertsAction !== [] ? $setupAlertsAction : $tryAgainAction;
+				} elseif (str_contains($errLower, 'permission') || str_contains($errLower, 'cannot read the log')) {
+					$attentionAction = $viewLogsAction !== [] ? $viewLogsAction : $tryAgainAction;
+				}
+				// Generic "Try again." / check-failed copy → card CTA matches the sentence.
 			}
 			return new HealthCard(
 				'log',

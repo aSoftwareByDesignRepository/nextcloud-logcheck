@@ -5,7 +5,7 @@ declare(strict_types=1);
 /**
  * Nav footer: single "Help" button that opens a dropdown with
  * Report a problem / Suggest an improvement / GitHub Issues.
- * (Commercial "Support & us" is a separate nav page — do not reuse that label here.)
+ * (Commercial "Support us" is a separate nav page — do not reuse that label here.)
  *
  * Expected variables (set by the including template):
  * @var \OCP\IL10N $l
@@ -149,7 +149,7 @@ $sbdFeedbackIcon = static function (string $iconPrefix, string $inner): string {
 			<?php endif; ?>
 		</ul>
 		<p class="<?php p($prefix); ?>-nav-footer__note">
-			<?php p($l->t('Email is best-effort — no reply SLA. Need booked help? Use Support & us.')); ?>
+			<?php p($l->t('Email is best-effort — no reply SLA. Need booked help? Use Support us.')); ?>
 		</p>
 	</div>
 	<script type="application/json" id="<?php p($prefix); ?>-app-feedback-config"><?php

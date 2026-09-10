@@ -183,6 +183,34 @@ class ApiControllerInvokeTest extends TestCase
 		self::assertSame(4, $res->getData()['version']);
 	}
 
+	public function testSaveSettingsDisablesNotificationChannel(): void
+	{
+		$this->access->method('isNcAdmin')->willReturn(true);
+		$this->settings->expects(self::once())->method('save')
+			->with(
+				self::callback(static function (array $input): bool {
+					return isset($input['channels']['notification']['enabled'])
+						&& $input['channels']['notification']['enabled'] === false;
+				}),
+				3,
+				'admin',
+				true
+			)
+			->willReturn(['version' => 5]);
+		$this->settings->method('toUiDto')->willReturn(['version' => 5, 'settings' => [
+			'channels' => ['notification' => ['enabled' => false]],
+		]]);
+		$res = $this->controller([
+			'expected_version' => 3,
+			'channels' => [
+				'notification' => ['enabled' => false],
+			],
+		])->saveSettings();
+		self::assertSame(200, $res->getStatus());
+		self::assertSame(5, $res->getData()['version']);
+		self::assertFalse($res->getData()['settings']['channels']['notification']['enabled']);
+	}
+
 	public function testTurnOnAlertsHappyPathInvokesController(): void
 	{
 		$this->logBackend->expects(self::once())->method('assertFileBackend');

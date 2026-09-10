@@ -632,9 +632,18 @@ function mutants(string $root): array
 			'file' => $root . '/lib/Service/Health/LogHealthProbe.php',
 			'search' => '$statusState = isset($status[\'state\']) && is_string($status[\'state\']) ? $status[\'state\'] : \'\';
 		if ($error !== \'\' || $statusState === \'degraded\') {
-			$attentionAction = $setupAlertsAction;
-			if ($error !== \'\' && (stripos($error, \'log\') !== false || stripos($error, \'read\') !== false || stripos($error, \'permission\') !== false)) {
-				$attentionAction = $viewLogsAction !== [] ? $viewLogsAction : $setupAlertsAction;
+			$attentionAction = $tryAgainAction;
+			if ($error !== \'\') {
+				$errLower = strtolower($error);
+				if (str_contains($errLower, \'secret\') || str_contains($errLower, \'webhook\')
+					|| str_contains($errLower, \'email\') || str_contains($errLower, \'mail \')
+					|| str_contains($errLower, \'mail.\') || $error === ChannelStateStore::ERR_MAIL
+					|| $error === ChannelStateStore::ERR_HTTP || $error === ChannelStateStore::ERR_SECRETS) {
+					$attentionAction = $setupAlertsAction !== [] ? $setupAlertsAction : $tryAgainAction;
+				} elseif (str_contains($errLower, \'permission\') || str_contains($errLower, \'cannot read the log\')) {
+					$attentionAction = $viewLogsAction !== [] ? $viewLogsAction : $tryAgainAction;
+				}
+				// Generic "Try again." / check-failed copy → card CTA matches the sentence.
 			}
 			return new HealthCard(
 				\'log\',
@@ -642,9 +651,18 @@ function mutants(string $root): array
 				HealthCardState::DEGRADED,',
 			'replace' => '$statusState = isset($status[\'state\']) && is_string($status[\'state\']) ? $status[\'state\'] : \'\';
 		if (false && ($error !== \'\' || $statusState === \'degraded\')) {
-			$attentionAction = $setupAlertsAction;
-			if ($error !== \'\' && (stripos($error, \'log\') !== false || stripos($error, \'read\') !== false || stripos($error, \'permission\') !== false)) {
-				$attentionAction = $viewLogsAction !== [] ? $viewLogsAction : $setupAlertsAction;
+			$attentionAction = $tryAgainAction;
+			if ($error !== \'\') {
+				$errLower = strtolower($error);
+				if (str_contains($errLower, \'secret\') || str_contains($errLower, \'webhook\')
+					|| str_contains($errLower, \'email\') || str_contains($errLower, \'mail \')
+					|| str_contains($errLower, \'mail.\') || $error === ChannelStateStore::ERR_MAIL
+					|| $error === ChannelStateStore::ERR_HTTP || $error === ChannelStateStore::ERR_SECRETS) {
+					$attentionAction = $setupAlertsAction !== [] ? $setupAlertsAction : $tryAgainAction;
+				} elseif (str_contains($errLower, \'permission\') || str_contains($errLower, \'cannot read the log\')) {
+					$attentionAction = $viewLogsAction !== [] ? $viewLogsAction : $tryAgainAction;
+				}
+				// Generic "Try again." / check-failed copy → card CTA matches the sentence.
 			}
 			return new HealthCard(
 				\'log\',

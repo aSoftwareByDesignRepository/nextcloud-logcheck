@@ -15,12 +15,29 @@ $isNcAdmin = !empty($_['isNcAdmin']);
 		</div>
 	<?php endif; ?>
 
+	<?php
+	// Runtime auto-disable must not show the switch ON (banana / novice contradiction).
+	$emailPersistedOn = !empty($channels['email']['enabled']);
+	$emailRuntimeOff = !empty($status['channels']['email']['disabled']);
+	$emailShowsOn = $emailPersistedOn && !$emailRuntimeOff;
+	$slackPersistedOn = !empty($channels['slack']['enabled']);
+	$slackRuntimeOff = !empty($status['channels']['slack']['disabled']);
+	$slackShowsOn = $slackPersistedOn && !$slackRuntimeOff;
+	$webhookPersistedOn = !empty($channels['webhook']['enabled']);
+	$webhookRuntimeOff = !empty($status['channels']['webhook']['disabled']);
+	$webhookShowsOn = $webhookPersistedOn && !$webhookRuntimeOff;
+	?>
 	<section class="lck-channel-card" aria-labelledby="lck-email-title">
 		<h2 id="lck-email-title"><?php p($l->t('Email')); ?></h2>
 		<div class="lck-switch-field">
-			<input type="hidden" name="channels[email][enabled]" value="0">
-			<input class="lck-switch-field__input" type="checkbox" id="lck-email-enabled" name="channels[email][enabled]" value="1" role="switch"
-				<?php if (!empty($channels['email']['enabled'])): ?>checked<?php endif; ?>>
+			<?php if ($emailRuntimeOff): ?>
+				<input type="hidden" name="channels[email][enabled]" value="<?php p($emailPersistedOn ? '1' : '0'); ?>">
+				<input class="lck-switch-field__input" type="checkbox" id="lck-email-enabled" role="switch" disabled aria-disabled="true">
+			<?php else: ?>
+				<input type="hidden" name="channels[email][enabled]" value="0">
+				<input class="lck-switch-field__input" type="checkbox" id="lck-email-enabled" name="channels[email][enabled]" value="1" role="switch"
+					<?php if ($emailShowsOn): ?>checked<?php endif; ?>>
+			<?php endif; ?>
 			<label class="lck-switch-field__label" for="lck-email-enabled">
 				<span class="lck-switch-field__track" aria-hidden="true"></span>
 				<span class="lck-switch-field__text"><?php p($l->t('Send email alerts')); ?></span>
@@ -42,8 +59,9 @@ $isNcAdmin = !empty($_['isNcAdmin']);
 	</section>
 
 	<?php
-	$slackOn = !empty($channels['slack']['enabled']) || !empty($channels['slack']['webhook_url_set']);
-	$webhookOn = !empty($channels['webhook']['enabled']) || !empty($channels['webhook']['url_set']);
+	// Keep Slack & webhook open for recovery when runtime-disabled (even if persisted enabled is stale).
+	$slackOn = $slackShowsOn || $slackRuntimeOff || !empty($channels['slack']['webhook_url_set']);
+	$webhookOn = $webhookShowsOn || $webhookRuntimeOff || !empty($channels['webhook']['url_set']);
 	$outboundOpen = $slackOn || $webhookOn;
 	?>
 	<details class="lck-more"<?php if ($outboundOpen): ?> open<?php endif; ?>>
@@ -51,9 +69,14 @@ $isNcAdmin = !empty($_['isNcAdmin']);
 		<section class="lck-channel-card" aria-labelledby="lck-slack-title">
 			<h2 id="lck-slack-title"><?php p($l->t('Slack')); ?></h2>
 			<div class="lck-switch-field">
-				<input type="hidden" name="channels[slack][enabled]" value="0">
-				<input class="lck-switch-field__input" type="checkbox" id="lck-slack-enabled" name="channels[slack][enabled]" value="1" role="switch"
-					<?php if (!empty($channels['slack']['enabled'])): ?>checked<?php endif; ?>>
+				<?php if ($slackRuntimeOff): ?>
+					<input type="hidden" name="channels[slack][enabled]" value="<?php p($slackPersistedOn ? '1' : '0'); ?>">
+					<input class="lck-switch-field__input" type="checkbox" id="lck-slack-enabled" role="switch" disabled aria-disabled="true">
+				<?php else: ?>
+					<input type="hidden" name="channels[slack][enabled]" value="0">
+					<input class="lck-switch-field__input" type="checkbox" id="lck-slack-enabled" name="channels[slack][enabled]" value="1" role="switch"
+						<?php if ($slackShowsOn): ?>checked<?php endif; ?>>
+				<?php endif; ?>
 				<label class="lck-switch-field__label" for="lck-slack-enabled">
 					<span class="lck-switch-field__track" aria-hidden="true"></span>
 					<span class="lck-switch-field__text"><?php p($l->t('Send Slack alerts')); ?></span>
@@ -61,14 +84,11 @@ $isNcAdmin = !empty($_['isNcAdmin']);
 			</div>
 			<?php if (!empty($channels['slack']['webhook_url_set'])): ?>
 				<p class="lck-muted"><?php p($l->t('Saved URL')); ?>: <?php p((string)($channels['slack']['webhook_url_masked'] ?? '')); ?></p>
-				<div class="lck-switch-field">
-					<input type="hidden" name="channels[slack][clear_url]" value="0">
-					<input class="lck-switch-field__input" type="checkbox" id="lck-slack-clear" name="channels[slack][clear_url]" value="1" role="switch">
-					<label class="lck-switch-field__label" for="lck-slack-clear">
-						<span class="lck-switch-field__track" aria-hidden="true"></span>
-						<span class="lck-switch-field__text"><?php p($l->t('Clear saved URL')); ?></span>
-					</label>
-				</div>
+				<input type="hidden" name="channels[slack][clear_url]" id="lck-slack-clear" value="0">
+				<button type="button" class="lck-btn lck-btn--danger" id="lck-slack-clear-btn" aria-pressed="false">
+					<?php p($l->t('Clear saved URL')); ?>
+				</button>
+				<p class="lck-muted" id="lck-slack-clear-hint" hidden><?php p($l->t('Saved URL will be removed when you save.')); ?></p>
 			<?php endif; ?>
 			<label for="lck-slack-url"><?php p($l->t('Slack webhook URL')); ?></label>
 			<input class="form-input" type="url" id="lck-slack-url" name="channels[slack][webhook_url]" value="" autocomplete="off">
@@ -83,9 +103,14 @@ $isNcAdmin = !empty($_['isNcAdmin']);
 		<section class="lck-channel-card" aria-labelledby="lck-webhook-title">
 			<h2 id="lck-webhook-title"><?php p($l->t('Webhook')); ?></h2>
 			<div class="lck-switch-field">
-				<input type="hidden" name="channels[webhook][enabled]" value="0">
-				<input class="lck-switch-field__input" type="checkbox" id="lck-webhook-enabled" name="channels[webhook][enabled]" value="1" role="switch"
-					<?php if (!empty($channels['webhook']['enabled'])): ?>checked<?php endif; ?>>
+				<?php if ($webhookRuntimeOff): ?>
+					<input type="hidden" name="channels[webhook][enabled]" value="<?php p($webhookPersistedOn ? '1' : '0'); ?>">
+					<input class="lck-switch-field__input" type="checkbox" id="lck-webhook-enabled" role="switch" disabled aria-disabled="true">
+				<?php else: ?>
+					<input type="hidden" name="channels[webhook][enabled]" value="0">
+					<input class="lck-switch-field__input" type="checkbox" id="lck-webhook-enabled" name="channels[webhook][enabled]" value="1" role="switch"
+						<?php if ($webhookShowsOn): ?>checked<?php endif; ?>>
+				<?php endif; ?>
 				<label class="lck-switch-field__label" for="lck-webhook-enabled">
 					<span class="lck-switch-field__track" aria-hidden="true"></span>
 					<span class="lck-switch-field__text"><?php p($l->t('Send webhook alerts')); ?></span>
@@ -93,14 +118,11 @@ $isNcAdmin = !empty($_['isNcAdmin']);
 			</div>
 			<?php if (!empty($channels['webhook']['url_set'])): ?>
 				<p class="lck-muted"><?php p($l->t('Saved URL')); ?>: <?php p((string)($channels['webhook']['url_masked'] ?? '')); ?></p>
-				<div class="lck-switch-field">
-					<input type="hidden" name="channels[webhook][clear_url]" value="0">
-					<input class="lck-switch-field__input" type="checkbox" id="lck-webhook-clear" name="channels[webhook][clear_url]" value="1" role="switch">
-					<label class="lck-switch-field__label" for="lck-webhook-clear">
-						<span class="lck-switch-field__track" aria-hidden="true"></span>
-						<span class="lck-switch-field__text"><?php p($l->t('Clear saved URL')); ?></span>
-					</label>
-				</div>
+				<input type="hidden" name="channels[webhook][clear_url]" id="lck-webhook-clear" value="0">
+				<button type="button" class="lck-btn lck-btn--danger" id="lck-webhook-clear-btn" aria-pressed="false">
+					<?php p($l->t('Clear saved URL')); ?>
+				</button>
+				<p class="lck-muted" id="lck-webhook-clear-hint" hidden><?php p($l->t('Saved URL will be removed when you save.')); ?></p>
 			<?php endif; ?>
 			<label for="lck-webhook-url"><?php p($l->t('Webhook URL')); ?></label>
 			<input class="form-input" type="url" id="lck-webhook-url" name="channels[webhook][url]" value="" autocomplete="off">
@@ -160,5 +182,7 @@ $isNcAdmin = !empty($_['isNcAdmin']);
 		<?php endif; ?>
 	</details>
 
-	<button type="submit" class="lck-btn lck-btn--primary"><?php p($l->t('Save')); ?></button>
+	<div class="lck-form-actions">
+		<button type="submit" class="lck-btn lck-btn--primary"><?php p($l->t('Save')); ?></button>
+	</div>
 </form>
