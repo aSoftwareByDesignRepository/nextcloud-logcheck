@@ -86,6 +86,30 @@ test.describe('J-LCK-20 Logs browser', () => {
 		// Dialog stays open on mismatch
 		await expect(dialog).toBeVisible();
 		await page.click('#lck-logs-confirm-cancel');
+		await expect(dialog).toBeHidden();
+
+		// Confirm path: type START_FRESH; intercept mutate so e2e does not rotate the live log.
+		await actions.evaluate((el) => {
+			if (el instanceof HTMLDetailsElement) {
+				el.open = true;
+			}
+		});
+		await expect(btn).toBeVisible();
+		await btn.click();
+		await expect(dialog).toBeVisible();
+		await page.fill('#lck-logs-confirm-input', 'START_FRESH');
+		await page.route('**/api/logs/start-fresh', async (route) => {
+			await route.fulfill({
+				status: 200,
+				contentType: 'application/json',
+				body: JSON.stringify({ ok: true, name: 'nextcloud.log' }),
+			});
+		});
+		await Promise.all([
+			page.waitForResponse((r) => r.url().includes('/api/logs/start-fresh') && r.request().method() === 'POST'),
+			page.click('#lck-logs-confirm-ok'),
+		]);
+		await page.unroute('**/api/logs/start-fresh');
 	});
 
 	test('delete log file dialog open cancel and confirm', async ({ page }) => {
@@ -101,7 +125,7 @@ test.describe('J-LCK-20 Logs browser', () => {
 		await btn.click();
 		const dialog = page.locator('#lck-logs-confirm-dialog');
 		await expect(dialog).toBeVisible();
-		await expect(page.locator('#lck-logs-confirm-title')).toContainText(/Delete the log file/i);
+		await expect(page.locator('#lck-logs-confirm-title')).toContainText(/Delete the log file|Protokolldatei löschen/i);
 		await page.fill('#lck-logs-confirm-input', 'wrong');
 		await page.click('#lck-logs-confirm-ok');
 		await expect(dialog).toBeVisible();
@@ -150,10 +174,28 @@ test.describe('J-LCK-20 Logs browser', () => {
 		await older.check();
 		const btn = page.locator('#lck-logs-delete-copy');
 		test.skip(!(await btn.count()), 'Remove copy not available');
-		await page.locator('#lck-logs-more-menu summary').click();
+		const moreMenu = page.locator('#lck-logs-more-menu');
+		await moreMenu.evaluate((el) => {
+			if (el instanceof HTMLDetailsElement) {
+				el.open = true;
+			}
+		});
 		await expect(btn).toBeVisible();
 		await btn.click();
 		const dialog = page.locator('#lck-logs-confirm-dialog');
+		await expect(dialog).toBeVisible();
+		// Cancel/dismiss for THIS dialog (not shared start-fresh cancel theater).
+		await page.click('#lck-logs-confirm-cancel');
+		await expect(dialog).toBeHidden();
+		await expect(page.locator(`input[name="lck-logs-file"][value="${deletedId}"]`)).toHaveCount(1);
+
+		await moreMenu.evaluate((el) => {
+			if (el instanceof HTMLDetailsElement) {
+				el.open = true;
+			}
+		});
+		await expect(btn).toBeVisible();
+		await btn.click();
 		await expect(dialog).toBeVisible();
 		await page.fill('#lck-logs-confirm-input', 'DELETE_COPY');
 		await Promise.all([

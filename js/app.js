@@ -106,6 +106,141 @@
 		return d.getFullYear() + '-' + pad(d.getMonth() + 1) + '-' + pad(d.getDate()) + ' ' + pad(d.getHours()) + ':' + pad(d.getMinutes());
 	}
 
+	/**
+	 * Keep Log alerts health card honest with LogHealthProbe after watch toggle (no SSR stale Watching).
+	 * @param {Record<string, unknown>} status
+	 */
+	function applyLogHealthCard(status) {
+		var card = document.querySelector('.lck-health-card[data-probe="log"]');
+		if (!card) {
+			return;
+		}
+		var supported = status.backend_supported !== false;
+		var topologyOk = status.topology_ok !== false;
+		var watch = !!status.watch_enabled;
+		var lastCheck = typeof status.last_check_at === 'number' ? status.last_check_at : 0;
+		var stale = !!status.stale;
+		var error = typeof status.error === 'string' ? status.error : '';
+		var statusState = typeof status.state === 'string' ? status.state : '';
+		var u = urls();
+		var alertsHref = u.alerts || '#';
+		var logsHref = u.logs || '#';
+
+		var cardState = 'unknown';
+		var label = typeof status.label === 'string' ? status.label : '';
+		var detail = '';
+		/** @type {{ label: string, href: string|null, action?: string }[]} */
+		var actions = [];
+
+		if (!supported || !topologyOk) {
+			cardState = 'critical';
+			label = t('logcheck', 'Can\'t watch');
+			detail = error || t('logcheck', 'Log watching is not available on this server.');
+		} else if (!watch) {
+			cardState = 'degraded';
+			label = t('logcheck', 'Off');
+			detail = t('logcheck', 'Set up alerts to get notified about new errors.');
+			actions = [{ label: t('logcheck', 'Set up alerts'), href: alertsHref }];
+		} else if (lastCheck <= 0) {
+			cardState = 'degraded';
+			label = t('logcheck', 'Not checked yet');
+			detail = t('logcheck', 'Watching is on, but no background check has finished yet.');
+		} else if (stale) {
+			cardState = 'degraded';
+			label = t('logcheck', 'Needs a check');
+			detail = error || t('logcheck', 'Background checks look stuck.');
+		} else if (error || statusState === 'degraded') {
+			cardState = 'degraded';
+			label = t('logcheck', 'Needs attention');
+			detail = error || t('logcheck', 'The last background check did not finish cleanly.');
+			var errLower = error.toLowerCase();
+			if (errLower.indexOf('secret') !== -1 || errLower.indexOf('webhook') !== -1
+				|| errLower.indexOf('email') !== -1 || errLower.indexOf('mail') !== -1) {
+				actions = [{ label: t('logcheck', 'Set up alerts'), href: alertsHref }];
+			} else if (errLower.indexOf('permission') !== -1 || errLower.indexOf('cannot read the log') !== -1) {
+				actions = [{ label: t('logcheck', 'View logs'), href: logsHref }];
+			} else {
+				actions = [{ label: t('logcheck', 'Try again'), href: null, action: 'check-again' }];
+			}
+		} else {
+			cardState = 'ok';
+			label = t('logcheck', 'Watching');
+			detail = t('logcheck', 'Last check: %s', [formatLastCheck(lastCheck)]);
+		}
+
+		card.setAttribute('data-state', cardState);
+		var badge = card.querySelector('.lck-badge');
+		if (badge) {
+			badge.setAttribute('data-state', cardState);
+			var labelEl = badge.querySelector('.lck-badge__label');
+			if (labelEl) {
+				var sr = labelEl.querySelector('.lck-sr-only');
+				var srText = sr ? sr.textContent : '';
+				labelEl.textContent = '';
+				if (sr && srText) {
+					var srSpan = document.createElement('span');
+					srSpan.className = 'lck-sr-only';
+					srSpan.textContent = srText;
+					labelEl.appendChild(srSpan);
+				}
+				labelEl.appendChild(document.createTextNode(label));
+			}
+		}
+		var detailEl = card.querySelector('.lck-health-card__detail');
+		if (detail) {
+			if (!detailEl) {
+				detailEl = document.createElement('p');
+				detailEl.className = 'lck-health-card__detail lck-muted';
+				var header = card.querySelector('.lck-health-card__header');
+				if (header && header.parentNode) {
+					header.parentNode.insertBefore(detailEl, header.nextSibling);
+				}
+			}
+			detailEl.textContent = detail;
+		} else if (detailEl) {
+			detailEl.remove();
+		}
+
+		var actionsEl = card.querySelector('.lck-health-card__actions');
+		if (actions.length === 0) {
+			if (actionsEl) {
+				actionsEl.remove();
+			}
+		} else {
+			if (!actionsEl) {
+				actionsEl = document.createElement('p');
+				actionsEl.className = 'lck-health-card__actions';
+				var inner = card.querySelector('.lck-health-card__inner');
+				if (inner) {
+					inner.appendChild(actionsEl);
+				}
+			}
+			actionsEl.textContent = '';
+			actions.forEach(function (a) {
+				if (a.href) {
+					var link = document.createElement('a');
+					link.className = 'lck-btn lck-btn--secondary';
+					link.href = a.href;
+					link.textContent = a.label;
+					actionsEl.appendChild(link);
+				} else {
+					var btn = document.createElement('button');
+					btn.type = 'button';
+					btn.className = 'lck-btn lck-btn--secondary lck-health-card__action';
+					btn.setAttribute('data-lck-action', a.action || 'check-again');
+					btn.textContent = a.label;
+					btn.addEventListener('click', function () {
+						var again = document.getElementById('lck-check-again');
+						if (again) {
+							again.click();
+						}
+					});
+					actionsEl.appendChild(btn);
+				}
+			});
+		}
+	}
+
 	function applyHomeStatus(status) {
 		if (!status || typeof status !== 'object') {
 			return;
@@ -152,6 +287,7 @@
 		if (setupActions) {
 			if (showSetup) { setupActions.removeAttribute('hidden'); } else { setupActions.setAttribute('hidden', 'hidden'); }
 		}
+		applyLogHealthCard(status);
 		if (status.settings_version) {
 			setSettingsVersion(status.settings_version);
 		}

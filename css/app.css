@@ -3,7 +3,7 @@
  * Responsive inventory (this file + shell):
  * - Tokens: --lck-breakpoint-sm 480 / md 768 / lg 1024 (tokens.css)
  * - Shell: mobile-first 1-col grid; ≥1024 sidebar|main (app-layout.css)
- * - Nav: NC #app-navigation-toggle + body.snapjs-left <1024 (navigation.css)
+ * - Nav: in-page Menu + mobile-nav.css drawer <1024 (AZC#33); ≥1024 sticky sidebar
  * - Health grid: auto-fit minmax(~16rem) fills the main pane
  * - No LogCheck-specific data tables; forms = stacked labels + full-width inputs
  * - Desktop (≥1024): side-by-side shell; content rules here only style .lck-*
@@ -627,10 +627,15 @@
 #content.app-logcheck .lck-form {
 	min-width: 0;
 	max-width: 100%;
-	padding-bottom: calc(var(--lck-space-6, 1.5rem) + 4.5rem);
+	/* Bottom pad lives above sticky Save via .lck-form-actions margin — not after it */
+	padding-bottom: 0;
 }
 
-/* Sticky primary Save — always reachable when Slack/webhook/advanced sections expand */
+/*
+ * Sticky primary Save — always reachable when Slack/webhook/advanced sections expand.
+ * Clearance: large margin-top keeps muted callouts / Re-enable CTAs fully above Speichern
+ * with a visible gutter (visual critic: no sticky clip).
+ */
 #content.app-logcheck .lck-form-actions {
 	position: sticky;
 	bottom: 0;
@@ -639,11 +644,24 @@
 	flex-wrap: wrap;
 	align-items: center;
 	gap: var(--lck-space-3, 0.75rem);
-	margin: var(--lck-space-4, 1rem) 0 0;
+	margin: calc(var(--lck-space-6, 1.5rem) + var(--lck-touch, 44px)) 0 0;
 	padding: var(--lck-space-3, 0.75rem) var(--lck-space-2, 0.5rem) calc(var(--lck-space-4, 1rem) + env(safe-area-inset-bottom, 0px));
 	background: var(--color-main-background);
 	border-top: 1px solid var(--color-border, var(--lck-border));
 	box-shadow: 0 -8px 20px color-mix(in srgb, var(--color-main-text) 10%, transparent);
+}
+
+/* scrollIntoView / anchor jump leave room for sticky Speichern + callout padding below CTA */
+#content.app-logcheck #app-content {
+	scroll-padding-bottom: calc(
+		var(--lck-touch-lg, 48px) + var(--lck-space-3, 0.75rem) + var(--lck-space-4, 1rem)
+			+ env(safe-area-inset-bottom, 0px) + var(--lck-space-6, 1.5rem) + var(--lck-touch, 44px)
+	);
+}
+
+/* Channel recovery callouts need air above sticky Speichern (not flush / clipped) */
+#content.app-logcheck .lck-channel-card > .lck-callout {
+	margin-bottom: var(--lck-space-5, 1.25rem);
 }
 
 #content.app-logcheck .lck-form-actions .lck-btn--primary {
@@ -920,7 +938,7 @@
 	display: flex;
 	flex-wrap: wrap;
 	gap: var(--lck-space-2);
-	align-items: stretch;
+	align-items: center;
 	min-width: 0;
 	margin-bottom: var(--lck-space-3);
 }
@@ -928,18 +946,65 @@
 #content.app-logcheck .lck-logs-toolbar-actions > .lck-btn {
 	flex: 0 0 auto;
 	min-height: var(--lck-touch, 44px);
+	height: var(--lck-touch, 44px);
+	box-sizing: border-box;
 }
 
-#content.app-logcheck .lck-logs-more-menu {
+/*
+ * Mehr must match Reload/Copy row metrics — not the soft padded .lck-more accordion.
+ * Same secondary fill + ≥44px height (visual critic: no uneven toolbar).
+ */
+#content.app-logcheck .lck-logs-toolbar-actions > .lck-logs-more-menu.lck-more {
 	flex: 0 0 auto;
+	margin: 0;
+	padding: 0;
+	border: 0;
+	border-radius: 0;
+	background: transparent;
+	box-shadow: none;
+	align-self: center;
+}
+
+#content.app-logcheck .lck-logs-toolbar-actions > .lck-logs-more-menu > summary {
+	box-sizing: border-box;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	min-height: var(--lck-touch, 44px);
+	height: var(--lck-touch, 44px);
+	min-width: var(--lck-touch, 44px);
+	padding: var(--lck-space-2) var(--lck-space-4);
+	margin: 0;
+	border: 1px solid var(--lck-border, var(--color-border));
+	border-radius: var(--lck-radius-md);
+	background: color-mix(in srgb, var(--color-main-background) 82%, var(--color-main-text) 18%);
+	color: var(--color-main-text);
+	font-size: var(--lck-fs-md, 1rem);
+	font-weight: 600;
+	line-height: 1.25;
+	cursor: pointer;
+	list-style: none;
+}
+
+#content.app-logcheck .lck-logs-toolbar-actions > .lck-logs-more-menu > summary::-webkit-details-marker {
+	display: none;
+}
+
+#content.app-logcheck .lck-logs-toolbar-actions > .lck-logs-more-menu > summary:focus-visible {
+	outline: var(--lck-focus, 3px solid var(--color-primary-element));
+	outline-offset: var(--lck-focus-offset, 2px);
 }
 
 #content.app-logcheck .lck-logs-more-menu__body {
 	display: flex;
 	flex-direction: column;
 	gap: var(--lck-space-2);
-	margin-top: var(--lck-space-3);
+	margin-top: var(--lck-space-2);
+	padding: var(--lck-space-2);
 	min-width: min(100%, 16rem);
+	border: 1px solid var(--lck-border, var(--color-border));
+	border-radius: var(--lck-radius-md);
+	background: var(--color-main-background);
 }
 
 #content.app-logcheck .lck-logs-more-menu__item {
@@ -1231,8 +1296,8 @@
 }
 
 .lck-nav-footer__trigger:focus-visible {
-	outline: var(--lck-focus);
-	outline-offset: var(--lck-focus-offset);
+	outline: 3px solid color-mix(in srgb, var(--color-primary-element) 60%, transparent);
+	outline-offset: 2px;
 }
 
 .lck-nav-footer__trigger:focus:not(:focus-visible) {
@@ -1291,8 +1356,8 @@
 }
 
 .lck-nav-footer__menu-item:focus-visible {
-	outline: var(--lck-focus);
-	outline-offset: var(--lck-focus-offset);
+	outline: 3px solid color-mix(in srgb, var(--color-primary-element) 60%, transparent);
+	outline-offset: -2px;
 }
 
 .lck-nav-footer__menu-item:focus:not(:focus-visible) {
@@ -1313,22 +1378,12 @@
 	overflow-wrap: anywhere;
 }
 
-/* Mobile: pin feedback menu to viewport edges (phones <480) */
-.lck-nav-footer__menu {
-	left: var(--lck-space-2, 0.5rem);
-	right: var(--lck-space-2, 0.5rem);
-	transform: none;
-	min-width: 0;
-	max-width: calc(100vw - 2rem);
-}
-
-/* ≥480px: centered popover under trigger (sm breakpoint) */
-@media (min-width: 480px) {
+@media (width < 480px) {
 	.lck-nav-footer__menu {
-		left: 50%;
-		right: auto;
-		transform: translateX(-50%);
-		min-width: max-content;
+		left: var(--lck-space-2, 0.5rem);
+		right: var(--lck-space-2, 0.5rem);
+		transform: none;
+		min-width: 0;
 	}
 }
 

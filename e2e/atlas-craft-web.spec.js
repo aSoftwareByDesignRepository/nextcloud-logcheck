@@ -66,29 +66,32 @@ async function assertWatchingAlertCtaXor(page) {
 	const setup = await page.locator('#lck-alerts-checklist').isVisible();
 	const ready = await page.locator('#lck-watching-actions-ready').isVisible();
 	const err = await page.locator('#lck-watching-actions-error').isVisible();
+	// Locale-robust: force_language may be de. Hidden checklist still has DOM nodes — assert visibility.
+	const manageReady = page.locator('#lck-watching-actions-ready a.lck-btn[href*="alerts"]');
+	const manageErr = page.locator('#lck-watching-actions-error a.lck-btn[href*="alerts"]');
+	const setupCta = page.locator('#lck-alerts-checklist a.lck-btn[href*="alerts"]');
 	if (setup) {
-		await expect(page.locator('#lck-alerts-checklist a.lck-btn')).toBeVisible();
+		await expect(setupCta).toBeVisible();
 		await expect(page.locator('#lck-watching-actions-ready')).toBeHidden();
 		await expect(page.locator('#lck-watching-actions-error')).toBeHidden();
-		await expect(page.getByRole('link', { name: /^Manage alerts$/i })).toHaveCount(0);
 	} else if (ready) {
 		await expect(page.locator('#lck-alerts-checklist')).toBeHidden();
 		await expect(page.locator('#lck-watching-actions-error')).toBeHidden();
-		await expect(page.locator('#lck-watching-actions-ready a', { hasText: /Manage alerts/i })).toHaveCount(1);
-		await expect(page.getByRole('link', { name: /^Set up alerts$/i })).toHaveCount(0);
+		await expect(manageReady).toBeVisible();
+		await expect(setupCta).toBeHidden();
 	} else if (err) {
 		await expect(page.locator('#lck-alerts-checklist')).toBeHidden();
 		await expect(page.locator('#lck-watching-actions-ready')).toBeHidden();
 		await expect(page.locator('#lck-watching-try-again')).toBeVisible();
-		await expect(page.locator('#lck-watching-actions-error a', { hasText: /Manage alerts/i })).toHaveCount(1);
-		await expect(page.getByRole('link', { name: /^Set up alerts$/i })).toHaveCount(0);
+		await expect(manageErr).toBeVisible();
+		await expect(setupCta).toBeHidden();
 	}
 }
 
 /**
  * @param {import('@playwright/test').Page} page
  * @param {string} file
- * @param {{ scroll?: string, waitFor?: string, settleMs?: number, fullPage?: boolean, scrollBlock?: ScrollLogicalPosition }} [opts]
+ * @param {{ scroll?: string, waitFor?: string, settleMs?: number, fullPage?: boolean, scrollBlock?: ScrollLogicalPosition, afterScroll?: () => Promise<void> }} [opts]
  */
 async function shot(page, file, opts = {}) {
 	if (opts.scroll) {
@@ -98,6 +101,9 @@ async function shot(page, file, opts = {}) {
 			node.scrollIntoView({ block: block || 'center', inline: 'nearest' });
 		}, opts.scrollBlock || 'center');
 		await expect(el).toBeVisible({ timeout: 15_000 });
+	}
+	if (typeof opts.afterScroll === 'function') {
+		await opts.afterScroll();
 	}
 	if (opts.waitFor) {
 		await expect(page.locator(opts.waitFor).first()).toBeVisible({ timeout: 45_000 });
@@ -131,7 +137,7 @@ test.describe('Atlas web craft screenshots', () => {
 			});
 
 			const file = path.join(outDir, `logcheck-web-${p.id}.png`);
-			/** @type {{ scroll?: string, waitFor?: string, settleMs?: number, fullPage?: boolean, scrollBlock?: ScrollLogicalPosition }} */
+			/** @type {{ scroll?: string, waitFor?: string, settleMs?: number, fullPage?: boolean, scrollBlock?: ScrollLogicalPosition, afterScroll?: () => Promise<void> }} */
 			const opts = {};
 
 			if (p.id === 'home') {
@@ -139,6 +145,19 @@ test.describe('Atlas web craft screenshots', () => {
 				await expect(page.locator('#lck-alerts-checklist')).toBeHidden();
 				await expect(page.locator('#lck-watching-actions-error')).toBeHidden();
 				await expect(page.locator('#lck-watching-actions-ready')).toBeHidden();
+				// Log alerts card must match Off (not stale Watching from SSR).
+				await expect
+					.poll(async () => {
+						const label = await page
+							.locator('.lck-health-card[data-probe="log"] .lck-badge__label')
+							.innerText();
+						return label.replace(/\s+/g, ' ').trim();
+					}, { timeout: 15_000 })
+					.toMatch(/\b(Off|Aus)\b/i);
+				await expect(page.locator('.lck-health-card[data-probe="log"]')).toHaveAttribute(
+					'data-state',
+					'degraded',
+				);
 				opts.scroll = '#lck-watch-toggle, .lck-health-grid';
 				opts.waitFor = '#lck-watch-toggle';
 				opts.scrollBlock = 'center';
@@ -156,10 +175,30 @@ test.describe('Atlas web craft screenshots', () => {
 						}
 					});
 				}
-				// Prefer Slack card (runtime-disabled honesty) + sticky Save in frame.
-				opts.scroll = '#lck-slack-enabled, .lck-form-actions .lck-btn--primary';
-				opts.waitFor = '#lck-slack-enabled, #lck-webhook-url, .lck-form-actions .lck-btn--primary';
-				opts.scrollBlock = 'center';
+				// Muted Slack callout fully above sticky Speichern (clear gutter).
+				// Scroll the callout band itself — button-only end-align left callout padding under sticky.
+				opts.scroll = '.lck-channel-card .lck-callout--warning';
+				opts.waitFor =
+					'#lck-slack-enabled, .lck-callout--warning .lck-reenable-channel, .lck-form-actions .lck-btn--primary';
+				opts.scrollBlock = 'end';
+				opts.afterScroll = async () => {
+					await page.evaluate(() => {
+						const app = document.querySelector('#app-content');
+						const callout = document.querySelector('.lck-channel-card .lck-callout--warning');
+						const save = document.querySelector('.lck-form-actions');
+						if (!(app instanceof HTMLElement) || !(callout instanceof HTMLElement) || !(save instanceof HTMLElement)) {
+							return;
+						}
+						callout.scrollIntoView({ block: 'end', inline: 'nearest' });
+						const cr = callout.getBoundingClientRect();
+						const sr = save.getBoundingClientRect();
+						const need = 16; // clear gutter between callout bottom and sticky top
+						const overlap = cr.bottom + need - sr.top;
+						if (overlap > 0) {
+							app.scrollTop = Math.max(0, app.scrollTop - overlap);
+						}
+					});
+				};
 			} else if (p.id === 'rules' || p.id === 'people') {
 				opts.scroll = '.lck-form-actions .lck-btn--primary';
 				opts.waitFor = '.lck-form-actions .lck-btn--primary';
@@ -264,6 +303,65 @@ test.describe('Atlas web craft screenshots', () => {
 			console.log('craft', file, bytes);
 		}
 		await resetUserTheme(page);
+
+		// Open destructive confirm dialogs for critic Read() (start-fresh + delete).
+		await gotoLogCheck(page, '/logs');
+		const danger = page.locator('#lck-logs-actions');
+		if (await danger.count()) {
+			await danger.evaluate((el) => {
+				if (el instanceof HTMLDetailsElement) {
+					el.open = true;
+				}
+			});
+		}
+		const startFresh = page.locator('#lck-logs-start-fresh');
+		if ((await startFresh.count()) && (await startFresh.isVisible())) {
+			await startFresh.click();
+			const dialog = page.locator('#lck-logs-confirm-dialog');
+			await expect(dialog).toBeVisible({ timeout: 10_000 });
+			await expect(page.locator('#lck-logs-confirm-input')).toBeVisible();
+			await expect(page.locator('#lck-logs-confirm-cancel')).toBeVisible();
+			await expect(page.locator('#lck-logs-confirm-ok')).toBeVisible();
+			const dlgFile = path.join(outDir, 'logcheck-web-dlg-start-fresh.png');
+			const dlgBytes = await shot(page, dlgFile, {
+				scroll: '#lck-logs-confirm-dialog',
+				waitFor: '#lck-logs-confirm-dialog',
+				scrollBlock: 'center',
+				settleMs: 200,
+			});
+			meta.files.push({ id: 'dlg-start-fresh', path: 'craft/logcheck-web-dlg-start-fresh.png', bytes: dlgBytes });
+			console.log('craft', dlgFile, dlgBytes);
+			await page.locator('#lck-logs-confirm-cancel').click();
+			await expect(dialog).toBeHidden();
+		}
+		const deleteBtn = page.locator('#lck-logs-delete');
+		if (await danger.count()) {
+			await danger.evaluate((el) => {
+				if (el instanceof HTMLDetailsElement) {
+					el.open = true;
+				}
+			});
+		}
+		if ((await deleteBtn.count()) && (await deleteBtn.isVisible())) {
+			await deleteBtn.click();
+			const dialog = page.locator('#lck-logs-confirm-dialog');
+			await expect(dialog).toBeVisible({ timeout: 10_000 });
+			await expect(page.locator('#lck-logs-confirm-title')).toContainText(/Delete the log file|Protokolldatei löschen/i);
+			await expect(page.locator('#lck-logs-confirm-input')).toBeVisible();
+			await expect(page.locator('#lck-logs-confirm-cancel')).toBeVisible();
+			await expect(page.locator('#lck-logs-confirm-ok')).toBeVisible();
+			const dlgFile = path.join(outDir, 'logcheck-web-dlg-delete-log.png');
+			const dlgBytes = await shot(page, dlgFile, {
+				scroll: '#lck-logs-confirm-dialog',
+				waitFor: '#lck-logs-confirm-dialog',
+				scrollBlock: 'center',
+				settleMs: 200,
+			});
+			meta.files.push({ id: 'dlg-delete-log', path: 'craft/logcheck-web-dlg-delete-log.png', bytes: dlgBytes });
+			console.log('craft', dlgFile, dlgBytes);
+			await page.locator('#lck-logs-confirm-cancel').click();
+			await expect(dialog).toBeHidden();
+		}
 
 		fs.writeFileSync(path.join(outDir, 'craft-capture.log'), JSON.stringify(meta, null, 2) + '\n');
 	});

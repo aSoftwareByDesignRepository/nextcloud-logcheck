@@ -1,13 +1,13 @@
 /**
  * LogCheck sidebar — SnackCheck/DeskCheck family chrome (brand + icon rows).
  *
- * Responsive: mobile-first. Below 1024px Nextcloud core owns the drawer
- * (#app-navigation-toggle + body.snapjs-left). Do not invent a custom open
- * class or override transform with !important — that blocks NC snap.js.
+ * Responsive: desktop (≥1024) sticky sidebar here. Phone/tablet drawer is
+ * owned by css/common/mobile-nav.css + js/common/mobile-nav.js (in-page Menu;
+ * #content overflow:hidden clips core #app-navigation-toggle — AZC#33).
  */
 
 /* Base chrome (all viewports). Width/position for the in-flow desktop shell
- * are applied at min-width: 1024px so NC mobile.css can position:fixed + slide. */
+ * are applied at min-width: 1024px; mobile drawer rules live in mobile-nav.css. */
 #content.app-logcheck > #app-navigation.lck-nav,
 #app-navigation.lck-nav {
 	display: flex;
@@ -20,8 +20,6 @@
 	overflow: hidden;
 	box-sizing: border-box;
 	z-index: 100;
-	/* Intentionally no position/transform here — NC mobile.css (<1024) sets
-	 * position:fixed + translateX(-300px); body.snapjs-left slides it open. */
 }
 
 /* ≥1024px: restore sticky sidebar in the grid track (NC desktop layout) */

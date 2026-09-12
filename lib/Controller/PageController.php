@@ -256,6 +256,7 @@ class PageController extends Controller
 		Util::addStyle(Application::APP_ID, 'common/shell-chrome');
 		Util::addStyle(Application::APP_ID, 'common/app-layout');
 		Util::addStyle(Application::APP_ID, 'common/navigation');
+		Util::addStyle(Application::APP_ID, 'common/mobile-nav');
 		Util::addStyle(Application::APP_ID, 'common/form-controls');
 		Util::addStyle(Application::APP_ID, 'common/page-patterns');
 		Util::addStyle(Application::APP_ID, 'common/notification-surfaces');
@@ -265,6 +266,7 @@ class PageController extends Controller
 		Util::addStyle(Application::APP_ID, 'app');
 		Util::addScript(Application::APP_ID, 'common/toasts');
 		Util::addScript(Application::APP_ID, 'common/app-feedback');
+		Util::addScript(Application::APP_ID, 'common/mobile-nav');
 		Util::addScript(Application::APP_ID, 'app');
 		if ($extra === 'settings') {
 			Util::addScript(Application::APP_ID, 'settings');

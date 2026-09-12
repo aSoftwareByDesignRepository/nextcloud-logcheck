@@ -28,7 +28,7 @@
   max-width: 100% !important;
   min-width: 0;
   display: grid !important;
-  /* <1024: one track — NC #app-navigation-toggle / body.snapjs-left owns the drawer */
+  /* <1024: one track — in-page Menu + mobile-nav.css owns the drawer (AZC#33) */
   grid-template-columns: minmax(0, 1fr);
   grid-template-rows: minmax(0, 1fr);
   align-items: stretch;
@@ -52,7 +52,7 @@
   grid-row: unset !important;
 }
 
-/* Mobile/tablet: nav is off-canvas (NC); content fills the only track */
+/* Mobile/tablet: nav is off-canvas (in-page Menu); content fills the only track */
 #content.app-logcheck > #app-navigation.lck-nav {
   grid-column: 1;
   grid-row: 1;

@@ -117,10 +117,15 @@ class DesignSystemChromeTest extends TestCase
 		self::assertStringContainsString('data-lck-action="check-again"', $js);
 		self::assertStringContainsString('refreshHomeStatus', $js);
 		self::assertStringContainsString('applyHomeStatus', $js);
+		self::assertStringContainsString('applyLogHealthCard', $js);
+		self::assertStringContainsString("data-probe=\"log\"", $js);
 		self::assertStringContainsString('lck-watching-actions-ready', $js);
 		self::assertStringContainsString('lck-watching-actions-setup', $js);
 		$feedback = (string)file_get_contents($this->root . '/js/common/app-feedback.js');
-		self::assertStringContainsString('LogCheckToasts', $feedback);
+		self::assertStringContainsString('SbdAppFeedback', $feedback);
+		self::assertStringContainsString('showError', $feedback);
+		$toasts = (string)file_get_contents($this->root . '/js/common/toasts.js');
+		self::assertStringContainsString('LogCheckToasts', $toasts);
 	}
 
 	public function testWatchToggleAndSaveAvoidFullReload(): void
@@ -190,6 +195,8 @@ class DesignSystemChromeTest extends TestCase
 		self::assertStringContainsString("addStyle(Application::APP_ID, 'common/switch-field')", $src);
 		self::assertStringContainsString("addStyle(Application::APP_ID, 'common/badges')", $src);
 		self::assertStringContainsString("addStyle(Application::APP_ID, 'common/navigation')", $src);
+		self::assertStringContainsString("addStyle(Application::APP_ID, 'common/mobile-nav')", $src);
+		self::assertStringContainsString("addScript(Application::APP_ID, 'common/mobile-nav')", $src);
 		self::assertStringContainsString('roleLabel', $src);
 	}
 
@@ -230,13 +237,24 @@ class DesignSystemChromeTest extends TestCase
 		);
 	}
 
-	public function testNavigationDefersToNextcloudSnapDrawer(): void
+	public function testMobileNavShellUsesInPageMenuNotCoreToggleAlone(): void
 	{
+		$page = (string)file_get_contents($this->root . '/templates/common/page-start.php');
+		self::assertStringContainsString('nav-toggle.php', $page);
+		$toggle = (string)file_get_contents($this->root . '/templates/common/nav-toggle.php');
+		self::assertStringContainsString('id="lck-nav-toggle"', $toggle);
+		self::assertStringContainsString('data-lck-nav-toggle', $toggle);
+		self::assertFileExists($this->root . '/css/common/mobile-nav.css');
+		self::assertFileExists($this->root . '/js/common/mobile-nav.js');
+		$css = (string)file_get_contents($this->root . '/css/common/mobile-nav.css');
+		self::assertStringContainsString('lck-nav--open', $css);
+		self::assertStringContainsString('translateX(-105%)', $css);
+		$js = (string)file_get_contents($this->root . '/js/common/mobile-nav.js');
+		self::assertStringContainsString('data-lck-nav-toggle', $js);
+		$ctrl = (string)file_get_contents($this->root . '/lib/Controller/PageController.php');
+		self::assertStringContainsString("addStyle(Application::APP_ID, 'common/mobile-nav')", $ctrl);
+		self::assertStringContainsString("addScript(Application::APP_ID, 'common/mobile-nav')", $ctrl);
 		$nav = (string)file_get_contents($this->root . '/css/common/navigation.css');
-		// Custom open class / forced translate fights NC body.snapjs-left.
-		self::assertStringNotContainsString('lck-nav--open', $nav);
-		self::assertStringNotContainsString('translateX(-105%)', $nav);
-		self::assertStringContainsString('snapjs-left', $nav);
 		self::assertStringContainsString('@media (min-width: 1024px)', $nav);
 	}
 

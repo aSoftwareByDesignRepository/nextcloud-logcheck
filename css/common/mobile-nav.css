@@ -1,0 +1,146 @@
+/**
+ * Mobile navigation drawer + in-page Menu (<1024px).
+ * Desktop keeps the sticky sidebar from app-layout.css / navigation.css.
+ * Portals past #content overflow:hidden (arbeitszeitcheck#33).
+ */
+
+@media (width < 1024px) {
+	#content.app-logcheck #app-navigation-toggle,
+	#content.app-logcheck .app-navigation-toggle {
+		display: none !important;
+		visibility: hidden !important;
+		pointer-events: none !important;
+	}
+}
+
+.lck-nav-toggle {
+	display: none;
+	box-sizing: border-box;
+	align-items: center;
+	justify-content: center;
+	gap: var(--lck-space-2, 0.75rem);
+	min-height: 44px;
+	height: 44px;
+	min-width: 44px;
+	padding: 0 var(--lck-space-3, 0.75rem);
+	margin: 0;
+	border: 1px solid var(--color-border, var(--lck-border));
+	border-radius: var(--lck-radius-md, 12px);
+	background-color: var(--color-main-background);
+	color: var(--color-main-text);
+	font-family: inherit;
+	font-size: var(--lck-fs-sm, 0.875rem);
+	font-weight: 600;
+	line-height: 1;
+	cursor: pointer;
+	touch-action: manipulation;
+	flex-shrink: 0;
+}
+
+.lck-nav-toggle__icon {
+	display: inline-flex;
+	width: 1.25rem;
+	height: 1.25rem;
+	color: var(--color-main-text);
+}
+
+.lck-nav-toggle__icon.lck-icon,
+.lck-nav-toggle__icon svg {
+	width: 1.25rem;
+	height: 1.25rem;
+}
+
+.lck-nav-toggle:hover {
+	background-color: var(--color-background-hover);
+	border-color: var(--color-primary-element);
+}
+
+.lck-nav-toggle:focus-visible {
+	outline: 2px solid var(--color-primary-element);
+	outline-offset: 2px;
+}
+
+.lck-nav-toggle[aria-expanded='true'] {
+	background-color: color-mix(
+		in srgb,
+		var(--color-primary-element, #0082c9) 12%,
+		var(--color-main-background)
+	);
+	border-color: var(--color-primary-element);
+}
+
+@media (width < 1024px) {
+	.lck-nav-toggle {
+		display: inline-flex;
+		min-height: 44px;
+		height: 44px;
+		min-width: 44px;
+	}
+
+	#content.app-logcheck #app-navigation.lck-nav {
+		position: fixed !important;
+		top: var(--header-height, 50px) !important;
+		inset-inline-start: 0;
+		width: min(18rem, 88vw) !important;
+		max-width: 88vw;
+		height: calc(100dvh - var(--header-height, 50px)) !important;
+		z-index: 1999;
+		transform: translateX(-105%) !important;
+		transition: transform 180ms ease;
+		box-shadow:
+			0 4px 16px color-mix(in srgb, var(--color-main-text, #000) 18%, transparent),
+			0 0 0 1px var(--color-border);
+		overflow-x: hidden;
+		overflow-y: auto;
+		-webkit-overflow-scrolling: touch;
+		background: var(--color-main-background);
+	}
+
+	#content.app-logcheck #app-navigation.lck-nav.lck-nav--open {
+		transform: translateX(0) !important;
+	}
+
+	body.lck-nav-open {
+		overflow: hidden;
+	}
+}
+
+@media (min-width: 1024px) {
+	.lck-nav-toggle {
+		display: none !important;
+	}
+}
+
+@media (prefers-reduced-motion: reduce) {
+	#content.app-logcheck #app-navigation.lck-nav {
+		transition: none !important;
+	}
+}
+
+@media (width < 1024px) and (forced-colors: active) {
+	.lck-nav-toggle {
+		border: 2px solid ButtonText;
+	}
+}
+
+/* Beat NC / shell button defaults that shrink control height */
+#content.app-logcheck .lck-nav-toggle {
+	box-sizing: border-box;
+	min-height: 44px;
+	height: 44px;
+	min-width: 44px;
+	padding-block: 0;
+	line-height: 1;
+}
+
+.lck-page-header__top {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: var(--lck-space-2, 0.5rem);
+}
+
+.lck-page-header__top .lck-breadcrumb {
+	flex: 1 1 auto;
+	min-width: 0;
+}

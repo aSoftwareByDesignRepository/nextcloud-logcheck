@@ -84,27 +84,13 @@ test.describe('J-LCK-21 shell layout', () => {
 		expect(geom.docOverflow).toBeLessThanOrEqual(2);
 	});
 
-	test('mobile: NC snapjs-left can reveal navigation (no custom transform lock)', async ({ page }) => {
+	test('mobile: in-page Menu reveals navigation (AZC#33 / Atlas contract)', async ({ page }) => {
 		await page.setViewportSize({ width: 375, height: 812 });
 		await gotoLogCheck(page, '/');
-		const revealed = await page.evaluate(() => {
-			const nav = document.querySelector('#app-navigation.lck-nav');
-			if (!nav) {
-				return { ok: false };
-			}
-			document.body.classList.add('snapjs-left');
-			const cs = getComputedStyle(nav);
-			const transform = cs.transform;
-			const rect = nav.getBoundingClientRect();
-			document.body.classList.remove('snapjs-left');
-			// NC opens drawer with translateX(0); matrix(1,0,0,1,0,0) or none
-			const open =
-				transform === 'none'
-				|| transform === 'matrix(1, 0, 0, 1, 0, 0)'
-				|| rect.left >= -8;
-			return { ok: true, transform, left: rect.left, open };
-		});
-		expect(revealed.ok).toBeTruthy();
-		expect(revealed.open, JSON.stringify(revealed)).toBeTruthy();
+		const toggle = page.locator('[data-lck-nav-toggle], #lck-nav-toggle').first();
+		await expect(toggle).toBeVisible({ timeout: 20_000 });
+		await toggle.click();
+		await expect(page.locator('#app-navigation.lck-nav')).toHaveClass(/lck-nav--open/);
+		await expect(page.locator('#app-navigation.lck-nav a.lck-nav__link').first()).toBeVisible();
 	});
 });

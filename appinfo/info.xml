@@ -31,6 +31,10 @@ HealthCheck watches the Nextcloud admin log file and notifies entitled admins wh
 - Starting fresh / deleting the log requires a Nextcloud **system admin** and typed confirmation.
 - No SIEM export, ML anomaly detection, or auto-remediation.
 
+## Feedback welcome
+
+We improve this app with real-world use. Bug reports, rough edges, and ideas help — open a GitHub Issue (https://github.com/aSoftwareByDesignRepository/nextcloud-logcheck/issues) or write to info@software-by-design.de. Your feedback directly shapes what we build next.
+
 ## Requirements
 
 - Nextcloud 32–34 · PHP 8.2–8.5 · MySQL/MariaDB or PostgreSQL
@@ -59,6 +63,10 @@ HealthCheck überwacht die Nextcloud-Admin-Logdatei und benachrichtigt berechtig
 - Protokollansicht ist begrenzt (chunked) und nur die Systemconfig-Logdatei — nie ein vom Nutzer gewählter Pfad.
 - Neu beginnen / Löschen nur für Nextcloud-**System-Admins** mit Bestätigungswort.
 - Kein SIEM-Export, keine ML-Anomalieerkennung, keine Auto-Remediation.
+
+## Feedback willkommen
+
+Wir verbessern diese App mit Rückmeldungen aus der Praxis. Fehlerberichte, Stolpersteine und Ideen helfen — öffnen Sie ein GitHub Issue (https://github.com/aSoftwareByDesignRepository/nextcloud-logcheck/issues) oder schreiben Sie an info@software-by-design.de. Ihr Feedback prägt direkt, was wir als Nächstes bauen.
 
 ## Voraussetzungen
 

@@ -10,7 +10,7 @@
 	var APP_ID = 'logcheck';
 	var PREFIX = 'lck';
 	var EMAIL = 'dev@software-by-design.de';
-	var DISPLAY = 'HealthCheck';
+	var DISPLAY = 'LogCheck';
 
 	function t(key) {
 		if (typeof global.t === 'function') {
@@ -187,9 +187,6 @@
 				if (type === 'error' || type === 'danger' || type === 'critical' || name === 'showError') {
 					var toasts = document.querySelectorAll('.toast--error, .toast--danger, .toast--critical');
 					var last = toasts.length ? toasts[toasts.length - 1] : null;
-					if (!last) {
-						last = document.getElementById(PREFIX + '-alert-region');
-					}
 					attachReportLink(last, safeErrorCode(code) || (message.length <= 64 ? message : ''));
 				}
 			} catch (e) {
@@ -203,7 +200,6 @@
 
 	function installToastHooks() {
 		var candidates = [
-			global.LogCheckToasts,
 			global.ArbeitszeitCheckComponents,
 			global.ArbeitszeitCheckMessaging,
 			global.DutyCheckComponents,

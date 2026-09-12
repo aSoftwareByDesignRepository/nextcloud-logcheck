@@ -44,16 +44,19 @@ include __DIR__ . '/navigation.php';
 	<div id="lck-alert-region" class="lck-sr-only" role="alert" aria-live="assertive" aria-atomic="true"></div>
 	<div id="app-content-wrapper" class="lck-shell">
 		<header class="lck-page-header" aria-labelledby="lck-page-title">
-			<nav class="lck-breadcrumb" aria-label="<?php p($l->t('Breadcrumb')); ?>">
-				<ol class="lck-breadcrumb__list">
-					<li class="lck-breadcrumb__item">
-						<a class="lck-breadcrumb__link" href="<?php p($homeUrl); ?>"><?php p($l->t('HealthCheck')); ?></a>
-					</li>
-					<li class="lck-breadcrumb__item lck-breadcrumb__item--current" aria-current="page">
-						<span class="lck-breadcrumb__current"><?php p($pageTitle); ?></span>
-					</li>
-				</ol>
-			</nav>
+			<div class="lck-page-header__top">
+				<?php require __DIR__ . '/nav-toggle.php'; ?>
+				<nav class="lck-breadcrumb" aria-label="<?php p($l->t('Breadcrumb')); ?>">
+					<ol class="lck-breadcrumb__list">
+						<li class="lck-breadcrumb__item">
+							<a class="lck-breadcrumb__link" href="<?php p($homeUrl); ?>"><?php p($l->t('HealthCheck')); ?></a>
+						</li>
+						<li class="lck-breadcrumb__item lck-breadcrumb__item--current" aria-current="page">
+							<span class="lck-breadcrumb__current"><?php p($pageTitle); ?></span>
+						</li>
+					</ol>
+				</nav>
+			</div>
 			<div class="lck-page-header__main">
 				<div class="lck-page-header__icon" aria-hidden="true">
 					<?php print_unescaped(IconCatalog::render($iconName, 'lck-page-header__icon-svg')); ?>

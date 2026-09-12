@@ -168,16 +168,46 @@ test.describe('All shipped controls work', () => {
 	test('Rules: level/pace chips and Save', async ({ page }) => {
 		await gotoLogCheck(page, '/settings/rules');
 		await expect(page.locator('#lck-level-chips')).toBeVisible();
+
+		// Each min-level chip value (Errors=3, Warnings too=2).
+		await page.locator('#lck-level-chips .lck-chip[data-value="3"]').click();
+		await expect(page.locator('#lck-min-level')).toHaveValue('3');
 		await page.locator('#lck-level-chips .lck-chip[data-value="2"]').click();
 		await expect(page.locator('#lck-min-level')).toHaveValue('2');
-		await page.locator('#lck-pace-chips .lck-chip[data-value="300"]').click();
-		await expect(page.locator('#lck-pace-seconds')).toHaveValue('300');
 
+		// Each pace option: Fast 300, Normal 900, Quiet 3600.
+		for (const pace of ['300', '900', '3600']) {
+			await page.locator(`#lck-pace-chips .lck-chip[data-value="${pace}"]`).click();
+			await expect(page.locator('#lck-pace-seconds')).toHaveValue(pace);
+		}
+		await page.locator('#lck-pace-chips .lck-chip[data-value="900"]').click();
+		await expect(page.locator('#lck-pace-seconds')).toHaveValue('900');
+
+		const advanced = page.locator('details.lck-more').first();
+		await expect(advanced).not.toHaveAttribute('open');
 		await page.locator('details.lck-more summary').first().click();
 		await expect(page.locator('#lck-mutes')).toBeVisible();
 		await expect(page.locator('#lck-mute-apps')).toBeVisible();
 		await expect(page.locator('#lck-app-mode')).toBeVisible();
 
+		// Each app_mode value + mute add/clear save path.
+		for (const mode of ['all', 'allow', 'deny']) {
+			await page.locator('#lck-app-mode').selectOption(mode);
+			await expect(page.locator('#lck-app-mode')).toHaveValue(mode);
+		}
+		await page.locator('#lck-app-mode').selectOption('all');
+		await page.locator('#lck-app-list').fill('');
+		await page.locator('#lck-mutes').fill('atlas-mute-temp');
+		await page.locator('#lck-mute-apps').fill('atlas_temp_mute_app');
+
+		await Promise.all([
+			page.waitForResponse((r) => r.url().includes('/api/settings') && r.request().method() === 'PUT', { timeout: 30000 }),
+			page.locator('#lck-settings-form button[type="submit"]').click(),
+		]);
+
+		// Clear mute fields and save again (add/clear path).
+		await page.locator('#lck-mutes').fill('');
+		await page.locator('#lck-mute-apps').fill('');
 		await Promise.all([
 			page.waitForResponse((r) => r.url().includes('/api/settings') && r.request().method() === 'PUT', { timeout: 30000 }),
 			page.locator('#lck-settings-form button[type="submit"]').click(),
