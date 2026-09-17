@@ -4,8 +4,8 @@ OC.L10N.register(
 	"%s%% free" : "%s %% libero",
 	"(opens in a new tab)" : "(si apre in una nuova scheda)",
 	"(opens in a new window)" : "(si apre in una nuova finestra)",
-	"_HealthCheck found %n new error_::_HealthCheck found %n new errors_" : ["HealthCheck ha trovato %n nuovo errore","HealthCheck ha trovato %n nuovi errori"],
-	"_HealthCheck: %n new error_::_HealthCheck: %n new errors_" : ["HealthCheck: %n nuovo errore","HealthCheck: %n nuovi errori"],
+	"_HealthCheck found %n new error_::_HealthCheck found %n new errors_" : ["HealthCheck ha trovato %n nuovo errore", "HealthCheck ha trovato %n nuovi errori"],
+	"_HealthCheck: %n new error_::_HealthCheck: %n new errors_" : ["HealthCheck: %n nuovo errore", "HealthCheck: %n nuovi errori"],
 	"a newer version" : "una versione più recente",
 	"A rotated copy with that name already exists. Try again." : "Esiste già una copia con quel nome. Riprovi.",
 	"Active session context" : "Contesto di sessione attivo",
@@ -49,6 +49,7 @@ OC.L10N.register(
 	"Choose which apps to watch first. Mute patterns hide noisy lines after that." : "Scelga prima quali app monitorare. I modelli di silenziamento nascondono poi le righe rumorose.",
 	"Choose who can manage HealthCheck besides Nextcloud admins." : "Scelga chi può gestire HealthCheck oltre agli amministratori Nextcloud.",
 	"Clear saved URL" : "Cancellare URL salvato",
+	"Close navigation menu" : "Chiudi il menu di navigazione",
 	"Confirm" : "Conferma",
 	"Confirmation" : "Conferma",
 	"Connected" : "Connesso",
@@ -91,7 +92,7 @@ OC.L10N.register(
 	"Download started." : "Download avviato.",
 	"Email" : "E-mail",
 	"Email could not be sent. Check mail settings." : "Impossibile inviare l’e-mail. Controlli le impostazioni di posta.",
-	"Email is best-effort — no reply SLA. Need booked help? Use Support us." : "E-mail senza SLA di risposta. Per assistenza pianificata usi Support us.",
+	"Email is best-effort — no reply SLA. Need booked help? Use Support & us." : "Email best-effort — nessun SLA di risposta. Serve aiuto prenotato? Usa Support & us.",
 	"Email, Slack, webhook" : "E-mail, Slack, webhook",
 	"Enter something to search for." : "Inserisca qualcosa da cercare.",
 	"Enterprise" : "Enterprise",
@@ -159,6 +160,7 @@ OC.L10N.register(
 	"Matches found: %s" : "Corrispondenze: %s",
 	"Member" : "Membro",
 	"memory_limit=%s" : "memory_limit=%s",
+	"Menu" : "Menu",
 	"More" : "Altro",
 	"More on our website" : "Altro sul nostro sito",
 	"More options" : "Altre opzioni",
@@ -230,6 +232,7 @@ OC.L10N.register(
 	"Save failed." : "Salvataggio non riuscito.",
 	"Saved copy" : "Copia salvata",
 	"Saved URL" : "URL salvato",
+	"Saved URL will be removed when you save." : "L’URL salvato verrà rimosso quando salvi.",
 	"Saved." : "Salvato.",
 	"Search" : "Cerca",
 	"Search by name" : "Cercare per nome",
@@ -295,6 +298,7 @@ OC.L10N.register(
 	"This permanently deletes the current log. Prefer “Start fresh log” if you want to keep a copy." : "Questo elimina definitivamente il registro attuale. Preferisca «Avviare registro nuovo» se vuole tenere una copia.",
 	"This permanently deletes this older copy. The current log is not changed." : "Questo elimina definitivamente questa copia precedente. Il registro corrente non viene modificato.",
 	"Timezone" : "Fuso orario",
+	"Toggle navigation menu" : "Apri o chiudi il menu di navigazione",
 	"Try again" : "Riprovare",
 	"Turn on alerts" : "Attivare gli avvisi",
 	"Turn on alerts to get notified about new errors." : "Attivare gli avvisi per ricevere notifiche su nuovi errori.",
@@ -338,7 +342,7 @@ OC.L10N.register(
 	"Which apps to watch" : "App da monitorare",
 	"Which log?" : "Quale registro?",
 	"Who can open HealthCheck — Nextcloud admins always can; add app admins below." : "Chi può aprire HealthCheck — gli amministratori Nextcloud sempre; aggiunga admin dell’app sotto.",
-	"Who can open HealthCheck?" : "Chi può aprire HealthCheck?",
-	"Saved URL will be removed when you save." : "L’URL salvato verrà rimosso quando salvi."
-	}
+	"Who can open HealthCheck?" : "Chi può aprire HealthCheck?"
+	},
+	"nplurals=2; plural=(n != 1);"
 );

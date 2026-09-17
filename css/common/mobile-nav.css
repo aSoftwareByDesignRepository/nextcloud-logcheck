@@ -63,7 +63,7 @@
 .lck-nav-toggle[aria-expanded='true'] {
 	background-color: color-mix(
 		in srgb,
-		var(--color-primary-element, #0082c9) 12%,
+		var(--color-primary-element) 12%,
 		var(--color-main-background)
 	);
 	border-color: var(--color-primary-element);
@@ -88,7 +88,7 @@
 		transform: translateX(-105%) !important;
 		transition: transform 180ms ease;
 		box-shadow:
-			0 4px 16px color-mix(in srgb, var(--color-main-text, #000) 18%, transparent),
+			0 4px 16px color-mix(in srgb, var(--color-main-text) 18%, transparent),
 			0 0 0 1px var(--color-border);
 		overflow-x: hidden;
 		overflow-y: auto;

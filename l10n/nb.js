@@ -4,8 +4,8 @@ OC.L10N.register(
 	"%s%% free" : "%s %% ledig",
 	"(opens in a new tab)" : "(åpnes i en ny fane)",
 	"(opens in a new window)" : "(åpnes i et nytt vindu)",
-	"_HealthCheck found %n new error_::_HealthCheck found %n new errors_" : ["HealthCheck fant %n ny feil","HealthCheck fant %n nye feil"],
-	"_HealthCheck: %n new error_::_HealthCheck: %n new errors_" : ["HealthCheck: %n ny feil","HealthCheck: %n nye feil"],
+	"_HealthCheck found %n new error_::_HealthCheck found %n new errors_" : ["HealthCheck fant %n ny feil", "HealthCheck fant %n nye feil"],
+	"_HealthCheck: %n new error_::_HealthCheck: %n new errors_" : ["HealthCheck: %n ny feil", "HealthCheck: %n nye feil"],
 	"a newer version" : "en nyere versjon",
 	"A rotated copy with that name already exists. Try again." : "En omdøpt kopi med det navnet finnes allerede. Prøv igjen.",
 	"Active session context" : "Aktiv øktkontekst",
@@ -49,6 +49,7 @@ OC.L10N.register(
 	"Choose which apps to watch first. Mute patterns hide noisy lines after that." : "Velg først hvilke apper som skal overvåkes. Dempemønstre skjuler deretter støyende linjer.",
 	"Choose who can manage HealthCheck besides Nextcloud admins." : "Velg hvem som kan administrere HealthCheck i tillegg til Nextcloud-administratorer.",
 	"Clear saved URL" : "Fjern lagret URL",
+	"Close navigation menu" : "Lukk navigasjonsmenyen",
 	"Confirm" : "Bekreft",
 	"Confirmation" : "Bekreftelse",
 	"Connected" : "Tilkoblet",
@@ -91,7 +92,7 @@ OC.L10N.register(
 	"Download started." : "Nedlasting startet.",
 	"Email" : "E-post",
 	"Email could not be sent. Check mail settings." : "E-post kunne ikke sendes. Sjekk e-postinnstillingene.",
-	"Email is best-effort — no reply SLA. Need booked help? Use Support us." : "E-post uten svar-SLA. For booket hjelp: Support us.",
+	"Email is best-effort — no reply SLA. Need booked help? Use Support & us." : "E-post er best-effort — ingen svar-SLA. Trenger booket hjelp? Bruk Support & us.",
 	"Email, Slack, webhook" : "E-post, Slack, webhook",
 	"Enter something to search for." : "Skriv inn noe å søke etter.",
 	"Enterprise" : "Enterprise",
@@ -159,6 +160,7 @@ OC.L10N.register(
 	"Matches found: %s" : "Treff: %s",
 	"Member" : "Medlem",
 	"memory_limit=%s" : "memory_limit=%s",
+	"Menu" : "Meny",
 	"More" : "Mer",
 	"More on our website" : "Mer på nettstedet vårt",
 	"More options" : "Flere alternativer",
@@ -230,6 +232,7 @@ OC.L10N.register(
 	"Save failed." : "Lagring mislyktes.",
 	"Saved copy" : "Lagret kopi",
 	"Saved URL" : "Lagret URL",
+	"Saved URL will be removed when you save." : "Den lagrede URL-en fjernes når du lagrer.",
 	"Saved." : "Lagret.",
 	"Search" : "Søk",
 	"Search by name" : "Søk etter navn",
@@ -295,6 +298,7 @@ OC.L10N.register(
 	"This permanently deletes the current log. Prefer “Start fresh log” if you want to keep a copy." : "Dette sletter den gjeldende loggen permanent. Velg «Start ny logg» hvis en kopi skal beholdes.",
 	"This permanently deletes this older copy. The current log is not changed." : "Dette sletter denne eldre kopien permanent. Den gjeldende loggen endres ikke.",
 	"Timezone" : "Tidssone",
+	"Toggle navigation menu" : "Vis eller skjul navigasjonsmenyen",
 	"Try again" : "Prøv igjen",
 	"Turn on alerts" : "Slå på varsler",
 	"Turn on alerts to get notified about new errors." : "Slå på varsler for å bli varslet om nye feil.",
@@ -338,7 +342,7 @@ OC.L10N.register(
 	"Which apps to watch" : "Hvilke apper som skal overvåkes",
 	"Which log?" : "Hvilken logg?",
 	"Who can open HealthCheck — Nextcloud admins always can; add app admins below." : "Hvem som kan åpne HealthCheck — Nextcloud-administratorer alltid; legg til appadministratorer nedenfor.",
-	"Who can open HealthCheck?" : "Hvem kan åpne HealthCheck?",
-	"Saved URL will be removed when you save." : "Den lagrede URL-en fjernes når du lagrer."
-	}
+	"Who can open HealthCheck?" : "Hvem kan åpne HealthCheck?"
+	},
+	"nplurals=2; plural=(n != 1);"
 );

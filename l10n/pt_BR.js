@@ -4,8 +4,8 @@ OC.L10N.register(
 	"%s%% free" : "%s %% livre",
 	"(opens in a new tab)" : "(abre em uma nova aba)",
 	"(opens in a new window)" : "(abre em uma nova janela)",
-	"_HealthCheck found %n new error_::_HealthCheck found %n new errors_" : ["HealthCheck encontrou %n novo erro","HealthCheck encontrou %n novos erros"],
-	"_HealthCheck: %n new error_::_HealthCheck: %n new errors_" : ["HealthCheck: %n novo erro","HealthCheck: %n novos erros"],
+	"_HealthCheck found %n new error_::_HealthCheck found %n new errors_" : ["HealthCheck encontrou %n novo erro", "HealthCheck encontrou %n novos erros"],
+	"_HealthCheck: %n new error_::_HealthCheck: %n new errors_" : ["HealthCheck: %n novo erro", "HealthCheck: %n novos erros"],
 	"a newer version" : "uma versão mais recente",
 	"A rotated copy with that name already exists. Try again." : "Já existe uma cópia com esse nome. Tente novamente.",
 	"Active session context" : "Contexto da sessão ativa",
@@ -49,6 +49,7 @@ OC.L10N.register(
 	"Choose which apps to watch first. Mute patterns hide noisy lines after that." : "Escolha primeiro quais apps monitorar. Padrões de silêncio ocultam depois as linhas ruidosas.",
 	"Choose who can manage HealthCheck besides Nextcloud admins." : "Escolha quem pode gerenciar o HealthCheck além dos administradores do Nextcloud.",
 	"Clear saved URL" : "Limpar URL salva",
+	"Close navigation menu" : "Fechar o menu de navegação",
 	"Confirm" : "Confirmar",
 	"Confirmation" : "Confirmação",
 	"Connected" : "Conectado",
@@ -91,7 +92,7 @@ OC.L10N.register(
 	"Download started." : "Download iniciado.",
 	"Email" : "E-mail",
 	"Email could not be sent. Check mail settings." : "Não foi possível enviar o e-mail. Verifique as configurações de e-mail.",
-	"Email is best-effort — no reply SLA. Need booked help? Use Support us." : "E-mail sem SLA de resposta. Para ajuda contratada, use Support us.",
+	"Email is best-effort — no reply SLA. Need booked help? Use Support & us." : "E-mail é best-effort — sem SLA de resposta. Precisa de ajuda contratada? Use Support & us.",
 	"Email, Slack, webhook" : "E-mail, Slack, webhook",
 	"Enter something to search for." : "Digite algo para pesquisar.",
 	"Enterprise" : "Enterprise",
@@ -159,6 +160,7 @@ OC.L10N.register(
 	"Matches found: %s" : "Correspondências: %s",
 	"Member" : "Membro",
 	"memory_limit=%s" : "memory_limit=%s",
+	"Menu" : "Menu",
 	"More" : "Mais",
 	"More on our website" : "Mais no nosso site",
 	"More options" : "Mais opções",
@@ -230,6 +232,7 @@ OC.L10N.register(
 	"Save failed." : "Falha ao salvar.",
 	"Saved copy" : "Cópia salva",
 	"Saved URL" : "URL salva",
+	"Saved URL will be removed when you save." : "A URL salva será removida ao salvar.",
 	"Saved." : "Salvo.",
 	"Search" : "Pesquisar",
 	"Search by name" : "Pesquisar por nome",
@@ -295,6 +298,7 @@ OC.L10N.register(
 	"This permanently deletes the current log. Prefer “Start fresh log” if you want to keep a copy." : "Isso exclui permanentemente o log atual. Prefira “Iniciar log limpo” se quiser guardar uma cópia.",
 	"This permanently deletes this older copy. The current log is not changed." : "Isso exclui permanentemente esta cópia anterior. O registro atual não é alterado.",
 	"Timezone" : "Fuso horário",
+	"Toggle navigation menu" : "Abrir ou fechar o menu de navegação",
 	"Try again" : "Tentar de novo",
 	"Turn on alerts" : "Ativar alertas",
 	"Turn on alerts to get notified about new errors." : "Ative os alertas para ser notificado sobre novos erros.",
@@ -338,7 +342,7 @@ OC.L10N.register(
 	"Which apps to watch" : "Quais apps monitorar",
 	"Which log?" : "Qual registro?",
 	"Who can open HealthCheck — Nextcloud admins always can; add app admins below." : "Quem pode abrir o HealthCheck — administradores do Nextcloud sempre; adicione administradores do app abaixo.",
-	"Who can open HealthCheck?" : "Quem pode abrir o HealthCheck?",
-	"Saved URL will be removed when you save." : "A URL salva será removida ao salvar."
-	}
+	"Who can open HealthCheck?" : "Quem pode abrir o HealthCheck?"
+	},
+	"nplurals=2; plural=(n > 1);"
 );

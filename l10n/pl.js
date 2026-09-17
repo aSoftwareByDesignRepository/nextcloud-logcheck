@@ -4,8 +4,8 @@ OC.L10N.register(
 	"%s%% free" : "%s %% wolne",
 	"(opens in a new tab)" : "(otwiera się w nowej karcie)",
 	"(opens in a new window)" : "(otwiera się w nowym oknie)",
-	"_HealthCheck found %n new error_::_HealthCheck found %n new errors_" : ["HealthCheck znalazł %n nowy błąd","HealthCheck znalazł %n nowe błędy","HealthCheck znalazł %n nowych błędów"],
-	"_HealthCheck: %n new error_::_HealthCheck: %n new errors_" : ["HealthCheck: %n nowy błąd","HealthCheck: %n nowe błędy","HealthCheck: %n nowych błędów"],
+	"_HealthCheck found %n new error_::_HealthCheck found %n new errors_" : ["HealthCheck znalazł %n nowy błąd", "HealthCheck znalazł %n nowe błędy", "HealthCheck znalazł %n nowych błędów"],
+	"_HealthCheck: %n new error_::_HealthCheck: %n new errors_" : ["HealthCheck: %n nowy błąd", "HealthCheck: %n nowe błędy", "HealthCheck: %n nowych błędów"],
 	"a newer version" : "nowsza wersja",
 	"A rotated copy with that name already exists. Try again." : "Kopia o tej nazwie już istnieje. Spróbuj ponownie.",
 	"Active session context" : "Aktywny kontekst sesji",
@@ -49,6 +49,7 @@ OC.L10N.register(
 	"Choose which apps to watch first. Mute patterns hide noisy lines after that." : "Najpierw wybierz, które aplikacje monitorować. Wzorce wyciszania ukrywają potem głośne wiersze.",
 	"Choose who can manage HealthCheck besides Nextcloud admins." : "Wybierz, kto może zarządzać HealthCheck poza administratorami Nextclouda.",
 	"Clear saved URL" : "Wyczyść zapisany URL",
+	"Close navigation menu" : "Zamknij menu nawigacji",
 	"Confirm" : "Potwierdź",
 	"Confirmation" : "Potwierdzenie",
 	"Connected" : "Połączono",
@@ -91,7 +92,7 @@ OC.L10N.register(
 	"Download started." : "Pobieranie rozpoczęte.",
 	"Email" : "E-mail",
 	"Email could not be sent. Check mail settings." : "Nie udało się wysłać e-maila. Sprawdź ustawienia poczty.",
-	"Email is best-effort — no reply SLA. Need booked help? Use Support us." : "E-mail bez gwarancji odpowiedzi. Na zleconą pomoc użyj Support us.",
+	"Email is best-effort — no reply SLA. Need booked help? Use Support & us." : "E-mail na zasadzie best-effort — bez SLA odpowiedzi. Potrzebujesz zamówionej pomocy? Użyj Support & us.",
 	"Email, Slack, webhook" : "E-mail, Slack, webhook",
 	"Enter something to search for." : "Wpisz coś do wyszukania.",
 	"Enterprise" : "Enterprise",
@@ -159,6 +160,7 @@ OC.L10N.register(
 	"Matches found: %s" : "Dopasowania: %s",
 	"Member" : "Członek",
 	"memory_limit=%s" : "memory_limit=%s",
+	"Menu" : "Menu",
 	"More" : "Więcej",
 	"More on our website" : "Więcej na naszej stronie",
 	"More options" : "Więcej opcji",
@@ -230,6 +232,7 @@ OC.L10N.register(
 	"Save failed." : "Zapis nie powiódł się.",
 	"Saved copy" : "Zapisana kopia",
 	"Saved URL" : "Zapisany URL",
+	"Saved URL will be removed when you save." : "Zapisany adres URL zostanie usunięty po zapisaniu.",
 	"Saved." : "Zapisano.",
 	"Search" : "Szukaj",
 	"Search by name" : "Szukaj po nazwie",
@@ -295,6 +298,7 @@ OC.L10N.register(
 	"This permanently deletes the current log. Prefer “Start fresh log” if you want to keep a copy." : "To trwale usuwa bieżący dziennik. Wybierz „Zacznij nowy dziennik”, jeśli chcesz zachować kopię.",
 	"This permanently deletes this older copy. The current log is not changed." : "To trwale usuwa tę starszą kopię. Bieżący dziennik nie jest zmieniany.",
 	"Timezone" : "Strefa czasowa",
+	"Toggle navigation menu" : "Przełącz menu nawigacji",
 	"Try again" : "Spróbuj ponownie",
 	"Turn on alerts" : "Włącz alerty",
 	"Turn on alerts to get notified about new errors." : "Włącz alerty, aby otrzymywać powiadomienia o nowych błędach.",
@@ -338,7 +342,7 @@ OC.L10N.register(
 	"Which apps to watch" : "Które aplikacje monitorować",
 	"Which log?" : "Który dziennik?",
 	"Who can open HealthCheck — Nextcloud admins always can; add app admins below." : "Kto może otworzyć HealthCheck — administratorzy Nextclouda zawsze; dodaj administratorów aplikacji poniżej.",
-	"Who can open HealthCheck?" : "Kto może otworzyć HealthCheck?",
-	"Saved URL will be removed when you save." : "Zapisany adres URL zostanie usunięty po zapisaniu."
-	}
+	"Who can open HealthCheck?" : "Kto może otworzyć HealthCheck?"
+	},
+	"nplurals=3; plural=(n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);"
 );

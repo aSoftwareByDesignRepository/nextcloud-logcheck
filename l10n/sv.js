@@ -4,8 +4,8 @@ OC.L10N.register(
 	"%s%% free" : "%s %% ledigt",
 	"(opens in a new tab)" : "(öppnas i en ny flik)",
 	"(opens in a new window)" : "(öppnas i ett nytt fönster)",
-	"_HealthCheck found %n new error_::_HealthCheck found %n new errors_" : ["HealthCheck hittade %n nytt fel","HealthCheck hittade %n nya fel"],
-	"_HealthCheck: %n new error_::_HealthCheck: %n new errors_" : ["HealthCheck: %n nytt fel","HealthCheck: %n nya fel"],
+	"_HealthCheck found %n new error_::_HealthCheck found %n new errors_" : ["HealthCheck hittade %n nytt fel", "HealthCheck hittade %n nya fel"],
+	"_HealthCheck: %n new error_::_HealthCheck: %n new errors_" : ["HealthCheck: %n nytt fel", "HealthCheck: %n nya fel"],
 	"a newer version" : "en nyare version",
 	"A rotated copy with that name already exists. Try again." : "En omdöpt kopia med det namnet finns redan. Försök igen.",
 	"Active session context" : "Aktiv sessionskontext",
@@ -49,6 +49,7 @@ OC.L10N.register(
 	"Choose which apps to watch first. Mute patterns hide noisy lines after that." : "Välj först vilka appar som ska bevakas. Dämplingsmönster döljer sedan brusiga rader.",
 	"Choose who can manage HealthCheck besides Nextcloud admins." : "Välj vem som får hantera HealthCheck utöver Nextcloud-administratörer.",
 	"Clear saved URL" : "Rensa sparad URL",
+	"Close navigation menu" : "Stäng navigeringsmenyn",
 	"Confirm" : "Bekräfta",
 	"Confirmation" : "Bekräftelse",
 	"Connected" : "Ansluten",
@@ -91,7 +92,7 @@ OC.L10N.register(
 	"Download started." : "Nedladdning startad.",
 	"Email" : "E-post",
 	"Email could not be sent. Check mail settings." : "E-post kunde inte skickas. Kontrollera e-postinställningarna.",
-	"Email is best-effort — no reply SLA. Need booked help? Use Support us." : "E-post utan svar-SLA. För bokad hjälp: Support us.",
+	"Email is best-effort — no reply SLA. Need booked help? Use Support & us." : "E-post är best-effort — ingen svarstid-SLA. Behöver bokad hjälp? Använd Support & us.",
 	"Email, Slack, webhook" : "E-post, Slack, webhook",
 	"Enter something to search for." : "Ange något att söka efter.",
 	"Enterprise" : "Enterprise",
@@ -159,6 +160,7 @@ OC.L10N.register(
 	"Matches found: %s" : "Träffar: %s",
 	"Member" : "Medlem",
 	"memory_limit=%s" : "memory_limit=%s",
+	"Menu" : "Meny",
 	"More" : "Mer",
 	"More on our website" : "Mer på vår webbplats",
 	"More options" : "Fler alternativ",
@@ -230,6 +232,7 @@ OC.L10N.register(
 	"Save failed." : "Kunde inte spara.",
 	"Saved copy" : "Sparad kopia",
 	"Saved URL" : "Sparad URL",
+	"Saved URL will be removed when you save." : "Den sparade URL:en tas bort när du sparar.",
 	"Saved." : "Sparat.",
 	"Search" : "Sök",
 	"Search by name" : "Sök på namn",
@@ -295,6 +298,7 @@ OC.L10N.register(
 	"This permanently deletes the current log. Prefer “Start fresh log” if you want to keep a copy." : "Detta tar bort den aktuella loggen permanent. Välj „Starta ny logg“ om en kopia ska behållas.",
 	"This permanently deletes this older copy. The current log is not changed." : "Detta tar permanent bort den här äldre kopian. Den aktuella loggen ändras inte.",
 	"Timezone" : "Tidszon",
+	"Toggle navigation menu" : "Visa eller dölj navigeringsmenyn",
 	"Try again" : "Försök igen",
 	"Turn on alerts" : "Aktivera aviseringar",
 	"Turn on alerts to get notified about new errors." : "Slå på aviseringar för att få veta om nya fel.",
@@ -338,7 +342,7 @@ OC.L10N.register(
 	"Which apps to watch" : "Appar att bevaka",
 	"Which log?" : "Vilken logg?",
 	"Who can open HealthCheck — Nextcloud admins always can; add app admins below." : "Vem som kan öppna HealthCheck — Nextcloud-administratörer alltid; lägg till appadministratörer nedan.",
-	"Who can open HealthCheck?" : "Vem kan öppna HealthCheck?",
-	"Saved URL will be removed when you save." : "Den sparade URL:en tas bort när du sparar."
-	}
+	"Who can open HealthCheck?" : "Vem kan öppna HealthCheck?"
+	},
+	"nplurals=2; plural=(n != 1);"
 );
