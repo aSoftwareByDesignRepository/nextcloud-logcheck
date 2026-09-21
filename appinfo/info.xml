@@ -37,7 +37,7 @@ We improve this app with real-world use. Bug reports, rough edges, and ideas hel
 
 ## Requirements
 
-- Nextcloud 32–34 · PHP 8.2–8.5 · MySQL/MariaDB or PostgreSQL
+- Nextcloud 32–35 · PHP 8.2–8.5 · MySQL/MariaDB or PostgreSQL
 - Working background jobs (cron recommended)
 	]]></description>
 	<description lang="de"><![CDATA[
@@ -70,10 +70,10 @@ Wir verbessern diese App mit Rückmeldungen aus der Praxis. Fehlerberichte, Stol
 
 ## Voraussetzungen
 
-- Nextcloud 32–34 · PHP 8.2–8.5 · MySQL/MariaDB oder PostgreSQL
+- Nextcloud 32–35 · PHP 8.2–8.5 · MySQL/MariaDB oder PostgreSQL
 - Funktionierende Hintergrundjobs (Cron empfohlen)
 	]]></description>
-	<version>1.3.24</version>
+	<version>1.4.0</version>
 	<licence>agpl</licence>
 	<author mail="info@software-by-design.de" homepage="https://software-by-design.de">Alexander Mäule</author>
 	<namespace>LogCheck</namespace>
@@ -87,7 +87,7 @@ Wir verbessern diese App mit Rückmeldungen aus der Praxis. Fehlerberichte, Stol
 	<screenshot small-thumbnail="https://raw.githubusercontent.com/aSoftwareByDesignRepository/nextcloud-logcheck/refs/heads/main/screenshots/alerts.png">https://raw.githubusercontent.com/aSoftwareByDesignRepository/nextcloud-logcheck/refs/heads/main/screenshots/alerts.png</screenshot>
 	<screenshot small-thumbnail="https://raw.githubusercontent.com/aSoftwareByDesignRepository/nextcloud-logcheck/refs/heads/main/screenshots/rules.png">https://raw.githubusercontent.com/aSoftwareByDesignRepository/nextcloud-logcheck/refs/heads/main/screenshots/rules.png</screenshot>
 	<dependencies>
-		<nextcloud min-version="32" max-version="34"/>
+		<nextcloud min-version="32" max-version="35"/>
 		<php min-version="8.2" max-version="8.5"/>
 		<database>pgsql</database>
 		<database>mysql</database>

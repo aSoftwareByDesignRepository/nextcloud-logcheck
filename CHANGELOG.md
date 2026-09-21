@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.4.0 — 2026-09-21
+
+- **Nextcloud:** raise `max-version` to **35** (Hub 26 Summer) so App Store updates are offered on current stable.
+- Docs: store/README compatibility prose now **32–35**.
+
 ## 1.3.24 — 2026-09-09
 
 - App Store: shorten EN/DE `<summary>` to ≤128 characters (info.xml schema)

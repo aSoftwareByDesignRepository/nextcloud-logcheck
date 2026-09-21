@@ -4,7 +4,7 @@ Watch the Nextcloud admin log and get alerted when new ERROR or FATAL lines appe
 
 ## Requirements
 
-- Nextcloud 32–34
+- Nextcloud 32–35
 - PHP 8.2–8.5
 - File-based logging (`log_type = file`)
 - Working background jobs (cron recommended)
