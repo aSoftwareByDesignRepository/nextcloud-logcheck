@@ -107,6 +107,19 @@
 		form.addEventListener('submit', async function (ev) {
 			ev.preventDefault();
 			var submit = form.querySelector('button[type="submit"]');
+			/* Disabling the focused submit drops focus to body — remember and
+			   restore it after the PUT so keyboard users keep their place. */
+			var refocusSubmit = !!(submit && document.activeElement === submit);
+			var restoreSubmit = function () {
+				if (!submit) {
+					return;
+				}
+				submit.disabled = false;
+				submit.removeAttribute('aria-busy');
+				if (refocusSubmit && document.activeElement !== submit) {
+					submit.focus();
+				}
+			};
 			if (submit) {
 				submit.disabled = true;
 				submit.setAttribute('aria-busy', 'true');
@@ -114,6 +127,7 @@
 			var body = formToSettings(form);
 			var res = await App.putJson(App.urls().apiSave, body);
 			if (App.handleConflict(res)) {
+				restoreSubmit();
 				return;
 			}
 			if (res.status >= 200 && res.status < 300) {
@@ -121,16 +135,10 @@
 				if (res.data && res.data.version) {
 					App.setSettingsVersion(res.data.version);
 				}
-				if (submit) {
-					submit.disabled = false;
-					submit.removeAttribute('aria-busy');
-				}
+				restoreSubmit();
 			} else {
 				LogCheckToasts.showError((res.data && res.data.message) || t('logcheck', 'Save failed.'));
-				if (submit) {
-					submit.disabled = false;
-					submit.removeAttribute('aria-busy');
-				}
+				restoreSubmit();
 			}
 		});
 

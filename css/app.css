@@ -1276,8 +1276,10 @@
 .lck-nav-footer__trigger {
 	display: inline-flex;
 	gap: var(--lck-space-3, 0.75rem);
-	min-height: 44px;
-	min-width: 44px;
+	/* !important: NC core button:not(...) (0-1-1) otherwise shrinks this to
+	   --default-clickable-area (34px), below the 44px touch floor. */
+	min-height: 44px !important;
+	min-width: 44px !important;
 	padding: var(--lck-space-2, 0.5rem) var(--lck-space-3, 0.75rem);
 	border-radius: var(--lck-radius-sm, 6px);
 	box-sizing: border-box;

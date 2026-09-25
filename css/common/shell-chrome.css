@@ -570,12 +570,15 @@
 	color: var(--lck-text);
 	border-color: var(--lck-border);
 }
-.lck-btn--danger,
+#app-content.lck-app .lck-btn--danger,
+#app-content-wrapper .lck-btn--danger,
 .lck-app .btn--danger {
-	/* Solid fill — never pale --color-error tint (WCAG 1.4.3 / design-system §3.3) */
-	background: var(--lck-danger-fill);
-	color: var(--lck-danger-on-fill);
-	border-color: transparent;
+	/* Solid fill — never pale --color-error tint (WCAG 1.4.3 / design-system §3.3).
+	   ID-scoped + !important: NC core button:not(...) (0-1-1) otherwise paints
+	   --color-primary-element-light over the danger fill. */
+	background: var(--lck-danger-fill) !important;
+	color: var(--lck-danger-on-fill) !important;
+	border-color: transparent !important;
 }
 .lck-btn--danger:hover,
 .lck-app .btn--danger:hover {

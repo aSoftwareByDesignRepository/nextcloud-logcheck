@@ -49,11 +49,11 @@ HealthCheck überwacht die Nextcloud-Admin-Logdatei und benachrichtigt berechtig
 
 ## Warum Admins es einsetzen
 
-- **Alerts in wenigen Tipps** — E-Mail unter Alerts einrichten (Test & einschalten); Slack und Webhook optional
+- **Benachrichtigungen in wenigen Tipps** — E-Mail unter Benachrichtigungen einrichten (Test & einschalten); Slack und Webhook optional
 - **Protokoll ansehen, suchen, neu beginnen** — neuesten Teil lesen, suchen, kopieren oder nach Fehlerbehebung neu starten (System-Admin)
 - **Überlebt Logrotate** — dauerhafter Byte-Cursor mit Erkennung von Rotation/Kürzung
 - **Rauschen stummschalten** — App-ID und Regex; HealthCheck selbst ist standardmäßig stumm
-- **Sicher standardmäßig** — in Alerts nur Aggregate (kein Rohtext), außer ein System-Admin bestätigt die Opt-in
+- **Sicher standardmäßig** — in Benachrichtigungen nur Aggregate (kein Rohtext), außer ein System-Admin bestätigt die Opt-in
 - **Ehrlich, wenn es nicht geht** — nicht unterstützte Log-Backends zeigen klar „Kann nicht überwachen“
 
 ## Klare Grenzen
