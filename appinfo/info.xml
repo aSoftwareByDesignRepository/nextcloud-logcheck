@@ -73,6 +73,18 @@ Wir verbessern diese App mit Rückmeldungen aus der Praxis. Fehlerberichte, Stol
 - Nextcloud 32–35 · PHP 8.2–8.5 · MySQL/MariaDB oder PostgreSQL
 - Funktionierende Hintergrundjobs (Cron empfohlen)
 	]]></description>
+	<screenshot small-thumbnail="https://raw.githubusercontent.com/aSoftwareByDesignRepository/nextcloud-logcheck/refs/heads/master/screenshots/logcheck-screenshot-01.png">
+		https://raw.githubusercontent.com/aSoftwareByDesignRepository/nextcloud-logcheck/refs/heads/master/screenshots/logcheck-screenshot-01.png
+	</screenshot>
+	<screenshot small-thumbnail="https://raw.githubusercontent.com/aSoftwareByDesignRepository/nextcloud-logcheck/refs/heads/master/screenshots/logcheck-screenshot-02.png">
+		https://raw.githubusercontent.com/aSoftwareByDesignRepository/nextcloud-logcheck/refs/heads/master/screenshots/logcheck-screenshot-02.png
+	</screenshot>
+	<screenshot small-thumbnail="https://raw.githubusercontent.com/aSoftwareByDesignRepository/nextcloud-logcheck/refs/heads/master/screenshots/logcheck-screenshot-03.png">
+		https://raw.githubusercontent.com/aSoftwareByDesignRepository/nextcloud-logcheck/refs/heads/master/screenshots/logcheck-screenshot-03.png
+	</screenshot>
+	<screenshot small-thumbnail="https://raw.githubusercontent.com/aSoftwareByDesignRepository/nextcloud-logcheck/refs/heads/master/screenshots/logcheck-screenshot-04.png">
+		https://raw.githubusercontent.com/aSoftwareByDesignRepository/nextcloud-logcheck/refs/heads/master/screenshots/logcheck-screenshot-04.png
+	</screenshot>
 	<version>1.4.0</version>
 	<licence>agpl</licence>
 	<author mail="info@software-by-design.de" homepage="https://software-by-design.de">Alexander Mäule</author>
@@ -82,10 +94,6 @@ Wir verbessern diese App mit Rückmeldungen aus der Praxis. Fehlerberichte, Stol
 	<website>https://nextcloud.software-by-design.de/</website>
 	<bugs>https://github.com/aSoftwareByDesignRepository/nextcloud-logcheck/issues</bugs>
 	<repository type="git">https://github.com/aSoftwareByDesignRepository/nextcloud-logcheck.git</repository>
-	<screenshot small-thumbnail="https://raw.githubusercontent.com/aSoftwareByDesignRepository/nextcloud-logcheck/refs/heads/main/screenshots/home.png">https://raw.githubusercontent.com/aSoftwareByDesignRepository/nextcloud-logcheck/refs/heads/main/screenshots/home.png</screenshot>
-	<screenshot small-thumbnail="https://raw.githubusercontent.com/aSoftwareByDesignRepository/nextcloud-logcheck/refs/heads/main/screenshots/logs.png">https://raw.githubusercontent.com/aSoftwareByDesignRepository/nextcloud-logcheck/refs/heads/main/screenshots/logs.png</screenshot>
-	<screenshot small-thumbnail="https://raw.githubusercontent.com/aSoftwareByDesignRepository/nextcloud-logcheck/refs/heads/main/screenshots/alerts.png">https://raw.githubusercontent.com/aSoftwareByDesignRepository/nextcloud-logcheck/refs/heads/main/screenshots/alerts.png</screenshot>
-	<screenshot small-thumbnail="https://raw.githubusercontent.com/aSoftwareByDesignRepository/nextcloud-logcheck/refs/heads/main/screenshots/rules.png">https://raw.githubusercontent.com/aSoftwareByDesignRepository/nextcloud-logcheck/refs/heads/main/screenshots/rules.png</screenshot>
 	<dependencies>
 		<nextcloud min-version="32" max-version="35"/>
 		<php min-version="8.2" max-version="8.5"/>
