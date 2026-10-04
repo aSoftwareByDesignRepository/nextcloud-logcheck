@@ -191,12 +191,15 @@ class DesignSystemChromeTest extends TestCase
 	public function testPageControllerRegistersFeedbackAndSwitchAssets(): void
 	{
 		$src = (string)file_get_contents($this->root . '/lib/Controller/PageController.php');
-		self::assertStringContainsString("addScript(Application::APP_ID, 'common/app-feedback')", $src);
-		self::assertStringContainsString("addStyle(Application::APP_ID, 'common/switch-field')", $src);
-		self::assertStringContainsString("addStyle(Application::APP_ID, 'common/badges')", $src);
-		self::assertStringContainsString("addStyle(Application::APP_ID, 'common/navigation')", $src);
-		self::assertStringContainsString("addStyle(Application::APP_ID, 'common/mobile-nav')", $src);
-		self::assertStringContainsString("addScript(Application::APP_ID, 'common/mobile-nav')", $src);
+		self::assertStringContainsString('AssetRegistrar::registerStyles()', $src);
+		self::assertStringContainsString('AssetRegistrar::registerScripts()', $src);
+		$assets = (string)file_get_contents($this->root . '/lib/Support/AssetRegistrar.php');
+		self::assertStringContainsString("addScript(Application::APP_ID, 'common/app-feedback')", $assets);
+		self::assertStringContainsString("addStyle(Application::APP_ID, 'common/switch-field')", $assets);
+		self::assertStringContainsString("addStyle(Application::APP_ID, 'common/badges')", $assets);
+		self::assertStringContainsString("addStyle(Application::APP_ID, 'common/navigation')", $assets);
+		self::assertStringContainsString("addStyle(Application::APP_ID, 'common/mobile-nav')", $assets);
+		self::assertStringContainsString("addScript(Application::APP_ID, 'common/mobile-nav')", $assets);
 		self::assertStringContainsString('roleLabel', $src);
 	}
 
@@ -251,7 +254,7 @@ class DesignSystemChromeTest extends TestCase
 		self::assertStringContainsString('translateX(-105%)', $css);
 		$js = (string)file_get_contents($this->root . '/js/common/mobile-nav.js');
 		self::assertStringContainsString('data-lck-nav-toggle', $js);
-		$ctrl = (string)file_get_contents($this->root . '/lib/Controller/PageController.php');
+		$ctrl = (string)file_get_contents($this->root . '/lib/Support/AssetRegistrar.php');
 		self::assertStringContainsString("addStyle(Application::APP_ID, 'common/mobile-nav')", $ctrl);
 		self::assertStringContainsString("addScript(Application::APP_ID, 'common/mobile-nav')", $ctrl);
 		$nav = (string)file_get_contents($this->root . '/css/common/navigation.css');

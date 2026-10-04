@@ -11,6 +11,7 @@ use OCA\LogCheck\Service\LogFileService;
 use OCA\LogCheck\Service\SettingsSectionCatalog;
 use OCA\LogCheck\Service\SettingsService;
 use OCA\LogCheck\Service\StatusService;
+use OCA\LogCheck\Support\AssetRegistrar;
 use OCA\LogCheck\Support\SupportUsLinks;
 use OCP\AppFramework\Controller;
 use OCP\AppFramework\Http\Attribute\NoAdminRequired;
@@ -252,22 +253,8 @@ class PageController extends Controller
 
 	private function registerAssets(string $extra = ''): void
 	{
-		Util::addStyle(Application::APP_ID, 'common/tokens');
-		Util::addStyle(Application::APP_ID, 'common/shell-chrome');
-		Util::addStyle(Application::APP_ID, 'common/app-layout');
-		Util::addStyle(Application::APP_ID, 'common/navigation');
-		Util::addStyle(Application::APP_ID, 'common/mobile-nav');
-		Util::addStyle(Application::APP_ID, 'common/form-controls');
-		Util::addStyle(Application::APP_ID, 'common/page-patterns');
-		Util::addStyle(Application::APP_ID, 'common/notification-surfaces');
-		Util::addStyle(Application::APP_ID, 'common/dialogs');
-		Util::addStyle(Application::APP_ID, 'common/switch-field');
-		Util::addStyle(Application::APP_ID, 'common/badges');
-		Util::addStyle(Application::APP_ID, 'app');
-		Util::addScript(Application::APP_ID, 'common/toasts');
-		Util::addScript(Application::APP_ID, 'common/app-feedback');
-		Util::addScript(Application::APP_ID, 'common/mobile-nav');
-		Util::addScript(Application::APP_ID, 'app');
+		AssetRegistrar::registerStyles();
+		AssetRegistrar::registerScripts();
 		if ($extra === 'settings') {
 			Util::addScript(Application::APP_ID, 'settings');
 		}

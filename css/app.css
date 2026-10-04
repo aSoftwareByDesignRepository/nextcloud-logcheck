@@ -162,6 +162,13 @@
 	display: none !important;
 }
 
+/* Alerts checklist is a content list — NC core resets ul markers; restore disc. */
+#content.app-logcheck .lck-alerts-checklist__list {
+	list-style: disc outside;
+	padding-left: 1.25rem;
+	margin: var(--lck-space-2) 0 0;
+}
+
 #content.app-logcheck .lck-watching-row {
 	display: flex;
 	flex-direction: column;
@@ -372,6 +379,8 @@
 #content.app-logcheck .lck-access-explain__list {
 	margin: var(--lck-space-2) 0 0;
 	padding-left: 1.25rem;
+	/* Content explainer bullets — NC core resets ul markers; restore disc. */
+	list-style: disc outside;
 }
 
 #content.app-logcheck .lck-access-explain__list li + li {
@@ -1273,13 +1282,14 @@
 	gap: var(--lck-space-2, 0.5rem);
 }
 
-.lck-nav-footer__trigger {
+/* Scoped under #content: bare .{p}-nav-footer__trigger loses to NC core
+ * `#app-content button` / `#app-navigation button` min-height rules
+ * (var(--default-clickable-area) → 34px) — Atlas touch-target defect. */
+#content .lck-nav-footer__trigger {
 	display: inline-flex;
 	gap: var(--lck-space-3, 0.75rem);
-	/* !important: NC core button:not(...) (0-1-1) otherwise shrinks this to
-	   --default-clickable-area (34px), below the 44px touch floor. */
-	min-height: 44px !important;
-	min-width: 44px !important;
+	min-height: 44px;
+	min-width: 44px;
 	padding: var(--lck-space-2, 0.5rem) var(--lck-space-3, 0.75rem);
 	border-radius: var(--lck-radius-sm, 6px);
 	box-sizing: border-box;
@@ -1298,7 +1308,7 @@
 }
 
 .lck-nav-footer__trigger:focus-visible {
-	outline: 3px solid var(--lck-focus, var(--color-primary-element));
+	outline: 3px solid color-mix(in srgb, var(--color-primary-element) 60%, transparent);
 	outline-offset: 2px;
 }
 
@@ -1337,7 +1347,7 @@
 	display: none;
 }
 
-.lck-nav-footer__menu-item {
+#content .lck-nav-footer__menu-item {
 	display: flex;
 	align-items: center;
 	gap: var(--lck-space-3, 0.75rem);
@@ -1358,7 +1368,7 @@
 }
 
 .lck-nav-footer__menu-item:focus-visible {
-	outline: 3px solid var(--lck-focus, var(--color-primary-element));
+	outline: 3px solid color-mix(in srgb, var(--color-primary-element) 60%, transparent);
 	outline-offset: -2px;
 }
 
@@ -1402,7 +1412,7 @@
 	border: 0;
 }
 
-.lck-nav-footer__toast-link {
+#content .lck-nav-footer__toast-link {
 	display: inline-flex;
 	align-items: center;
 	min-height: 44px;
@@ -1469,3 +1479,71 @@
 /* === app-feedback:lck end === */
 
 
+
+/* Toasts — app-owned container so kind+text dedup can reset the dismiss
+   timer (OC.Notification/Toastify stacks identical messages). Body-mounted:
+   keep clear of system chrome (home indicator / gesture bar). */
+.lck-toasts {
+	position: fixed;
+	bottom: calc(var(--lck-space-4) + env(safe-area-inset-bottom, 0px));
+	inset-inline-start: calc(var(--lck-space-4) + env(safe-area-inset-left, 0px));
+	inset-inline-end: calc(var(--lck-space-4) + env(safe-area-inset-right, 0px));
+	display: flex;
+	flex-direction: column;
+	gap: var(--lck-space-2);
+	z-index: 1200;
+	max-width: min(400px, calc(100vw - 2 * var(--lck-space-4)));
+}
+@media (min-width: 768px) {
+	.lck-toasts {
+		inset-inline-start: auto;
+		inset-inline-end: calc(var(--lck-space-4) + env(safe-area-inset-right, 0px));
+		max-width: min(400px, 90vw);
+	}
+}
+.lck-toast {
+	background: var(--color-main-background);
+	color: var(--color-main-text);
+	border: 1px solid var(--lck-border-strong);
+	border-left: 4px solid var(--color-primary-element);
+	padding: var(--lck-space-3) var(--lck-space-4);
+	border-radius: var(--lck-radius-md);
+	box-shadow: var(--lck-shadow-md);
+	display: flex;
+	gap: var(--lck-space-2);
+	align-items: center;
+}
+.lck-toast__text {
+	color: inherit;
+	flex: 1;
+	min-width: 0;
+}
+.lck-toast--success { border-left-color: var(--color-success-text, var(--color-success)); }
+.lck-toast--error { border-left-color: var(--color-error-text, var(--color-error)); }
+.lck-toast__feedback {
+	color: var(--color-text-link, var(--color-primary-element));
+	text-decoration: underline;
+	white-space: nowrap;
+}
+.lck-toast__close {
+	margin-left: auto;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	background: transparent;
+	border: 0;
+	cursor: pointer;
+	padding: var(--lck-space-2);
+	min-height: 44px;
+	min-width: 44px;
+	box-sizing: border-box;
+	color: inherit;
+	border-radius: var(--lck-radius-md);
+}
+.lck-toast__close:hover {
+	background: var(--color-background-hover);
+}
+.lck-toast__close:focus-visible {
+	outline: 2px solid var(--color-main-text);
+	outline-offset: 2px;
+}

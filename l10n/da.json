@@ -97,12 +97,12 @@
 		"Download started.": "Download startet.",
 		"Email": "E-mail",
 		"Email could not be sent. Check mail settings.": "E-mail kunne ikke sendes. Tjek mailindstillingerne.",
-		"Email is best-effort — no reply SLA. Need booked help? Use Support & us.": "E-mail er efter bedste evne — ingen svar-SLA. Brug for booket hjælp? Brug Support & us.",
+		"Email is best-effort — no reply SLA. Need booked help? Use Support & us.": "E-mail er efter bedste evne — ingen svar-SLA. Brug for booket hjælp? Brug siden »Støt os«.",
 		"Email, Slack, webhook": "E-mail, Slack, webhook",
 		"Enter something to search for.": "Indtast noget at søge efter.",
 		"Enterprise": "Enterprise",
 		"Enterprise inquiry": "Enterprise-forespørgsel",
-		"Error": "Error",
+		"Error": "Fejl",
 		"Errors": "Fejl",
 		"Errors+": "Fejl+",
 		"Everyone else cannot open HealthCheck.": "Alle andre kan ikke åbne HealthCheck.",
@@ -184,7 +184,7 @@
 		"No errors in this part of the log": "Ingen fejl i denne del af loggen",
 		"No log file yet. Nextcloud creates it when something is logged.": "Ingen logfil endnu. Nextcloud opretter den, når noget logges.",
 		"No log lines loaded yet. Use Reload, or wait for Nextcloud to write to the log.": "Ingen loglinjer indlæst endnu. Brug Genindlæs, eller vent til Nextcloud skriver til loggen.",
-		"No matches for this search.": "Ingen træffere for denne søgning.",
+		"No matches for this search.": "Ingen træffer for denne søgning.",
 		"No matching lines in this part of the log": "Ingen matchende linjer i denne del af loggen",
 		"No other log copies yet.": "Ingen andre logkopier endnu.",
 		"No people found.": "Ingen personer fundet.",
@@ -291,7 +291,7 @@
 		"Test failed.": "Test mislykkedes.",
 		"Test sent.": "Test sendt.",
 		"The cached update check is older than two weeks.": "Det cachede opdateringstjek er ældre end to uger.",
-		"The current log is renamed aside. A new empty log is created. Alerts keep working from the new file.": "Den aktuelle log omdøbes. En ny tom fil oprettes. Alerts fortsætter med den nye fil.",
+		"The current log is renamed aside. A new empty log is created. Alerts keep working from the new file.": "Den aktuelle log omdøbes. En ny tom fil oprettes. Advarsler fortsætter med den nye fil.",
 		"The last background check did not finish cleanly.": "Den seneste baggrundskontrol blev ikke afsluttet korrekt.",
 		"The log file is not writable from here. Ask your host for file permissions.": "Logfilen kan ikke skrives herfra. Bed værten om filrettigheder.",
 		"This check could not run.": "Dette tjek kunne ikke køre.",
@@ -347,7 +347,8 @@
 		"Which apps to watch": "Hvilke apps der skal overvåges",
 		"Which log?": "Hvilken log?",
 		"Who can open HealthCheck — Nextcloud admins always can; add app admins below.": "Hvem kan åbne HealthCheck — Nextcloud-administratorer altid; tilføj appadministratorer nedenfor.",
-		"Who can open HealthCheck?": "Hvem kan åbne HealthCheck?"
+		"Who can open HealthCheck?": "Hvem kan åbne HealthCheck?",
+		"Dismiss": "Luk"
 	},
 	"pluralForm": "nplurals=2; plural=(n != 1);"
 }

@@ -92,18 +92,18 @@ OC.L10N.register(
 	"Download started." : "Pobieranie rozpoczęte.",
 	"Email" : "E-mail",
 	"Email could not be sent. Check mail settings." : "Nie udało się wysłać e-maila. Sprawdź ustawienia poczty.",
-	"Email is best-effort — no reply SLA. Need booked help? Use Support & us." : "E-mail na zasadzie best-effort — bez SLA odpowiedzi. Potrzebujesz zamówionej pomocy? Użyj Support & us.",
+	"Email is best-effort — no reply SLA. Need booked help? Use Support & us." : "E-mail na zasadzie best-effort — bez SLA odpowiedzi. Potrzebujesz zamówionej pomocy? Użyj strony »Wesprzyj nas«.",
 	"Email, Slack, webhook" : "E-mail, Slack, webhook",
 	"Enter something to search for." : "Wpisz coś do wyszukania.",
 	"Enterprise" : "Enterprise",
 	"Enterprise inquiry" : "Zapytanie enterprise",
-	"Error" : "Error",
+	"Error" : "Błąd",
 	"Errors" : "Błędy",
 	"Errors+" : "Błędy+",
 	"Everyone else cannot open HealthCheck." : "Nikt inny nie może otworzyć HealthCheck.",
 	"Everything looks fine" : "Wszystko wygląda w porządku",
 	"Fast (5 min)" : "Szybko (5 min)",
-	"Fatal" : "Fatal",
+	"Fatal" : "Krytyczny",
 	"File" : "Plik",
 	"Filter what you see" : "Filtruj widok",
 	"For Slack and webhook: paste the URL, click Send test, then turn the channel on and Save." : "Dla Slacka i webhooka: wklej URL, kliknij Wyślij test, włącz kanał i zapisz.",
@@ -342,7 +342,8 @@ OC.L10N.register(
 	"Which apps to watch" : "Które aplikacje monitorować",
 	"Which log?" : "Który dziennik?",
 	"Who can open HealthCheck — Nextcloud admins always can; add app admins below." : "Kto może otworzyć HealthCheck — administratorzy Nextclouda zawsze; dodaj administratorów aplikacji poniżej.",
-	"Who can open HealthCheck?" : "Kto może otworzyć HealthCheck?"
+	"Who can open HealthCheck?" : "Kto może otworzyć HealthCheck?",
+	"Dismiss" : "Zamknij"
 	},
 	"nplurals=3; plural=(n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);"
 );

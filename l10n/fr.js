@@ -92,12 +92,12 @@ OC.L10N.register(
 	"Download started." : "Téléchargement démarré.",
 	"Email" : "E-mail",
 	"Email could not be sent. Check mail settings." : "L’e-mail n’a pas pu être envoyé. Vérifiez les paramètres de messagerie.",
-	"Email is best-effort — no reply SLA. Need booked help? Use Support & us." : "E-mail au mieux — pas de délai de réponse garanti. Besoin d’aide réservée ? Utilisez Support & us.",
+	"Email is best-effort — no reply SLA. Need booked help? Use Support & us." : "E-mail au mieux — pas de délai de réponse garanti. Besoin d’aide réservée ? Utilisez la page « Soutenez-nous ».",
 	"Email, Slack, webhook" : "E-mail, Slack, webhook",
 	"Enter something to search for." : "Saisissez un terme à chercher.",
 	"Enterprise" : "Enterprise",
 	"Enterprise inquiry" : "Demande entreprise",
-	"Error" : "Error",
+	"Error" : "Erreur",
 	"Errors" : "Erreurs",
 	"Errors+" : "Erreurs+",
 	"Everyone else cannot open HealthCheck." : "Personne d’autre ne peut ouvrir HealthCheck.",
@@ -342,7 +342,8 @@ OC.L10N.register(
 	"Which apps to watch" : "Apps à surveiller",
 	"Which log?" : "Quel journal ?",
 	"Who can open HealthCheck — Nextcloud admins always can; add app admins below." : "Qui peut ouvrir HealthCheck — les administrateurs Nextcloud toujours ; ajoutez des admins de l’app ci-dessous.",
-	"Who can open HealthCheck?" : "Qui peut ouvrir HealthCheck ?"
+	"Who can open HealthCheck?" : "Qui peut ouvrir HealthCheck ?",
+	"Dismiss" : "Fermer"
 	},
 	"nplurals=2; plural=(n > 1);"
 );

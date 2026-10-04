@@ -342,7 +342,8 @@ OC.L10N.register(
 	"Which apps to watch" : "Which apps to watch",
 	"Which log?" : "Which log?",
 	"Who can open HealthCheck — Nextcloud admins always can; add app admins below." : "Who can open HealthCheck — Nextcloud admins always can; add app admins below.",
-	"Who can open HealthCheck?" : "Who can open HealthCheck?"
+	"Who can open HealthCheck?" : "Who can open HealthCheck?",
+	"Dismiss" : "Dismiss"
 	},
 	"nplurals=2; plural=(n != 1);"
 );

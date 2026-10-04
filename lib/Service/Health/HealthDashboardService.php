@@ -85,6 +85,8 @@ final class HealthDashboardService
 			try {
 				$out[] = $probe->probe()->toArray();
 			} catch (\Throwable $e) {
+				// best-effort: a failing probe must not blank the dashboard; the
+				// card below renders the error state instead of the probe result.
 				$this->logger->warning('HealthCheck health probe failed', [
 					'app' => 'logcheck',
 					'probe' => $probe->id(),

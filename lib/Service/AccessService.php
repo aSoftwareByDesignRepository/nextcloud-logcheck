@@ -89,7 +89,15 @@ final class AccessService
 	 */
 	public function normalizeAccess(array $access): array
 	{
-		$mode = isset($access['mode']) ? (string)$access['mode'] : 'restricted';
+		$rawMode = $access['mode'] ?? 'restricted';
+		if (!is_scalar($rawMode)) {
+			throw new ValidationException(
+				'Invalid access mode.',
+				['access.mode' => 'Invalid access mode.'],
+				'LCK_VALIDATION'
+			);
+		}
+		$mode = (string)$rawMode;
 		if ($mode === 'open' || $mode === 'all' || $mode === 'public') {
 			throw new ValidationException(
 				'Open access is not allowed.',

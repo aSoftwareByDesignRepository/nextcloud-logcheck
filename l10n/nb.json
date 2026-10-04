@@ -97,12 +97,12 @@
 		"Download started.": "Nedlasting startet.",
 		"Email": "E-post",
 		"Email could not be sent. Check mail settings.": "E-post kunne ikke sendes. Sjekk e-postinnstillingene.",
-		"Email is best-effort — no reply SLA. Need booked help? Use Support & us.": "E-post er best-effort — ingen svar-SLA. Trenger booket hjelp? Bruk Support & us.",
+		"Email is best-effort — no reply SLA. Need booked help? Use Support & us.": "E-post er best-effort — ingen svar-SLA. Trenger booket hjelp? Bruk siden »Støtt oss«.",
 		"Email, Slack, webhook": "E-post, Slack, webhook",
 		"Enter something to search for.": "Skriv inn noe å søke etter.",
 		"Enterprise": "Enterprise",
 		"Enterprise inquiry": "Enterprise-forespørsel",
-		"Error": "Error",
+		"Error": "Feil",
 		"Errors": "Feil",
 		"Errors+": "Feil+",
 		"Everyone else cannot open HealthCheck.": "Alle andre kan ikke åpne HealthCheck.",
@@ -347,7 +347,8 @@
 		"Which apps to watch": "Hvilke apper som skal overvåkes",
 		"Which log?": "Hvilken logg?",
 		"Who can open HealthCheck — Nextcloud admins always can; add app admins below.": "Hvem som kan åpne HealthCheck — Nextcloud-administratorer alltid; legg til appadministratorer nedenfor.",
-		"Who can open HealthCheck?": "Hvem kan åpne HealthCheck?"
+		"Who can open HealthCheck?": "Hvem kan åpne HealthCheck?",
+		"Dismiss": "Lukk"
 	},
 	"pluralForm": "nplurals=2; plural=(n != 1);"
 }

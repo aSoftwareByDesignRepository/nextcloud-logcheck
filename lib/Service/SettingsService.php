@@ -282,7 +282,7 @@ final class SettingsService
 		}
 
 		if (array_key_exists('watch_enabled', $input)) {
-			$wantOn = (bool)$input['watch_enabled'];
+			$wantOn = InputCoercion::asBool($input['watch_enabled'], 'watch_enabled');
 			$runtime = is_array($out['runtime'] ?? null) ? $out['runtime'] : [];
 			if ($wantOn) {
 				if ($this->topologyGuard->isMismatch($runtime)) {
@@ -304,7 +304,7 @@ final class SettingsService
 		}
 
 		if (isset($input['min_level'])) {
-			$level = (int)$input['min_level'];
+			$level = InputCoercion::asInt($input['min_level'], 'min_level');
 			if ($level < 0 || $level > 4) {
 				throw new ValidationException('Invalid level.', ['min_level' => 'Invalid level.']);
 			}
@@ -312,7 +312,7 @@ final class SettingsService
 		}
 
 		if (isset($input['coalesce_seconds']) || isset($input['digest_window_seconds'])) {
-			$coalesce = (int)($input['coalesce_seconds'] ?? $input['digest_window_seconds']);
+			$coalesce = InputCoercion::asInt($input['coalesce_seconds'] ?? $input['digest_window_seconds'], 'coalesce_seconds');
 			// UI chips are 300 / 900 / 3600 only — reject anything else (Momos: no silent clamp of arbitrary API values).
 			if (!in_array($coalesce, [300, 900, 3600], true)) {
 				throw new ValidationException('Invalid alert pace.', ['coalesce_seconds' => 'Invalid alert pace.']);
@@ -322,7 +322,7 @@ final class SettingsService
 		}
 
 		if (isset($input['app_mode'])) {
-			$mode = (string)$input['app_mode'];
+			$mode = InputCoercion::asString($input['app_mode'], 'app_mode');
 			if (!in_array($mode, ['all', 'allow', 'deny'], true)) {
 				throw new ValidationException('Invalid app filter.', ['app_mode' => 'Invalid app filter.']);
 			}
@@ -334,6 +334,9 @@ final class SettingsService
 			}
 			$normalized = [];
 			foreach ($input['app_list'] as $rawId) {
+				if (!is_scalar($rawId)) {
+					throw new ValidationException('Invalid app id.', ['app_list' => 'Invalid app id.']);
+				}
 				$id = trim((string)$rawId);
 				if ($id === '') {
 					continue;
@@ -357,7 +360,11 @@ final class SettingsService
 					continue;
 				}
 				$type = (string)($mute['type'] ?? '');
-				$value = (string)($mute['value'] ?? '');
+				$rawMuteValue = $mute['value'] ?? '';
+				if (!is_scalar($rawMuteValue) && $rawMuteValue !== '') {
+					throw new ValidationException('Invalid mute value.', ['mutes' => 'Invalid mute value.']);
+				}
+				$value = (string)$rawMuteValue;
 				if ($type === 'app') {
 					if ($value === '') {
 						continue;
@@ -382,8 +389,8 @@ final class SettingsService
 			if (!$isNcAdmin) {
 				throw new ForbiddenException('Only Nextcloud admins can change log excerpt settings.');
 			}
-			$want = (bool)$input['include_message_excerpts'];
-			if ($want && strtoupper(trim((string)($input['excerpt_confirm'] ?? ''))) !== 'CONFIRM') {
+			$want = InputCoercion::asBool($input['include_message_excerpts'], 'include_message_excerpts');
+			if ($want && strtoupper(trim(InputCoercion::asString($input['excerpt_confirm'] ?? '', 'excerpt_confirm'))) !== 'CONFIRM') {
 				throw new ValidationException(
 					'Please confirm you understand the privacy risk.',
 					['include_message_excerpts' => 'Confirmation required.']
@@ -396,7 +403,7 @@ final class SettingsService
 			if (!$isNcAdmin) {
 				throw new ForbiddenException('Only Nextcloud admins can allow private webhook addresses.');
 			}
-			$out['allow_private_webhooks'] = (bool)$input['allow_private_webhooks'];
+			$out['allow_private_webhooks'] = InputCoercion::asBool($input['allow_private_webhooks'], 'allow_private_webhooks');
 		}
 
 		if (isset($input['channels']) && is_array($input['channels'])) {
@@ -430,7 +437,9 @@ final class SettingsService
 
 		if (isset($input['notification']) && is_array($input['notification'])) {
 			$n = $input['notification'];
-			$out['notification']['enabled'] = !empty($n['enabled']);
+			$out['notification']['enabled'] = array_key_exists('enabled', $n)
+				? InputCoercion::asBool($n['enabled'], 'channels.notification.enabled')
+				: false;
 			if (isset($n['recipient_uids']) && is_array($n['recipient_uids'])) {
 				if (count($n['recipient_uids']) > self::NOTIFICATION_RECIPIENTS_MAX) {
 					throw new ValidationException(
@@ -484,7 +493,9 @@ final class SettingsService
 			if ($recipientsChanged) {
 				$this->channelTestProof->invalidateChannel('email');
 			}
-			$wantEnabled = !empty($e['enabled']);
+			$wantEnabled = array_key_exists('enabled', $e)
+				? InputCoercion::asBool($e['enabled'], 'channels.email.enabled')
+				: false;
 			$out['email']['enabled'] = $wantEnabled;
 			if ($wantEnabled) {
 				$this->assertEmailChannelMayEnable(
@@ -501,7 +512,7 @@ final class SettingsService
 			$s = $input['slack'];
 			$urlChanging = false;
 			$newUrl = null;
-			if (!empty($s['clear_url'])) {
+			if (array_key_exists('clear_url', $s) && InputCoercion::asBool($s['clear_url'], 'channels.slack.clear_url')) {
 				$out['slack']['webhook_url_cipher'] = null;
 				$urlChanging = true;
 			} elseif (isset($s['webhook_url']) && is_string($s['webhook_url']) && $s['webhook_url'] !== '') {
@@ -515,7 +526,9 @@ final class SettingsService
 			if ($urlChanging) {
 				$this->channelTestProof->invalidateChannel('slack');
 			}
-			$wantEnabled = !empty($s['enabled']);
+			$wantEnabled = array_key_exists('enabled', $s)
+				? InputCoercion::asBool($s['enabled'], 'channels.slack.enabled')
+				: false;
 			$out['slack']['enabled'] = $wantEnabled;
 			if ($wantEnabled) {
 				$this->assertOutboundChannelMayEnable(
@@ -536,7 +549,7 @@ final class SettingsService
 			}
 			$urlChanging = false;
 			$newUrl = null;
-			if (!empty($w['clear_url'])) {
+			if (array_key_exists('clear_url', $w) && InputCoercion::asBool($w['clear_url'], 'channels.webhook.clear_url')) {
 				$out['webhook']['url_cipher'] = null;
 				$urlChanging = true;
 			} elseif (isset($w['url']) && is_string($w['url']) && $w['url'] !== '') {
@@ -549,7 +562,9 @@ final class SettingsService
 			if ($urlChanging) {
 				$this->channelTestProof->invalidateChannel('webhook');
 			}
-			$wantEnabled = !empty($w['enabled']);
+			$wantEnabled = array_key_exists('enabled', $w)
+				? InputCoercion::asBool($w['enabled'], 'channels.webhook.enabled')
+				: false;
 			$out['webhook']['enabled'] = $wantEnabled;
 			if ($wantEnabled) {
 				$this->assertOutboundChannelMayEnable(

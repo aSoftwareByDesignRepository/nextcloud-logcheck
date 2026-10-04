@@ -97,18 +97,18 @@
 		"Download started.": "Nedladdning startad.",
 		"Email": "E-post",
 		"Email could not be sent. Check mail settings.": "E-post kunde inte skickas. Kontrollera e-postinställningarna.",
-		"Email is best-effort — no reply SLA. Need booked help? Use Support & us.": "E-post är best-effort — ingen svarstid-SLA. Behöver bokad hjälp? Använd Support & us.",
+		"Email is best-effort — no reply SLA. Need booked help? Use Support & us.": "E-post är best-effort — ingen svarstid-SLA. Behöver bokad hjälp? Använd sidan »Stöd oss«.",
 		"Email, Slack, webhook": "E-post, Slack, webhook",
 		"Enter something to search for.": "Ange något att söka efter.",
 		"Enterprise": "Enterprise",
 		"Enterprise inquiry": "Enterprise-förfrågan",
-		"Error": "Error",
+		"Error": "Fel",
 		"Errors": "Fel",
 		"Errors+": "Fel+",
 		"Everyone else cannot open HealthCheck.": "Alla andra kan inte öppna HealthCheck.",
 		"Everything looks fine": "Allt ser bra ut",
 		"Fast (5 min)": "Snabbt (5 min)",
-		"Fatal": "Fatal",
+		"Fatal": "Allvarlig",
 		"File": "Fil",
 		"Filter what you see": "Filtrera vad du ser",
 		"For Slack and webhook: paste the URL, click Send test, then turn the channel on and Save.": "För Slack och webhook: klistra in URL:en, klicka på Skicka test, aktivera kanalen och spara.",
@@ -347,7 +347,8 @@
 		"Which apps to watch": "Appar att bevaka",
 		"Which log?": "Vilken logg?",
 		"Who can open HealthCheck — Nextcloud admins always can; add app admins below.": "Vem som kan öppna HealthCheck — Nextcloud-administratörer alltid; lägg till appadministratörer nedan.",
-		"Who can open HealthCheck?": "Vem kan öppna HealthCheck?"
+		"Who can open HealthCheck?": "Vem kan öppna HealthCheck?",
+		"Dismiss": "Stäng"
 	},
 	"pluralForm": "nplurals=2; plural=(n != 1);"
 }

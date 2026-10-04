@@ -70,6 +70,9 @@ final class ChannelDispatcher
 				}
 				$this->channelStateStore->recordSuccess($channel);
 			} catch (\Throwable $e) {
+				// non-fatal + compensated, not swallowed: the pending row is marked
+				// failed (retryable), the delivery ledger records 'failed', and the
+				// channel state captures the error for the UI.
 				$attempts = $row['attempts'] + 1;
 				$this->pendingStore->markFailed($row['event_id'], $channel, $attempts, $claimGen);
 				$this->deliveryStore->record($row['event_id'], $channel, 'failed');

@@ -92,7 +92,7 @@ OC.L10N.register(
 	"Download started." : "Descarga iniciada.",
 	"Email" : "Correo",
 	"Email could not be sent. Check mail settings." : "No se pudo enviar el correo. Compruebe la configuración de correo.",
-	"Email is best-effort — no reply SLA. Need booked help? Use Support & us." : "El correo es de mejor esfuerzo — sin SLA de respuesta. ¿Necesita ayuda contratada? Use Support & us.",
+	"Email is best-effort — no reply SLA. Need booked help? Use Support & us." : "El correo es de mejor esfuerzo — sin SLA de respuesta. ¿Necesita ayuda contratada? Use la página «Apóyenos».",
 	"Email, Slack, webhook" : "Correo, Slack, webhook",
 	"Enter something to search for." : "Introduzca algo que buscar.",
 	"Enterprise" : "Enterprise",
@@ -251,7 +251,7 @@ OC.L10N.register(
 	"Send test & turn on" : "Enviar prueba y activar",
 	"Send webhook alerts" : "Enviar alertas webhook",
 	"Set up alerts" : "Configurar alertas",
-	"Set up alerts to get notified about new errors." : "Configure alertas para recibir avisos de errores nuevos.",
+	"Set up alerts to get notified about new errors." : "Configure alertas para recibir notificaciones de errores nuevos.",
 	"Set up at least one alert channel" : "Configurar al menos un canal de alerta",
 	"Settings" : "Ajustes",
 	"Settings changed elsewhere — reload and try again." : "Los ajustes cambiaron en otro sitio — recargue e inténtelo de nuevo.",
@@ -301,7 +301,7 @@ OC.L10N.register(
 	"Toggle navigation menu" : "Mostrar u ocultar el menú de navegación",
 	"Try again" : "Intentarlo de nuevo",
 	"Turn on alerts" : "Activar alertas",
-	"Turn on alerts to get notified about new errors." : "Active las alertas para recibir avisos de errores nuevos.",
+	"Turn on alerts to get notified about new errors." : "Active las alertas para recibir notificaciones de errores nuevos.",
 	"Turn this on so HealthCheck looks for new errors in the background." : "Actívelo para que HealthCheck busque errores nuevos en segundo plano.",
 	"Turn watching off, or ask your host to use one shared log file for all servers." : "Desactive la vigilancia, o pida a su proveedor un archivo de registro compartido para todos los servidores.",
 	"Type CONFIRM to enable excerpts" : "Escriba CONFIRM para activar los extractos",
@@ -326,7 +326,7 @@ OC.L10N.register(
 	"View logs" : "Ver registros",
 	"View, search, start fresh" : "Ver, buscar, empezar de nuevo",
 	"Warning" : "Advertencia",
-	"Warnings too" : "También avisos",
+	"Warnings too" : "También advertencias",
 	"Warnings+" : "Advertencias+",
 	"Watch" : "Vigilancia",
 	"Watch log file" : "Vigilar archivo de registro",
@@ -342,7 +342,8 @@ OC.L10N.register(
 	"Which apps to watch" : "Apps a vigilar",
 	"Which log?" : "¿Qué registro?",
 	"Who can open HealthCheck — Nextcloud admins always can; add app admins below." : "Quién puede abrir HealthCheck: los administradores de Nextcloud siempre; añada admins de la app abajo.",
-	"Who can open HealthCheck?" : "¿Quién puede abrir HealthCheck?"
+	"Who can open HealthCheck?" : "¿Quién puede abrir HealthCheck?",
+	"Dismiss" : "Descartar"
 	},
 	"nplurals=2; plural=(n != 1);"
 );

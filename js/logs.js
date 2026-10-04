@@ -44,6 +44,18 @@
 		}
 	}
 
+	/* WCAG 3.3.1/3.3.3: route the server `fields` map onto the named controls
+	   (aria-invalid + inline .lck-field-error). `confirm` lands on the open
+	   confirm-dialog input; `q` on the search box. */
+	function markFieldErrors(fields) {
+		if (window.LogCheckApp && typeof LogCheckApp.markFields === 'function') {
+			LogCheckApp.markFields(fields, {
+				confirm: 'lck-logs-confirm-input',
+				q: 'lck-logs-search'
+			});
+		}
+	}
+
 	function reloadAfterMutate() {
 		window.setTimeout(function () {
 			try {
@@ -842,6 +854,7 @@
 			var base = withFileParam((u.apiLogSearch || '') + '?q=' + encodeURIComponent(q));
 			var res = await getJson(withViewerParam(base));
 			if (res.status < 200 || res.status >= 300) {
+				markFieldErrors(res.data && res.data.fields);
 				toastErr((res.data && res.data.message) || t('Search failed. Try again.'));
 				return;
 			}
@@ -928,7 +941,9 @@
 				ev.preventDefault();
 				var typed = String(input.value || '').trim();
 				if (typed !== opts.word) {
-					toastErr(opts.mismatch || t('Type the confirmation word exactly.'));
+					var mismatch = opts.mismatch || t('Type the confirmation word exactly.');
+					markFieldErrors({ confirm: mismatch });
+					toastErr(mismatch);
 					input.focus();
 					return;
 				}
@@ -1028,6 +1043,7 @@
 		var u = urls();
 		var res = await postJson(u.apiLogStartFresh, { confirm: typed });
 		if (res.status < 200 || res.status >= 300) {
+			markFieldErrors(res.data && res.data.fields);
 			toastErr((res.data && res.data.message) || t('Could not start a fresh log.'));
 			return;
 		}
@@ -1057,6 +1073,7 @@
 		var u = urls();
 		var res = await postJson(u.apiLogDelete, { confirm: typed });
 		if (res.status < 200 || res.status >= 300) {
+			markFieldErrors(res.data && res.data.fields);
 			toastErr((res.data && res.data.message) || t('Could not delete the log file.'));
 			return;
 		}
@@ -1089,6 +1106,7 @@
 		var u = urls();
 		var res = await postJson(u.apiLogDeleteCopy, { confirm: typed, file: file });
 		if (res.status < 200 || res.status >= 300) {
+			markFieldErrors(res.data && res.data.fields);
 			toastErr((res.data && res.data.message) || t('Could not delete this log copy.'));
 			return;
 		}

@@ -330,6 +330,7 @@
 					LogCheckToasts.showSuccess(toggle.checked ? t('logcheck', 'Watching') : t('logcheck', 'Off'));
 					await refreshHomeStatus();
 				} else {
+					markValidationFields(res.data && res.data.fields, { watch_enabled: 'lck-watch-toggle' });
 					LogCheckToasts.showError((res.data && res.data.message) || t('logcheck', 'Save failed.'));
 					toggle.checked = !toggle.checked;
 				}
@@ -384,6 +385,31 @@
 		}
 	});
 
+	/**
+	 * WCAG 3.3.1/3.3.3: render the server's localized `fields` map on the named
+	 * controls (aria-invalid + inline .lck-field-error). `remap` translates a
+	 * server field key to a DOM id/name when the visible control is not
+	 * addressable by the key directly (hidden chip carriers, nested channel
+	 * keys like `channels.slack`, the `url` SSRF key, `access.*` keys).
+	 * @param {Record<string, string>|undefined|null} fields
+	 * @param {Record<string, string>} [remap]
+	 */
+	function markValidationFields(fields, remap) {
+		if (!window.CheckFieldErrors || !fields || typeof fields !== 'object') {
+			return;
+		}
+		var translated = {};
+		Object.keys(fields).forEach(function (key) {
+			var target = remap && remap[key] ? remap[key] : key;
+			translated[target] = fields[key];
+		});
+		window.CheckFieldErrors.markValidationFields(translated);
+	}
+
+	if (window.CheckFieldErrors) {
+		window.CheckFieldErrors.install({ prefix: 'lck' });
+	}
+
 	window.LogCheckApp = {
 		urls: urls,
 		token: token,
@@ -393,6 +419,7 @@
 		settingsVersion: settingsVersion,
 		setSettingsVersion: setSettingsVersion,
 		chipGroup: chipGroup,
+		markFields: markValidationFields,
 		applyHomeStatus: applyHomeStatus,
 		refreshHomeStatus: refreshHomeStatus
 	};

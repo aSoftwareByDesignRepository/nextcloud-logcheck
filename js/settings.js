@@ -72,6 +72,59 @@
 		return settings;
 	}
 
+	/**
+	 * Server `fields` keys → visible control ids. The canonical field-errors
+	 * module resolves `[name]`/`[data-field]`/`#id`; keys that only hit hidden
+	 * carrier inputs (chip groups) or don't match a control name are remapped
+	 * here so aria-invalid + the inline error land on the visible control.
+	 */
+	var FIELD_TARGETS = {
+		'min_level': 'lck-level-chips',
+		'coalesce_seconds': 'lck-pace-chips',
+		'app_mode': 'lck-app-mode',
+		'app_list': 'lck-app-list',
+		'mutes': 'lck-mutes',
+		'mute_apps': 'lck-mute-apps',
+		'channels.email': 'lck-email-recipients',
+		'channels.email.recipients': 'lck-email-recipients',
+		'channels.slack': 'lck-slack-url',
+		'channels.slack.webhook_url': 'lck-slack-url',
+		'channels.webhook': 'lck-webhook-url',
+		'channels.webhook.headers': 'lck-webhook-url',
+		'channels.notification': 'lck-notification-enabled',
+		'channels.notification.recipient_uids': 'lck-notification-enabled',
+		'include_message_excerpts': 'lck-excerpt-confirm',
+		'excerpt_confirm': 'lck-excerpt-confirm',
+		'allow_private_webhooks': 'lck-private-webhooks',
+		'access.app_admins': 'lck-people-search',
+		'access.mode': 'lck-people-search'
+	};
+
+	/**
+	 * `url` (SSRF guard) is emitted per-channel; in the settings form it refers
+	 * to whichever channel URL was just submitted — slack first, then webhook.
+	 * @param {string} [channel] channel scope when known (test endpoints)
+	 */
+	function fieldTargets(channel) {
+		var map = Object.assign({}, FIELD_TARGETS);
+		if (channel === 'email') {
+			map.url = 'lck-email-recipients';
+			map.recipients = 'lck-email-recipients';
+		} else if (channel === 'slack') {
+			map.url = 'lck-slack-url';
+			map.webhook_url = 'lck-slack-url';
+		} else if (channel === 'webhook') {
+			map.url = 'lck-webhook-url';
+		} else {
+			// save path: point at the enabled channel's URL input.
+			var slackOn = document.getElementById('lck-slack-enabled');
+			var webOn = document.getElementById('lck-webhook-enabled');
+			map.url = (webOn && webOn.checked) ? 'lck-webhook-url'
+				: (slackOn && slackOn.checked) ? 'lck-slack-url' : 'lck-webhook-url';
+		}
+		return map;
+	}
+
 	function bindClearUrlButton(btnId, hiddenId, hintId) {
 		var btn = document.getElementById(btnId);
 		var hidden = document.getElementById(hiddenId);
@@ -137,6 +190,7 @@
 				}
 				restoreSubmit();
 			} else {
+				App.markFields(res.data && res.data.fields, fieldTargets());
 				LogCheckToasts.showError((res.data && res.data.message) || t('logcheck', 'Save failed.'));
 				restoreSubmit();
 			}
@@ -220,6 +274,7 @@
 			}
 			var testRes = await runChannelTest(channel, btn);
 			if (testRes.status < 200 || testRes.status >= 300) {
+				App.markFields(testRes.data && testRes.data.fields, fieldTargets(channel));
 				showChannelStatus(channel, (testRes.data && testRes.data.message) || t('logcheck', 'Test failed.'), false);
 				LogCheckToasts.showError((testRes.data && testRes.data.message) || t('logcheck', 'Test failed.'));
 				return;
@@ -241,6 +296,7 @@
 					App.setSettingsVersion(saveRes.data.version);
 				}
 			} else {
+				App.markFields(saveRes.data && saveRes.data.fields, fieldTargets());
 				showChannelStatus(channel, (saveRes.data && saveRes.data.message) || t('logcheck', 'Save failed.'), false);
 				LogCheckToasts.showError((saveRes.data && saveRes.data.message) || t('logcheck', 'Save failed.'));
 			}

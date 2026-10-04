@@ -287,6 +287,8 @@ final class WatchRunner
 		try {
 			$this->jobList->scheduleAfter(LogWatchJob::class, time());
 		} catch (\Throwable) {
+			// best-effort: a failed requeue loses at most one catch-up pass; the
+			// recurring TimedJob keeps the watch alive on its own schedule.
 		}
 		return true;
 	}

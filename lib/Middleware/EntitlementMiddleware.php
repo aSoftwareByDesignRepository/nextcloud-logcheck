@@ -8,6 +8,7 @@ use OCA\LogCheck\Controller\ApiController;
 use OCA\LogCheck\Controller\PageController;
 use OCA\LogCheck\Exception\ForbiddenException;
 use OCA\LogCheck\Service\AccessService;
+use OCA\LogCheck\Support\AssetRegistrar;
 use OCP\AppFramework\Http;
 use OCP\AppFramework\Http\JSONResponse;
 use OCP\AppFramework\Http\TemplateResponse;
@@ -47,6 +48,9 @@ final class EntitlementMiddleware extends Middleware
 		if ($controller instanceof ApiController || str_starts_with($this->request->getPathInfo() ?? '', '/apps/logcheck/api')) {
 			return new JSONResponse(['error' => 'LCK_FORBIDDEN', 'message' => 'Not authorized.'], Http::STATUS_FORBIDDEN);
 		}
+		// beforeController throws before PageController::registerAssets() runs —
+		// without the shell styles the denied page renders completely unstyled.
+		AssetRegistrar::registerStyles();
 		return new TemplateResponse('logcheck', 'access-denied', [
 			'homeUrl' => $this->urlGenerator->linkToRoute('files.view.index'),
 		], 'user');

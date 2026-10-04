@@ -15,6 +15,7 @@ use OCA\LogCheck\Service\ChannelDispatcher;
 use OCA\LogCheck\Service\ChannelStateStore;
 use OCA\LogCheck\Service\ChannelTestProof;
 use OCA\LogCheck\Service\CursorStore;
+use OCA\LogCheck\Service\InputCoercion;
 use OCA\LogCheck\Service\LeaseService;
 use OCA\LogCheck\Service\LogBackendService;
 use OCA\LogCheck\Service\LogFileService;
@@ -160,15 +161,15 @@ class ApiController extends Controller
 
 			$body = $this->requestBody();
 			$expected = (int)($body['expected_version'] ?? -1);
-			$email = trim((string)($body['email'] ?? ''));
+			$email = trim(InputCoercion::asString($body['email'] ?? '', 'email'));
 			if ($email === '' || !filter_var($email, FILTER_VALIDATE_EMAIL)) {
 				throw new ValidationException('Please enter a valid email address.', ['email' => 'Please enter a valid email address.']);
 			}
 
 			$current = $this->settingsService->getRawSettings();
 			$allowPrivate = !empty($current['allow_private_webhooks']);
-			$slackUrl = trim((string)($body['slack_url'] ?? ''));
-			$webhookUrl = trim((string)($body['webhook_url'] ?? ''));
+			$slackUrl = trim(InputCoercion::asString($body['slack_url'] ?? '', 'slack_url'));
+			$webhookUrl = trim(InputCoercion::asString($body['webhook_url'] ?? '', 'webhook_url'));
 			$this->assertOutboundUrlLength($slackUrl);
 			$this->assertOutboundUrlLength($webhookUrl);
 
@@ -177,11 +178,11 @@ class ApiController extends Controller
 			$ephemeral['channels']['email']['recipients'] = [$email];
 			$ephemeral['channels']['notification']['enabled'] = true;
 			if (isset($body['min_level'])) {
-				$ephemeral['min_level'] = (int)$body['min_level'];
+				$ephemeral['min_level'] = InputCoercion::asInt($body['min_level'], 'min_level');
 			}
 			if (isset($body['coalesce_seconds'])) {
-				$ephemeral['coalesce_seconds'] = (int)$body['coalesce_seconds'];
-				$ephemeral['digest_window_seconds'] = (int)$body['coalesce_seconds'];
+				$ephemeral['coalesce_seconds'] = InputCoercion::asInt($body['coalesce_seconds'], 'coalesce_seconds');
+				$ephemeral['digest_window_seconds'] = $ephemeral['coalesce_seconds'];
 			}
 
 			$emailPayload = $this->payloadBuilder->buildTestPayload('email', $ephemeral);
@@ -210,10 +211,10 @@ class ApiController extends Controller
 				],
 			];
 			if (isset($body['min_level'])) {
-				$input['min_level'] = (int)$body['min_level'];
+				$input['min_level'] = InputCoercion::asInt($body['min_level'], 'min_level');
 			}
 			if (isset($body['coalesce_seconds'])) {
-				$input['coalesce_seconds'] = (int)$body['coalesce_seconds'];
+				$input['coalesce_seconds'] = InputCoercion::asInt($body['coalesce_seconds'], 'coalesce_seconds');
 			}
 			if ($slackUrl !== '') {
 				$input['channels']['slack'] = [
@@ -299,7 +300,7 @@ class ApiController extends Controller
 
 			if ($channel === 'slack' || $channel === 'webhook') {
 				$urlKey = $channel === 'slack' ? 'webhook_url' : 'url';
-				$plain = trim((string)($body[$urlKey] ?? $body['url'] ?? ''));
+				$plain = trim(InputCoercion::asString($body[$urlKey] ?? $body['url'] ?? '', $urlKey));
 				if ($plain !== '') {
 					$this->assertOutboundUrlLength($plain);
 					$this->channelDispatcher->sendPlainUrl($channel, $payload, $plain, $allowPrivate);

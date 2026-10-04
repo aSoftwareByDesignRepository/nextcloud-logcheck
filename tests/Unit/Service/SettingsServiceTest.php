@@ -589,6 +589,118 @@ class SettingsServiceTest extends TestCase
 		], 'admin', true);
 	}
 
+	public function testFormStringFalseDoesNotFlipAllowPrivateWebhooks(): void
+	{
+		$svc = $this->svcForMerge();
+		$method = new ReflectionMethod(SettingsService::class, 'mergeAndValidate');
+		$method->setAccessible(true);
+		$current = SettingsService::defaults();
+		$current['allow_private_webhooks'] = false;
+		// The proven live hole: PHP (bool)"false" === true flipped the SSRF
+		// scope flag ON for a form-encoded "false". Strict parsing must keep it off.
+		$out = $method->invoke($svc, $current, [
+			'allow_private_webhooks' => 'false',
+		], 'admin', true);
+		self::assertFalse($out['allow_private_webhooks']);
+	}
+
+	public function testFormStringTrueEnablesAllowPrivateWebhooks(): void
+	{
+		$svc = $this->svcForMerge();
+		$method = new ReflectionMethod(SettingsService::class, 'mergeAndValidate');
+		$method->setAccessible(true);
+		$out = $method->invoke($svc, SettingsService::defaults(), [
+			'allow_private_webhooks' => 'true',
+		], 'admin', true);
+		self::assertTrue($out['allow_private_webhooks']);
+	}
+
+	public function testGarbageBoolRejectedFailClosed(): void
+	{
+		$svc = $this->svcForMerge();
+		$method = new ReflectionMethod(SettingsService::class, 'mergeAndValidate');
+		$method->setAccessible(true);
+		$this->expectException(\OCA\LogCheck\Exception\ValidationException::class);
+		$method->invoke($svc, SettingsService::defaults(), [
+			'allow_private_webhooks' => 'banana',
+		], 'admin', true);
+	}
+
+	public function testFormStringFalseDisablesWatch(): void
+	{
+		$svc = $this->svcForMerge();
+		$method = new ReflectionMethod(SettingsService::class, 'mergeAndValidate');
+		$method->setAccessible(true);
+		$current = SettingsService::defaults();
+		$current['watch_enabled'] = true;
+		$out = $method->invoke($svc, $current, [
+			'watch_enabled' => 'false',
+		], 'admin', true);
+		self::assertFalse($out['watch_enabled']);
+	}
+
+	public function testWatchEnabledGarbageRejected(): void
+	{
+		$svc = $this->svcForMerge();
+		$method = new ReflectionMethod(SettingsService::class, 'mergeAndValidate');
+		$method->setAccessible(true);
+		$this->expectException(\OCA\LogCheck\Exception\ValidationException::class);
+		$method->invoke($svc, SettingsService::defaults(), [
+			'watch_enabled' => 'banana',
+		], 'admin', true);
+	}
+
+	public function testMinLevelGarbageRejectedFailClosed(): void
+	{
+		$svc = $this->svcForMerge();
+		$method = new ReflectionMethod(SettingsService::class, 'mergeAndValidate');
+		$method->setAccessible(true);
+		$this->expectException(\OCA\LogCheck\Exception\ValidationException::class);
+		$method->invoke($svc, SettingsService::defaults(), [
+			'min_level' => 'banana',
+		], 'admin', true);
+	}
+
+	public function testChannelEnabledFormStringFalseDisables(): void
+	{
+		$svc = $this->svcForMerge();
+		$method = new ReflectionMethod(SettingsService::class, 'mergeAndValidate');
+		$method->setAccessible(true);
+		$current = SettingsService::defaults();
+		$current['channels']['email']['enabled'] = true;
+		$out = $method->invoke($svc, $current, [
+			'channels' => [
+				'email' => ['enabled' => 'false'],
+			],
+		], 'admin', true);
+		self::assertFalse($out['channels']['email']['enabled']);
+	}
+
+	public function testChannelEnabledGarbageRejected(): void
+	{
+		$svc = $this->svcForMerge();
+		$method = new ReflectionMethod(SettingsService::class, 'mergeAndValidate');
+		$method->setAccessible(true);
+		$this->expectException(\OCA\LogCheck\Exception\ValidationException::class);
+		$method->invoke($svc, SettingsService::defaults(), [
+			'channels' => [
+				'email' => ['enabled' => 'banana'],
+			],
+		], 'admin', true);
+	}
+
+	public function testAppListRejectsNonScalarEntry(): void
+	{
+		$svc = $this->svcForMerge();
+		$method = new ReflectionMethod(SettingsService::class, 'mergeAndValidate');
+		$method->setAccessible(true);
+		$this->expectException(\OCA\LogCheck\Exception\ValidationException::class);
+		$method->invoke($svc, SettingsService::defaults(), [
+			'app_mode' => 'allowlist',
+			'app_list' => [['nested' => 'array']],
+		], 'admin', true);
+	}
+
 	private function svcForMerge(): SettingsService
 	{
 		return new SettingsService(

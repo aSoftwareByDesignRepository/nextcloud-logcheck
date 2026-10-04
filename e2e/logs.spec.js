@@ -16,7 +16,7 @@ test.describe('J-LCK-20 Logs browser', () => {
 		await expect(page.locator('.lck-logs-files')).toBeVisible();
 		const picker = page.locator('#lck-logs-file-list');
 		await expect(picker).toBeVisible();
-		await expect(page.getByRole('heading', { name: /Which log\?|Welche Protokolldatei/i })).toBeVisible();
+		await expect(page.locator('#lck-logs-files-title')).toBeVisible();
 		const viewer = page.locator('#lck-logs-viewer');
 		const unreadable = page.locator('.lck-logs .lck-callout--warning, .lck-logs .lck-callout--info');
 		const hasViewer = await viewer.count();
