@@ -929,6 +929,7 @@
 				form.removeEventListener('submit', onSubmit);
 				cancel.removeEventListener('click', onCancel);
 				dialog.removeEventListener('cancel', onEsc);
+				dialog.removeEventListener('keydown', onEscKey);
 				if (typeof dialog.close === 'function') {
 					dialog.close();
 				} else {
@@ -960,9 +961,18 @@
 				cleanup(null);
 			}
 
+			function onEscKey(ev) {
+				// Host apps (e.g. core notifications) preventDefault() the Escape
+				// keydown globally, suppressing the native `cancel` event.
+				if (ev.key === 'Escape') {
+					cleanup(null);
+				}
+			}
+
 			form.addEventListener('submit', onSubmit);
 			cancel.addEventListener('click', onCancel);
 			dialog.addEventListener('cancel', onEsc);
+			dialog.addEventListener('keydown', onEscKey);
 
 			if (typeof dialog.showModal === 'function') {
 				dialog.showModal();
