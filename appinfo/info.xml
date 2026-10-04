@@ -73,18 +73,10 @@ Wir verbessern diese App mit Rückmeldungen aus der Praxis. Fehlerberichte, Stol
 - Nextcloud 32–35 · PHP 8.2–8.5 · MySQL/MariaDB oder PostgreSQL
 - Funktionierende Hintergrundjobs (Cron empfohlen)
 	]]></description>
-	<screenshot small-thumbnail="https://raw.githubusercontent.com/aSoftwareByDesignRepository/nextcloud-logcheck/refs/heads/master/screenshots/logcheck-screenshot-01.png">
-		https://raw.githubusercontent.com/aSoftwareByDesignRepository/nextcloud-logcheck/refs/heads/master/screenshots/logcheck-screenshot-01.png
-	</screenshot>
-	<screenshot small-thumbnail="https://raw.githubusercontent.com/aSoftwareByDesignRepository/nextcloud-logcheck/refs/heads/master/screenshots/logcheck-screenshot-02.png">
-		https://raw.githubusercontent.com/aSoftwareByDesignRepository/nextcloud-logcheck/refs/heads/master/screenshots/logcheck-screenshot-02.png
-	</screenshot>
-	<screenshot small-thumbnail="https://raw.githubusercontent.com/aSoftwareByDesignRepository/nextcloud-logcheck/refs/heads/master/screenshots/logcheck-screenshot-03.png">
-		https://raw.githubusercontent.com/aSoftwareByDesignRepository/nextcloud-logcheck/refs/heads/master/screenshots/logcheck-screenshot-03.png
-	</screenshot>
-	<screenshot small-thumbnail="https://raw.githubusercontent.com/aSoftwareByDesignRepository/nextcloud-logcheck/refs/heads/master/screenshots/logcheck-screenshot-04.png">
-		https://raw.githubusercontent.com/aSoftwareByDesignRepository/nextcloud-logcheck/refs/heads/master/screenshots/logcheck-screenshot-04.png
-	</screenshot>
+	<screenshot small-thumbnail="https://raw.githubusercontent.com/aSoftwareByDesignRepository/nextcloud-logcheck/refs/heads/main/screenshots/logcheck-screenshot-01.png">https://raw.githubusercontent.com/aSoftwareByDesignRepository/nextcloud-logcheck/refs/heads/main/screenshots/logcheck-screenshot-01.png</screenshot>
+	<screenshot small-thumbnail="https://raw.githubusercontent.com/aSoftwareByDesignRepository/nextcloud-logcheck/refs/heads/main/screenshots/logcheck-screenshot-02.png">https://raw.githubusercontent.com/aSoftwareByDesignRepository/nextcloud-logcheck/refs/heads/main/screenshots/logcheck-screenshot-02.png</screenshot>
+	<screenshot small-thumbnail="https://raw.githubusercontent.com/aSoftwareByDesignRepository/nextcloud-logcheck/refs/heads/main/screenshots/logcheck-screenshot-03.png">https://raw.githubusercontent.com/aSoftwareByDesignRepository/nextcloud-logcheck/refs/heads/main/screenshots/logcheck-screenshot-03.png</screenshot>
+	<screenshot small-thumbnail="https://raw.githubusercontent.com/aSoftwareByDesignRepository/nextcloud-logcheck/refs/heads/main/screenshots/logcheck-screenshot-04.png">https://raw.githubusercontent.com/aSoftwareByDesignRepository/nextcloud-logcheck/refs/heads/main/screenshots/logcheck-screenshot-04.png</screenshot>
 	<version>1.4.0</version>
 	<licence>agpl</licence>
 	<author mail="info@software-by-design.de" homepage="https://software-by-design.de">Alexander Mäule</author>
