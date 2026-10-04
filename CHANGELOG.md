@@ -1,9 +1,22 @@
 # Changelog
 
-## 1.4.0 — 2026-09-21
+All notable changes to this project will be documented in this file.
 
-- **Nextcloud:** raise `max-version` to **35** (Hub 26 Summer) so App Store updates are offered on current stable.
-- Docs: store/README compatibility prose now **32–35**.
+The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
+and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+
+## 1.4.1 - 2026-10-04
+
+### Fixed
+
+- Confirmation dialog now closes on Escape even when another Nextcloud app suppresses the native dialog cancel event.
+- Permission-denied page now renders with the app's styles on every path.
+- Toasts deduplicate identical messages; field-level form errors marked aria-invalid for screen readers.
+- Localization: corpus register fixes and correct per-locale plural rules.
+
+### Changed
+
+- Atlas v3.5.14 verification pass; store screenshot URLs corrected.
 
 ## 1.3.24 — 2026-09-09
 
