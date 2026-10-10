@@ -9,16 +9,24 @@ declare(strict_types=1);
 
 namespace OCA\LogCheck\Service;
 
+use OCA\LogCheck\AppInfo\Application;
 use OCP\EventDispatcher\IEventDispatcher;
 use OCP\Log\Audit\CriticalActionPerformedEvent;
+use Psr\Log\LoggerInterface;
 
 /**
  * Emits CriticalActionPerformedEvent with obfuscated details.
+ *
+ * Also writes the same line through the app logger: the audit event is a
+ * no-op on instances without admin_audit enabled, so the event alone left
+ * policy mutations (access grants, watch toggles, log deletion) with zero
+ * durable record. The app-log line keeps actor + what-changed forever.
  */
 final class AuditService
 {
 	public function __construct(
 		private readonly IEventDispatcher $dispatcher,
+		private readonly LoggerInterface $logger,
 	) {
 	}
 
@@ -39,5 +47,7 @@ final class AuditService
 		// OCP signature: (string $logMessage, array $parameters = [], bool $obfuscateParameters = false).
 		// Never pass a bool as the 2nd argument — that TypeErrors and aborts the caller (settings save).
 		$this->dispatcher->dispatchTyped(new CriticalActionPerformedEvent($message, []));
+		// Durable record independent of admin_audit being installed/enabled.
+		$this->logger->warning($message, ['app' => Application::APP_ID]);
 	}
 }

@@ -52,7 +52,7 @@ $isNcAdmin = !empty($_['isNcAdmin']);
 		<button type="button" class="lck-btn lck-btn--primary lck-test-turn-on" data-channel="email"><?php p($l->t('Send test & turn on')); ?></button>
 		<p class="lck-channel-status lck-muted" id="lck-email-status" role="status" hidden></p>
 		<?php if (!empty($status['channels']['email']['disabled'])): ?>
-			<p class="lck-callout lck-callout--warning"><?php p($l->t('Channel disabled after repeated failures.')); ?>
+			<p class="lck-callout lck-callout--warning" role="status"><?php p($l->t('Channel disabled after repeated failures.')); ?>
 				<button type="button" class="lck-btn lck-btn--primary lck-reenable-channel" data-channel="email"><?php p($l->t('Re-enable & test')); ?></button>
 			</p>
 		<?php endif; ?>
@@ -95,7 +95,7 @@ $isNcAdmin = !empty($_['isNcAdmin']);
 			<button type="button" class="lck-btn lck-btn--primary lck-test-turn-on" data-channel="slack"><?php p($l->t('Send test & turn on')); ?></button>
 			<p class="lck-channel-status lck-muted" id="lck-slack-status" role="status" hidden></p>
 			<?php if (!empty($status['channels']['slack']['disabled'])): ?>
-				<p class="lck-callout lck-callout--warning"><?php p($l->t('Channel disabled after repeated failures.')); ?>
+				<p class="lck-callout lck-callout--warning" role="status"><?php p($l->t('Channel disabled after repeated failures.')); ?>
 					<button type="button" class="lck-btn lck-btn--primary lck-reenable-channel" data-channel="slack"><?php p($l->t('Re-enable & test')); ?></button>
 				</p>
 			<?php endif; ?>
@@ -129,7 +129,7 @@ $isNcAdmin = !empty($_['isNcAdmin']);
 			<button type="button" class="lck-btn lck-btn--primary lck-test-turn-on" data-channel="webhook"><?php p($l->t('Send test & turn on')); ?></button>
 			<p class="lck-channel-status lck-muted" id="lck-webhook-status" role="status" hidden></p>
 			<?php if (!empty($status['channels']['webhook']['disabled'])): ?>
-				<p class="lck-callout lck-callout--warning"><?php p($l->t('Channel disabled after repeated failures.')); ?>
+				<p class="lck-callout lck-callout--warning" role="status"><?php p($l->t('Channel disabled after repeated failures.')); ?>
 					<button type="button" class="lck-btn lck-btn--primary lck-reenable-channel" data-channel="webhook"><?php p($l->t('Re-enable & test')); ?></button>
 				</p>
 			<?php endif; ?>
@@ -150,7 +150,7 @@ $isNcAdmin = !empty($_['isNcAdmin']);
 		<button type="button" class="lck-btn lck-btn--primary lck-test-turn-on" data-channel="notification"><?php p($l->t('Send test & turn on')); ?></button>
 		<p class="lck-channel-status lck-muted" id="lck-notification-status" role="status" hidden></p>
 		<?php if ($isNcAdmin): ?>
-			<div class="lck-callout lck-callout--warning" id="lck-excerpts-help">
+			<div class="lck-callout lck-callout--warning" id="lck-excerpts-help" role="status">
 				<p><?php p($l->t('Including log text can expose passwords, tokens, and personal data — including to services outside your country. Only enable if you accept that risk.')); ?></p>
 			</div>
 			<div class="lck-switch-field">
@@ -166,7 +166,7 @@ $isNcAdmin = !empty($_['isNcAdmin']);
 			<label for="lck-excerpt-confirm"><?php p($l->t('Type CONFIRM to enable excerpts')); ?></label>
 			<input class="form-input" type="text" id="lck-excerpt-confirm" name="excerpt_confirm" value="" autocomplete="off">
 
-			<div class="lck-callout lck-callout--info" id="lck-private-webhooks-help">
+			<div class="lck-callout lck-callout--info" id="lck-private-webhooks-help" role="status">
 				<p><?php p($l->t('Private network webhooks can reach devices on your local network. Leave this off unless you know you need it.')); ?></p>
 			</div>
 			<div class="lck-switch-field">

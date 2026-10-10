@@ -89,6 +89,7 @@
 		"Delete the log file?": "Logbestand verwijderen?",
 		"Delete this log copy?": "Deze logkopie verwijderen?",
 		"Detected log type: %s": "Gedetecteerd logtype: %s",
+		"Dismiss": "Sluiten",
 		"Does not change alert rules.": "Wijzigt geen alertregels.",
 		"Donate": "Doneren",
 		"Donations & enterprise": "Donaties en enterprise",
@@ -176,7 +177,7 @@
 		"Never ran": "Nog nooit uitgevoerd",
 		"Nextcloud admin": "Nextcloud-beheerder",
 		"Nextcloud admins always have access. They can also change this list, download the full log file, start a fresh log, and turn on raw excerpts in alerts.": "Nextcloud-beheerders hebben altijd toegang. Zij kunnen ook deze lijst wijzigen, het volledige logbestand downloaden, een schoon log starten en ruwe fragmenten in meldingen inschakelen.",
-		"Nextcloud core: %s. App updates: check Apps in Admin settings.": "Nextcloud-core: %s. App-updates: controleer Apps in de beheerdersinstellingen.",
+		"Nextcloud core: %s. App updates: check Apps in Admin settings.": "Nextcloud-core-versie: %s. App-updates: controleer Apps in de beheerdersinstellingen.",
 		"Nextcloud has not cached an update check yet. Open Admin settings → Overview.": "Nextcloud heeft nog geen updatecontrole gecachet. Open Beheerdersinstellingen → Overzicht.",
 		"Nextcloud needs PHP 8.2 or newer. %s": "Nextcloud vereist PHP 8.2 of nieuwer. %s",
 		"Nextcloud reported errors while running background jobs.": "Nextcloud meldde fouten bij achtergrondtaken.",
@@ -294,6 +295,7 @@
 		"The current log is renamed aside. A new empty log is created. Alerts keep working from the new file.": "Het huidige log wordt hernoemd. Er wordt een leeg bestand gemaakt. Meldingen gaan door op het nieuwe bestand.",
 		"The last background check did not finish cleanly.": "De laatste achtergrondcontrole is niet netjes afgerond.",
 		"The log file is not writable from here. Ask your host for file permissions.": "Het logbestand is hier niet beschrijfbaar. Vraag uw host om bestandsrechten.",
+		"The server could not be reached. Check your connection and try again.": "De server kon niet worden bereikt. Controleer uw verbinding en probeer het opnieuw.",
 		"This check could not run.": "Deze controle kon niet worden uitgevoerd.",
 		"This instance URL uses HTTP. Prefer HTTPS for production.": "Deze instantie-URL gebruikt HTTP. Geef de voorkeur aan HTTPS in productie.",
 		"This is an older copy. Alerts only watch the current log.": "Dit is een oudere kopie. Meldingen bewaken alleen het huidige log.",
@@ -347,8 +349,7 @@
 		"Which apps to watch": "Welke apps bewaken",
 		"Which log?": "Welk logbestand?",
 		"Who can open HealthCheck — Nextcloud admins always can; add app admins below.": "Wie HealthCheck mag openen — Nextcloud-beheerders altijd; voeg hieronder appbeheerders toe.",
-		"Who can open HealthCheck?": "Wie mag HealthCheck openen?",
-		"Dismiss": "Sluiten"
+		"Who can open HealthCheck?": "Wie mag HealthCheck openen?"
 	},
 	"pluralForm": "nplurals=2; plural=(n != 1);"
 }

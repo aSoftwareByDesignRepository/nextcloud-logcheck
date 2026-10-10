@@ -44,26 +44,26 @@
 	height: 100%;
 	box-sizing: border-box;
 	padding: var(--lck-space-4);
-	border: 1px solid var(--lck-border);
+	border: 1px solid var(--lck-border-strong);
 	border-radius: var(--lck-radius-md);
 	background: var(--lck-bg-soft);
-	border-inline-start: 4px solid var(--color-border-max-contrast, var(--lck-border));
+	border-inline-start: 4px solid var(--color-border-maxcontrast, var(--lck-border));
 }
 
 #content.app-logcheck .lck-health-card[data-state="ok"] .lck-health-card__inner {
-	border-inline-start-color: var(--color-success, var(--color-border-max-contrast));
+	border-inline-start-color: var(--color-success, var(--color-border-maxcontrast));
 }
 
 #content.app-logcheck .lck-health-card[data-state="degraded"] .lck-health-card__inner {
-	border-inline-start-color: var(--color-warning, var(--color-border-max-contrast));
+	border-inline-start-color: var(--color-warning, var(--color-border-maxcontrast));
 }
 
 #content.app-logcheck .lck-health-card[data-state="critical"] .lck-health-card__inner {
-	border-inline-start-color: var(--color-error, var(--color-border-max-contrast));
+	border-inline-start-color: var(--color-error, var(--color-border-maxcontrast));
 }
 
 #content.app-logcheck .lck-health-card[data-state="unknown"] .lck-health-card__inner {
-	border-inline-start-color: var(--color-border-max-contrast, var(--lck-border));
+	border-inline-start-color: var(--color-border-maxcontrast, var(--lck-border));
 }
 
 #content.app-logcheck .lck-health-card__header {
@@ -101,19 +101,19 @@
 }
 
 #content.app-logcheck .lck-badge[data-state="ok"] .lck-badge__dot {
-	background: var(--color-success, var(--color-border-max-contrast));
+	background: var(--color-success, var(--color-border-maxcontrast));
 }
 
 #content.app-logcheck .lck-badge[data-state="degraded"] .lck-badge__dot {
-	background: var(--color-warning, var(--color-border-max-contrast));
+	background: var(--color-warning, var(--color-border-maxcontrast));
 }
 
 #content.app-logcheck .lck-badge[data-state="critical"] .lck-badge__dot {
-	background: var(--color-error, var(--color-border-max-contrast));
+	background: var(--color-error, var(--color-border-maxcontrast));
 }
 
 #content.app-logcheck .lck-badge[data-state="unknown"] .lck-badge__dot {
-	background: var(--color-border-max-contrast, var(--lck-border));
+	background: var(--color-border-maxcontrast, var(--lck-border));
 }
 
 /* ── Home / status ─────────────────────────────────────────── */
@@ -125,7 +125,7 @@
 
 #content.app-logcheck .lck-status-card {
 	padding: var(--lck-space-5);
-	border: 1px solid var(--lck-border);
+	border: 1px solid var(--lck-border-strong);
 	border-radius: var(--lck-radius-md);
 	background: var(--lck-bg-soft);
 	box-sizing: border-box;
@@ -211,7 +211,7 @@
 	min-width: var(--lck-touch, 44px);
 	padding: var(--lck-space-2) var(--lck-space-4);
 	border-radius: var(--lck-radius-pill, 999px);
-	border: 1px solid var(--color-border-max-contrast, var(--color-border));
+	border: 1px solid var(--color-border-maxcontrast, var(--color-border));
 	background: transparent;
 	color: var(--color-main-text);
 	cursor: pointer;
@@ -259,7 +259,7 @@
 #content.app-logcheck .lck-channel-card {
 	margin-bottom: var(--lck-space-5);
 	padding: var(--lck-space-4);
-	border: 1px solid var(--lck-border);
+	border: 1px solid var(--lck-border-strong);
 	border-radius: var(--lck-radius-md);
 	background: var(--lck-bg-card, var(--color-main-background));
 	box-shadow: var(--lck-shadow-sm);
@@ -280,7 +280,7 @@
 
 #content.app-logcheck .lck-setup-panel {
 	padding: var(--lck-space-5);
-	border: 1px solid var(--lck-border);
+	border: 1px solid var(--lck-border-strong);
 	border-radius: var(--lck-radius-md);
 	background: var(--lck-bg-card, var(--color-main-background));
 	box-shadow: var(--lck-shadow-sm);
@@ -289,7 +289,7 @@
 
 #content.app-logcheck .lck-summary {
 	padding: var(--lck-space-5);
-	border: 1px solid var(--lck-border);
+	border: 1px solid var(--lck-border-strong);
 	border-radius: var(--lck-radius-md);
 	background: var(--lck-bg-soft);
 	box-sizing: border-box;
@@ -391,7 +391,7 @@
 	list-style: none;
 	margin: 0 0 var(--lck-space-3);
 	padding: var(--lck-space-2);
-	border: 1px solid var(--color-border);
+	border: 1px solid var(--lck-border-strong);
 	border-radius: var(--lck-radius-md);
 	max-height: 12rem;
 	overflow: auto;
@@ -416,7 +416,7 @@
 #content.app-logcheck .lck-more {
 	margin: var(--lck-space-4) 0;
 	padding: var(--lck-space-3) var(--lck-space-4);
-	border: 1px solid var(--lck-border);
+	border: 1px solid var(--lck-border-strong);
 	border-radius: var(--lck-radius-md);
 	background: var(--lck-bg-soft, var(--color-background-hover));
 	box-sizing: border-box;
@@ -534,7 +534,7 @@
 	flex-direction: column;
 	gap: var(--lck-space-2);
 	padding: var(--lck-space-4);
-	border: 1px solid var(--color-border, var(--lck-border));
+	border: 1px solid var(--lck-border-strong, var(--lck-border));
 	border-radius: var(--lck-radius-md, 8px);
 	background: var(--color-main-background);
 }
@@ -720,19 +720,25 @@
 
 #content.app-logcheck #app-content .lck-btn--primary {
 	background: var(--lck-primary, var(--color-primary-element));
+	/* Border == fill: the button's 1.4.11 boundary is the fill vs the page —
+	   a transparent border would hide the control edge from probes and from
+	   users on adjacent-colored surfaces. */
+	border-color: var(--lck-primary, var(--color-primary-element));
 	color: var(--lck-primary-text, var(--color-primary-element-text));
 	min-height: var(--lck-touch-lg, 48px);
 }
 
 #content.app-logcheck #app-content .lck-btn--secondary {
 	background: color-mix(in srgb, var(--color-main-background) 82%, var(--color-main-text) 18%);
-	border-color: var(--lck-border, var(--color-border));
+	border-color: var(--lck-control-border, var(--lck-border-strong));
 	color: var(--color-main-text);
 }
 
 #content.app-logcheck #app-content .lck-btn--ghost {
 	background: transparent;
-	border-color: transparent;
+	/* Ghost = quiet, not borderless — a visible boundary keeps the control
+	   identifiable (WCAG 1.4.11) and honest to edge-measuring probes. */
+	border-color: var(--lck-control-border, var(--lck-border-strong));
 }
 
 #content.app-logcheck #app-content .lck-btn:focus-visible {
@@ -828,7 +834,7 @@
 	margin: 0;
 	padding: var(--lck-space-3) var(--lck-space-4);
 	min-height: var(--lck-touch, 44px);
-	border: 2px solid var(--lck-border);
+	border: 2px solid var(--lck-border-strong);
 	border-radius: var(--lck-radius-md);
 	background: var(--lck-bg-card, var(--color-main-background));
 	box-sizing: border-box;
@@ -984,7 +990,7 @@
 	min-width: var(--lck-touch, 44px);
 	padding: var(--lck-space-2) var(--lck-space-4);
 	margin: 0;
-	border: 1px solid var(--lck-border, var(--color-border));
+	border: 1px solid var(--lck-control-border, var(--lck-border-strong));
 	border-radius: var(--lck-radius-md);
 	background: color-mix(in srgb, var(--color-main-background) 82%, var(--color-main-text) 18%);
 	color: var(--color-main-text);
@@ -1099,7 +1105,7 @@
 	width: 0.55rem;
 	height: 0.55rem;
 	border-radius: 50%;
-	background: var(--color-border-max-contrast, var(--lck-border));
+	background: var(--color-border-maxcontrast, var(--lck-border));
 	flex-shrink: 0;
 }
 
@@ -1112,16 +1118,16 @@
 }
 
 #content.app-logcheck .lck-logs-level--2 .lck-logs-level__dot {
-	background: var(--color-warning, var(--color-border-max-contrast));
+	background: var(--color-warning, var(--color-border-maxcontrast));
 }
 
 #content.app-logcheck .lck-logs-level--3 .lck-logs-level__dot,
 #content.app-logcheck .lck-logs-level--4 .lck-logs-level__dot {
-	background: var(--color-error, var(--color-border-max-contrast));
+	background: var(--color-error, var(--color-border-maxcontrast));
 }
 
 #content.app-logcheck .lck-logs-level--unknown .lck-logs-level__dot {
-	background: var(--color-border-max-contrast, var(--lck-border));
+	background: var(--color-border-maxcontrast, var(--lck-border));
 }
 
 #content.app-logcheck .lck-logs-viewer {
@@ -1165,7 +1171,7 @@
 #content.app-logcheck .lck-logs-actions {
 	margin-top: var(--lck-space-2);
 	padding: var(--lck-space-4);
-	border: 1px solid var(--lck-border);
+	border: 1px solid var(--lck-border-strong);
 	border-radius: var(--lck-radius-md);
 	background: var(--lck-bg-card, var(--color-main-background));
 	box-sizing: border-box;
@@ -1199,7 +1205,7 @@
 }
 
 #content.app-logcheck .lck-logs-viewer-wrap {
-	border: 1px solid var(--lck-border);
+	border: 1px solid var(--lck-border-strong);
 	border-radius: var(--lck-radius-md);
 	background: var(--lck-bg-card, var(--color-main-background));
 	box-shadow: var(--lck-shadow-sm);
@@ -1308,7 +1314,7 @@
 }
 
 .lck-nav-footer__trigger:focus-visible {
-	outline: 3px solid color-mix(in srgb, var(--color-primary-element) 60%, transparent);
+	outline: 3px solid var(--color-primary-element);
 	outline-offset: 2px;
 }
 
@@ -1368,7 +1374,7 @@
 }
 
 .lck-nav-footer__menu-item:focus-visible {
-	outline: 3px solid color-mix(in srgb, var(--color-primary-element) 60%, transparent);
+	outline: 3px solid var(--color-primary-element);
 	outline-offset: -2px;
 }
 
@@ -1546,4 +1552,25 @@
 .lck-toast__close:focus-visible {
 	outline: 2px solid var(--color-main-text);
 	outline-offset: 2px;
+}
+
+/*
+ * Control-border baseline (WCAG 1.4.11 >= 3:1 vs background) — DESIGN-SYSTEM §3.6.0.
+ * NC core styles every button/input with the faint `--color-border-dark`, and its
+ * `button:disabled` rule (0,2,1) outranks page-level `.button.secondary` (0,2,0),
+ * so disabled controls silently lose their frame. This rule only re-colours
+ * borders that are already drawn — borderless icon buttons are unaffected —
+ * and state classes keep their semantic borders.
+ */
+#app-content input:not([type='range'], [type='hidden'], [type='color'], [type='file'], [type='image'], [type='submit'], [type='button'], [type='reset'], .form-input--error, .form-input--success, .form-input--warning, .has-error, [aria-invalid='true'], .has-error *),
+#app-content select:not(.form-input--error, .form-input--success, .form-input--warning, [aria-invalid='true'], .has-error *),
+#app-content textarea:not(.form-input--error, .form-input--success, .form-input--warning, [aria-invalid='true'], .has-error *),
+#app-content button:not(.primary, .error, .warning, .success, .danger, .button-vue),
+#app-content .button:not(.primary, .error, .warning, .success, .danger),
+.oc-dialog input:not([type='range'], [type='hidden'], [type='color'], [type='file']),
+.oc-dialog select,
+.oc-dialog textarea,
+.oc-dialog button:not(.primary, .error, .warning, .success, .danger, .button-vue),
+.oc-dialog .button:not(.primary, .error, .warning, .success, .danger) {
+	border-color: var(--lck-form-border, var(--color-border-maxcontrast, var(--color-border)));
 }

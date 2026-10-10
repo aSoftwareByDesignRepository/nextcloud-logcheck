@@ -15,7 +15,8 @@ $htmlLang = (string)($clientHints['htmlLang'] ?? 'en-US');
 	<div id="lck-live-region" class="lck-sr-only" role="status" aria-live="polite" aria-atomic="true"></div>
 	<div id="lck-alert-region" class="lck-sr-only" role="alert" aria-live="assertive" aria-atomic="true"></div>
 	<div id="app-content-wrapper" class="lck-shell">
-		<header class="lck-page-header" aria-labelledby="lck-page-title">
+		<!-- div, not header: unscoped <header> = second banner landmark. -->
+		<div class="lck-page-header" aria-labelledby="lck-page-title">
 			<div class="lck-page-header__main">
 				<div class="lck-page-header__icon" aria-hidden="true">
 					<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lck-page-header__icon-svg" focusable="false"><circle cx="12" cy="12" r="10"/><path d="M15 9 9 15M9 9l6 6"/></svg>
@@ -24,7 +25,7 @@ $htmlLang = (string)($clientHints['htmlLang'] ?? 'en-US');
 					<h1 id="lck-page-title" class="lck-page-title"><?php p($l->t('Not authorized')); ?></h1>
 				</div>
 			</div>
-		</header>
+		</div>
 		<main id="lck-main-content" class="lck-main" tabindex="-1" aria-labelledby="lck-page-title">
 			<section class="lck-callout lck-callout--warning" role="alert">
 				<p><?php p($l->t('Only Nextcloud admins and HealthCheck app admins can use this app.')); ?></p>

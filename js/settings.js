@@ -84,6 +84,9 @@
 		'app_mode': 'lck-app-mode',
 		'app_list': 'lck-app-list',
 		'mutes': 'lck-mutes',
+		// MuteRegexValidator reports bad patterns under the generic 'value'
+		// key — pin it to the mutes textarea so the 422 paints a control.
+		'value': 'lck-mutes',
 		'mute_apps': 'lck-mute-apps',
 		'channels.email': 'lck-email-recipients',
 		'channels.email.recipients': 'lck-email-recipients',

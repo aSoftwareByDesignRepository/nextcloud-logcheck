@@ -84,6 +84,7 @@ OC.L10N.register(
 	"Delete the log file?" : "Delete the log file?",
 	"Delete this log copy?" : "Delete this log copy?",
 	"Detected log type: %s" : "Detected log type: %s",
+	"Dismiss" : "Dismiss",
 	"Does not change alert rules." : "Does not change alert rules.",
 	"Donate" : "Donate",
 	"Donations & enterprise" : "Donations & enterprise",
@@ -289,6 +290,7 @@ OC.L10N.register(
 	"The current log is renamed aside. A new empty log is created. Alerts keep working from the new file." : "The current log is renamed aside. A new empty log is created. Alerts keep working from the new file.",
 	"The last background check did not finish cleanly." : "The last background check did not finish cleanly.",
 	"The log file is not writable from here. Ask your host for file permissions." : "The log file is not writable from here. Ask your host for file permissions.",
+	"The server could not be reached. Check your connection and try again." : "The server could not be reached. Check your connection and try again.",
 	"This check could not run." : "This check could not run.",
 	"This instance URL uses HTTP. Prefer HTTPS for production." : "This instance URL uses HTTP. Prefer HTTPS for production.",
 	"This is an older copy. Alerts only watch the current log." : "This is an older copy. Alerts only watch the current log.",
@@ -342,8 +344,7 @@ OC.L10N.register(
 	"Which apps to watch" : "Which apps to watch",
 	"Which log?" : "Which log?",
 	"Who can open HealthCheck — Nextcloud admins always can; add app admins below." : "Who can open HealthCheck — Nextcloud admins always can; add app admins below.",
-	"Who can open HealthCheck?" : "Who can open HealthCheck?",
-	"Dismiss" : "Dismiss"
+	"Who can open HealthCheck?" : "Who can open HealthCheck?"
 	},
 	"nplurals=2; plural=(n != 1);"
 );

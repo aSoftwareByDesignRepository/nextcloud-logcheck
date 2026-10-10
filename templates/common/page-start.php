@@ -43,7 +43,10 @@ include __DIR__ . '/navigation.php';
 	<div id="lck-live-region" class="lck-sr-only" role="status" aria-live="polite" aria-atomic="true"></div>
 	<div id="lck-alert-region" class="lck-sr-only" role="alert" aria-live="assertive" aria-atomic="true"></div>
 	<div id="app-content-wrapper" class="lck-shell">
-		<header class="lck-page-header" aria-labelledby="lck-page-title">
+		<!-- div, not header: an unscoped <header> outside sectioning content
+		     registers a second banner landmark (duplicate banner with NC
+		     #header — ds_chrome lck-mf-dup-banner). -->
+		<div class="lck-page-header" aria-labelledby="lck-page-title">
 			<div class="lck-page-header__top">
 				<?php require __DIR__ . '/nav-toggle.php'; ?>
 				<nav class="lck-breadcrumb" aria-label="<?php p($l->t('Breadcrumb')); ?>">
@@ -78,5 +81,5 @@ include __DIR__ . '/navigation.php';
 				<span class="lck-scope-strip__value"><?php p($timezone); ?></span>
 			</div>
 			<?php endif; ?>
-		</header>
+		</div>
 		<main id="lck-main-content" class="lck-main" tabindex="-1" aria-labelledby="lck-page-title">

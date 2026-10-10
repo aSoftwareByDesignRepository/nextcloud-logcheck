@@ -70,7 +70,7 @@
 	height: 1.625rem;
 	border-radius: var(--lck-radius-pill, 999px);
 	background: var(--color-background-darker, var(--color-background-dark));
-	border: 1px solid var(--color-border, var(--lck-border));
+	border: 1px solid var(--lck-border-strong, var(--color-border));
 	transition: background 0.15s ease, border-color 0.15s ease;
 	vertical-align: middle;
 }

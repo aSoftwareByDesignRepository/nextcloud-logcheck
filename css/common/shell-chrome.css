@@ -98,7 +98,7 @@
 #content.app-logcheck #app-content .lck-section,
 #content.app-logcheck #app-content .lck-filter-panel {
 	background: var(--lck-bg-card, var(--color-main-background));
-	border: 1px solid var(--lck-border, var(--color-border));
+	border: 1px solid var(--lck-border, var(--lck-form-border));
 	border-radius: var(--lck-radius-md, 12px);
 	box-shadow: var(--lck-shadow-sm, 0 1px 2px color-mix(in srgb, var(--color-main-text) 8%, transparent));
 	box-sizing: border-box;
@@ -403,6 +403,11 @@
 	text-decoration: none;
 	border-radius: var(--lck-radius-sm);
 	padding-block: 2px;
+	/* WCAG 2.5.8: the anchor is the target — give it a >=24px box
+	   (was ~20px text-line; ds_chrome sweep touch probe). */
+	display: inline-flex;
+	align-items: center;
+	min-block-size: 24px;
 }
 #app-content.lck-app .lck-breadcrumb__link:hover {
 	text-decoration: underline;
@@ -568,7 +573,7 @@
 .lck-app .btn--secondary {
 	background: color-mix(in srgb, var(--color-main-background) 82%, var(--color-main-text) 18%);
 	color: var(--lck-text);
-	border-color: var(--lck-border);
+	border-color: var(--lck-control-border, var(--lck-border-strong));
 }
 #app-content.lck-app .lck-btn--danger,
 #app-content-wrapper .lck-btn--danger,
@@ -578,7 +583,9 @@
 	   --color-primary-element-light over the danger fill. */
 	background: var(--lck-danger-fill) !important;
 	color: var(--lck-danger-on-fill) !important;
-	border-color: transparent !important;
+	/* Border == fill so the control keeps a painted edge (boundary = fill vs
+	   surface, WCAG 1.4.11) instead of a transparent border. */
+	border-color: var(--lck-danger-fill) !important;
 }
 .lck-btn--danger:hover,
 .lck-app .btn--danger:hover {
@@ -593,7 +600,7 @@
 .lck-btn--ghost {
 	background: transparent;
 	color: var(--lck-text);
-	border-color: transparent;
+	border-color: var(--lck-control-border, var(--lck-border-strong));
 }
 .lck-btn--sm {
 	min-height: 44px;

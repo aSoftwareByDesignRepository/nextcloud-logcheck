@@ -65,15 +65,24 @@
 		});
 	}
 
+	/* Network-level failures (offline, aborted request, server down) reject
+	   fetch. Callers expect a {status, data} shape — return 0 + a translated
+	   message so busy/disabled controls are always restored and an error
+	   toast is shown instead of a silently stuck UI. */
 	async function postJson(url, body) {
-		var res = await fetch(url, {
-			method: 'POST',
-			headers: {
-				'Content-Type': 'application/json',
-				'requesttoken': token()
-			},
-			body: JSON.stringify(body)
-		});
+		var res;
+		try {
+			res = await fetch(url, {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json',
+					'requesttoken': token()
+				},
+				body: JSON.stringify(body)
+			});
+		} catch (e) {
+			return { status: 0, data: { message: t('logcheck', 'The server could not be reached. Check your connection and try again.') } };
+		}
 		var data = {};
 		try {
 			data = await res.json();
@@ -82,14 +91,19 @@
 	}
 
 	async function putJson(url, body) {
-		var res = await fetch(url, {
-			method: 'PUT',
-			headers: {
-				'Content-Type': 'application/json',
-				'requesttoken': token()
-			},
-			body: JSON.stringify(body)
-		});
+		var res;
+		try {
+			res = await fetch(url, {
+				method: 'PUT',
+				headers: {
+					'Content-Type': 'application/json',
+					'requesttoken': token()
+				},
+				body: JSON.stringify(body)
+			});
+		} catch (e) {
+			return { status: 0, data: { message: t('logcheck', 'The server could not be reached. Check your connection and try again.') } };
+		}
 		var data = {};
 		try {
 			data = await res.json();

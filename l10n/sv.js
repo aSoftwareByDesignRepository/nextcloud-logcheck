@@ -84,6 +84,7 @@ OC.L10N.register(
 	"Delete the log file?" : "Ta bort loggfilen?",
 	"Delete this log copy?" : "Ta bort den här loggkopian?",
 	"Detected log type: %s" : "Upptäckt loggtyp: %s",
+	"Dismiss" : "Stäng",
 	"Does not change alert rules." : "Ändrar inte aviseringsregler.",
 	"Donate" : "Donera",
 	"Donations & enterprise" : "Donationer och enterprise",
@@ -289,6 +290,7 @@ OC.L10N.register(
 	"The current log is renamed aside. A new empty log is created. Alerts keep working from the new file." : "Den aktuella loggen byter namn. En ny tom fil skapas. Aviseringar fortsätter på den nya filen.",
 	"The last background check did not finish cleanly." : "Den senaste bakgrundskontrollen avslutades inte rent.",
 	"The log file is not writable from here. Ask your host for file permissions." : "Loggfilen går inte att skriva härifrån. Be er host om filbehörigheter.",
+	"The server could not be reached. Check your connection and try again." : "Servern kunde inte nås. Kontrollera din anslutning och försök igen.",
 	"This check could not run." : "Denna kontroll kunde inte köras.",
 	"This instance URL uses HTTP. Prefer HTTPS for production." : "Denna instans-URL använder HTTP. Föredra HTTPS i produktion.",
 	"This is an older copy. Alerts only watch the current log." : "Detta är en äldre kopia. Aviseringar övervakar bara den aktuella loggen.",
@@ -342,8 +344,7 @@ OC.L10N.register(
 	"Which apps to watch" : "Appar att bevaka",
 	"Which log?" : "Vilken logg?",
 	"Who can open HealthCheck — Nextcloud admins always can; add app admins below." : "Vem som kan öppna HealthCheck — Nextcloud-administratörer alltid; lägg till appadministratörer nedan.",
-	"Who can open HealthCheck?" : "Vem kan öppna HealthCheck?",
-	"Dismiss" : "Stäng"
+	"Who can open HealthCheck?" : "Vem kan öppna HealthCheck?"
 	},
 	"nplurals=2; plural=(n != 1);"
 );

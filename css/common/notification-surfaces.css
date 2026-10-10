@@ -13,7 +13,7 @@
 	padding: var(--lck-space-4);
 	margin: var(--lck-space-4) 0;
 	border-radius: var(--lck-radius-md);
-	border: 1px solid var(--lck-border);
+	border: 1px solid var(--lck-border-strong);
 	border-left-width: 5px;
 	border-left-color: var(--color-primary-element);
 	background: var(--lck-tint-info);
@@ -79,7 +79,7 @@
 
 #app-content.lck-app .lck-callout--neutral:not(.lck-semantic-panel),
 .modal-backdrop .lck-callout--neutral:not(.lck-semantic-panel) {
-	border-color: var(--color-border);
+	border-color: var(--lck-border-strong);
 	border-left-width: 2px;
 	background: color-mix(in srgb, var(--color-main-text) 5%, var(--color-main-background));
 }
@@ -105,7 +105,7 @@
 	min-width: var(--lck-icon-well, 2.25rem);
 	min-height: var(--lck-icon-well, 2.25rem);
 	border-radius: var(--lck-radius-sm, 6px);
-	border: 2px solid var(--color-border);
+	border: 2px solid var(--lck-border-strong, var(--color-border));
 	background: var(--color-main-background);
 	color: var(--color-main-text);
 	box-shadow: none;
@@ -326,7 +326,7 @@
 	align-items: flex-start;
 	gap: var(--lck-space-3, 0.75rem) var(--lck-space-4, 1rem);
 	padding: var(--lck-space-4, 1rem) var(--lck-space-5, 1.25rem);
-	border: 2px solid var(--color-border, var(--lck-border));
+	border: 2px solid var(--lck-border-strong, var(--color-border));
 	border-radius: var(--lck-radius-md, 8px);
 	background: var(--color-main-background, var(--lck-bg));
 	box-shadow: var(--lck-shadow-sm);

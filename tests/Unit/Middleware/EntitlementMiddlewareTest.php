@@ -99,5 +99,7 @@ class EntitlementMiddlewareTest extends TestCase
 		$mw = $this->middleware($access, null, '/apps/logcheck/home');
 		$res = $mw->afterException($page, 'home', new ForbiddenException('Not authorized.'));
 		self::assertInstanceOf(TemplateResponse::class, $res);
+		// An authorization failure must not answer 200 — deny at HTTP level too.
+		self::assertSame(403, $res->getStatus());
 	}
 }

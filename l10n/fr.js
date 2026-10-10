@@ -84,6 +84,7 @@ OC.L10N.register(
 	"Delete the log file?" : "Supprimer le fichier journal ?",
 	"Delete this log copy?" : "Supprimer cette copie du journal ?",
 	"Detected log type: %s" : "Type de journal détecté : %s",
+	"Dismiss" : "Fermer",
 	"Does not change alert rules." : "Ne modifie pas les règles d’alerte.",
 	"Donate" : "Faire un don",
 	"Donations & enterprise" : "Dons et enterprise",
@@ -289,6 +290,7 @@ OC.L10N.register(
 	"The current log is renamed aside. A new empty log is created. Alerts keep working from the new file." : "Le journal actuel est renommé. Un fichier vide est créé. Les alertes continuent sur le nouveau fichier.",
 	"The last background check did not finish cleanly." : "Le dernier contrôle en arrière-plan ne s’est pas terminé correctement.",
 	"The log file is not writable from here. Ask your host for file permissions." : "Le fichier journal n’est pas accessible en écriture ici. Demandez les permissions à votre hébergeur.",
+	"The server could not be reached. Check your connection and try again." : "Le serveur n’a pas pu être atteint. Vérifiez votre connexion et réessayez.",
 	"This check could not run." : "Ce contrôle n’a pas pu s’exécuter.",
 	"This instance URL uses HTTP. Prefer HTTPS for production." : "Cette URL d’instance utilise HTTP. Préférez HTTPS en production.",
 	"This is an older copy. Alerts only watch the current log." : "Ceci est une copie plus ancienne. Les alertes ne surveillent que le journal actuel.",
@@ -342,8 +344,7 @@ OC.L10N.register(
 	"Which apps to watch" : "Apps à surveiller",
 	"Which log?" : "Quel journal ?",
 	"Who can open HealthCheck — Nextcloud admins always can; add app admins below." : "Qui peut ouvrir HealthCheck — les administrateurs Nextcloud toujours ; ajoutez des admins de l’app ci-dessous.",
-	"Who can open HealthCheck?" : "Qui peut ouvrir HealthCheck ?",
-	"Dismiss" : "Fermer"
+	"Who can open HealthCheck?" : "Qui peut ouvrir HealthCheck ?"
 	},
 	"nplurals=2; plural=(n > 1);"
 );

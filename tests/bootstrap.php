@@ -61,6 +61,41 @@ if (!class_exists(\Symfony\Component\Console\Command\Command::class, false)) {
 	eval('namespace Symfony\Component\Console\Command; class Command { public const SUCCESS = 0; public const FAILURE = 1; public function __construct() {} }');
 }
 
+// Host unit runs have no symfony/console (it ships inside the NC container).
+// Stub only the members the commands touch so PHPUnit can mock/spy them.
+if (!interface_exists(\Symfony\Component\Console\Input\InputInterface::class, false)) {
+	eval('namespace Symfony\Component\Console\Input; interface InputInterface {
+		public function getArgument(string $name): mixed;
+		public function getOption(string $name): mixed;
+		public function isInteractive(): bool;
+	}');
+}
+if (!interface_exists(\Symfony\Component\Console\Output\OutputInterface::class, false)) {
+	eval('namespace Symfony\Component\Console\Output; interface OutputInterface {
+		public const VERBOSITY_NORMAL = 2;
+		public function writeln($messages, int $options = 0): void;
+		public function write($messages, bool $newline = false, int $options = 0): void;
+		public function isDecorated(): bool;
+		public function getVerbosity(): int;
+	}');
+}
+if (!class_exists(\Symfony\Component\Console\Style\SymfonyStyle::class, false)) {
+	eval('namespace Symfony\Component\Console\Style; class SymfonyStyle {
+		public function __construct($input, $output) {}
+		public function title($message): void {}
+		public function section($message): void {}
+		public function text($message): void {}
+		public function note($message): void {}
+		public function warning($message): void {}
+		public function error($message): void {}
+		public function success($message): void {}
+		public function table(array $headers, array $rows): void {}
+		public function newLine(int $count = 1): void {}
+		public function writeln($message): void {}
+		public function confirm(string $question, bool $default = true): bool { return $default; }
+	}');
+}
+
 if ($base === null && !interface_exists(\OC\Hooks\Emitter::class, false)) {
 	eval('namespace OC\\Hooks; interface Emitter {}');
 }

@@ -84,6 +84,7 @@ OC.L10N.register(
 	"Delete the log file?" : "Protokolldatei löschen?",
 	"Delete this log copy?" : "Diese Protokollkopie löschen?",
 	"Detected log type: %s" : "Erkannter Log-Typ: %s",
+	"Dismiss" : "Schließen",
 	"Does not change alert rules." : "Ändert keine Benachrichtigungsregeln.",
 	"Donate" : "Spenden",
 	"Donations & enterprise" : "Spenden & Enterprise",
@@ -171,7 +172,7 @@ OC.L10N.register(
 	"Never ran" : "Noch nie gelaufen",
 	"Nextcloud admin" : "Nextcloud-Administrator",
 	"Nextcloud admins always have access. They can also change this list, download the full log file, start a fresh log, and turn on raw excerpts in alerts." : "Nextcloud-Administratoren haben immer Zugriff. Sie können außerdem diese Liste ändern, die vollständige Logdatei herunterladen, ein frisches Log starten und Rohausschnitte in Benachrichtigungen einschalten.",
-	"Nextcloud core: %s. App updates: check Apps in Admin settings." : "Nextcloud-Core: %s. App-Updates: Apps in den Admin-Einstellungen prüfen.",
+	"Nextcloud core: %s. App updates: check Apps in Admin settings." : "Nextcloud-Core-Version: %s. App-Updates: Apps in den Admin-Einstellungen prüfen.",
 	"Nextcloud has not cached an update check yet. Open Admin settings → Overview." : "Nextcloud hat noch keinen Update-Check gespeichert. Admin-Einstellungen → Übersicht öffnen.",
 	"Nextcloud needs PHP 8.2 or newer. %s" : "Nextcloud benötigt PHP 8.2 oder neuer. %s",
 	"Nextcloud reported errors while running background jobs." : "Nextcloud meldete Fehler bei Hintergrundjobs.",
@@ -289,6 +290,7 @@ OC.L10N.register(
 	"The current log is renamed aside. A new empty log is created. Alerts keep working from the new file." : "Das aktuelle Protokoll wird umbenannt. Eine neue leere Datei wird angelegt. Alerts laufen weiter mit der neuen Datei.",
 	"The last background check did not finish cleanly." : "Die letzte Hintergrundprüfung ist nicht sauber durchgelaufen.",
 	"The log file is not writable from here. Ask your host for file permissions." : "Die Protokolldatei ist von hier aus nicht beschreibbar. Bitten Sie Ihren Host um Dateiberechtigungen.",
+	"The server could not be reached. Check your connection and try again." : "Der Server konnte nicht erreicht werden. Prüfen Sie Ihre Verbindung und versuchen Sie es erneut.",
 	"This check could not run." : "Diese Prüfung konnte nicht ausgeführt werden.",
 	"This instance URL uses HTTP. Prefer HTTPS for production." : "Diese Instanz-URL nutzt HTTP. Für Produktion HTTPS bevorzugen.",
 	"This is an older copy. Alerts only watch the current log." : "Dies ist eine ältere Kopie. Alarme überwachen nur das aktuelle Protokoll.",
@@ -342,8 +344,7 @@ OC.L10N.register(
 	"Which apps to watch" : "Welche Apps beobachten",
 	"Which log?" : "Welche Protokolldatei?",
 	"Who can open HealthCheck — Nextcloud admins always can; add app admins below." : "Wer HealthCheck öffnen darf — Nextcloud-Administratoren immer; App-Admins unten hinzufügen.",
-	"Who can open HealthCheck?" : "Wer darf HealthCheck öffnen?",
-	"Dismiss" : "Schließen"
+	"Who can open HealthCheck?" : "Wer darf HealthCheck öffnen?"
 	},
 	"nplurals=2; plural=(n != 1);"
 );

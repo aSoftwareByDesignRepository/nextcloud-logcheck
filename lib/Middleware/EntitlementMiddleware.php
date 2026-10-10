@@ -51,8 +51,11 @@ final class EntitlementMiddleware extends Middleware
 		// beforeController throws before PageController::registerAssets() runs —
 		// without the shell styles the denied page renders completely unstyled.
 		AssetRegistrar::registerStyles();
-		return new TemplateResponse('logcheck', 'access-denied', [
+		$denied = new TemplateResponse('logcheck', 'access-denied', [
 			'homeUrl' => $this->urlGenerator->linkToRoute('files.view.index'),
 		], 'user');
+		// An authorization failure must not answer 200 — deny at HTTP level too.
+		$denied->setStatus(Http::STATUS_FORBIDDEN);
+		return $denied;
 	}
 }

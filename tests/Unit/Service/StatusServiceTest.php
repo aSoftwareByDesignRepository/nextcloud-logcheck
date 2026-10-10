@@ -64,7 +64,7 @@ class StatusServiceTest extends TestCase
 			'last_run_at' => time() - (3 * WatchRunner::JOB_INTERVAL),
 			'last_error' => null,
 		]);
-		$status = (new StatusService($settings, $this->fileBackend(), $this->emptyChannelState(), new TopologyGuard()))->getStatus();
+		$status = (new StatusService($settings, $this->fileBackend(), $this->emptyChannelState(), $this->createMock(TopologyGuard::class)))->getStatus();
 		self::assertTrue($status['stale']);
 		self::assertSame('stale', $status['state']);
 		self::assertSame('Needs a check', $status['label']);
@@ -78,7 +78,7 @@ class StatusServiceTest extends TestCase
 			'last_run_ok' => true,
 			'last_error' => null,
 		]);
-		$status = (new StatusService($settings, $this->fileBackend(), $this->emptyChannelState(), new TopologyGuard()))->getStatus();
+		$status = (new StatusService($settings, $this->fileBackend(), $this->emptyChannelState(), $this->createMock(TopologyGuard::class)))->getStatus();
 		self::assertFalse($status['stale']);
 		self::assertSame('watching', $status['state']);
 		self::assertSame('Watching', $status['label']);
@@ -92,7 +92,7 @@ class StatusServiceTest extends TestCase
 			'last_run_ok' => false,
 			'last_error' => 'Cannot read the log file. Check permissions.',
 		]);
-		$status = (new StatusService($settings, $this->fileBackend(), $this->emptyChannelState(), new TopologyGuard()))->getStatus();
+		$status = (new StatusService($settings, $this->fileBackend(), $this->emptyChannelState(), $this->createMock(TopologyGuard::class)))->getStatus();
 		self::assertSame('degraded', $status['state']);
 		self::assertSame('Needs attention', $status['label']);
 		self::assertNotSame('Watching', $status['label']);
@@ -107,7 +107,7 @@ class StatusServiceTest extends TestCase
 			'last_run_ok' => true,
 			'last_error' => null,
 		], ['secrets_readable' => false]);
-		$status = (new StatusService($settings, $this->fileBackend(), $this->emptyChannelState(), new TopologyGuard()))->getStatus();
+		$status = (new StatusService($settings, $this->fileBackend(), $this->emptyChannelState(), $this->createMock(TopologyGuard::class)))->getStatus();
 		self::assertSame('degraded', $status['state']);
 		self::assertSame('Needs attention', $status['label']);
 		self::assertStringContainsString('secrets', (string)$status['error']);

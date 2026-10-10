@@ -98,7 +98,19 @@ body,
 	--lck-text: var(--color-main-text);
 	--lck-muted: var(--color-text-maxcontrast);
 	--lck-border: color-mix(in srgb, var(--color-main-text) 12%, transparent);
-	--lck-border-strong: color-mix(in srgb, var(--color-main-text) 24%, transparent);
+	/* Boundaries of cards/controls/callouts/dialogs need >=3:1 vs the adjacent
+	   surface (WCAG 1.4.11): NC's --color-border-maxcontrast is theme-tuned for
+	   exactly that (dark + high-contrast themes included). The faint 24% mix
+	   measured ~1.3:1 — below the floor in every theme. */
+	--lck-border-strong: var(--color-border-maxcontrast, color-mix(in srgb, var(--color-main-text) 24%, transparent));
+	/* Interactive controls need >=3:1 (WCAG 1.4.11): maxcontrast is NC's own
+	   input border; --color-border / --lck-border stay surface-only. */
+	--lck-form-border: var(--color-border-maxcontrast, var(--lck-border-strong));
+	/* Filled controls (secondary/ghost/summary buttons): the border sits on a
+	   mid-gray fill, so it must read against BOTH fill and page — maxcontrast
+	   lands ~2.9:1 on the 18%-ink secondary fill. Ink-tuned maxcontrast text
+	   token clears 3:1 against both in every theme. */
+	--lck-control-border: var(--color-text-maxcontrast, var(--color-border-maxcontrast, var(--lck-border-strong)));
 
 	/* Primary / focus — track NC accent for custom branding */
 	--lck-primary: var(--color-primary-element);
@@ -169,7 +181,7 @@ body,
 	--logcheck-color-form-required: var(--lck-danger-ink);
 	--logcheck-color-form-label: var(--lck-text);
 	--logcheck-color-form-background: var(--color-main-background);
-	--logcheck-color-form-border: var(--color-border, var(--lck-border));
+	--logcheck-color-form-border: var(--color-border-maxcontrast, var(--lck-border-strong));
 	--logcheck-color-form-border-focus: var(--color-primary-element);
 	--logcheck-color-form-border-error: var(--lck-danger-ink);
 	--logcheck-color-form-border-success: var(--color-success-text, var(--color-success));
@@ -209,7 +221,9 @@ body[data-theme-dark-highcontrast],
 body[data-theme-light-highcontrast] #content.app-logcheck,
 body[data-theme-dark-highcontrast] #content.app-logcheck {
 	--lck-border: color-mix(in srgb, var(--color-main-text) 32%, transparent);
-	--lck-border-strong: color-mix(in srgb, var(--color-main-text) 48%, transparent);
+	/* HC themes push --color-border-maxcontrast to near-ink — keep it first so
+	   boundary chrome stays >=3:1 against HC surfaces. */
+	--lck-border-strong: var(--color-border-maxcontrast, color-mix(in srgb, var(--color-main-text) 48%, transparent));
 	--lck-shadow-sm: 0 0 0 1px var(--lck-border-strong);
 	--lck-shadow-md: 0 0 0 2px var(--lck-border-strong);
 	--logcheck-color-border: var(--lck-border);
@@ -231,8 +245,13 @@ body[data-theme-dark-highcontrast] #content.app-logcheck {
 	.lck-toasts,
 	.lck-license-modal {
 		--lck-border: color-mix(in srgb, var(--color-main-text) 28%, transparent);
-		--lck-border-strong: color-mix(in srgb, var(--color-main-text) 40%, transparent);
+		--lck-border-strong: var(--color-border-maxcontrast, color-mix(in srgb, var(--color-main-text) 40%, transparent));
 		--lck-shadow-sm: 0 0 0 1px var(--lck-border-strong);
 		--lck-shadow-md: 0 0 0 1px var(--lck-border-strong);
 	}
+}
+
+/* Alias for dead-name ref (literal fallback masked it). */
+body {
+	--lck-bg: var(--lck-bg-card);
 }

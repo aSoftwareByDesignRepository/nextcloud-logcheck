@@ -13,11 +13,15 @@ use OCA\LogCheck\Service\AuditService;
 use OCP\EventDispatcher\IEventDispatcher;
 use OCP\Log\Audit\CriticalActionPerformedEvent;
 use PHPUnit\Framework\TestCase;
+use Psr\Log\LoggerInterface;
 
 /**
  * Momos C-AUD1: CriticalActionPerformedEvent signature is
  * (string $logMessage, array $parameters = [], bool $obfuscateParameters = false).
  * Passing `false` as the 2nd arg TypeErrors and aborts settings saves that emit audits.
+ *
+ * The event alone evaporates when admin_audit is disabled (policy_mutation_no_audit
+ * class) — AuditService must also write the same redacted line via LoggerInterface.
  */
 class AuditServiceTest extends TestCase
 {
@@ -31,7 +35,7 @@ class AuditServiceTest extends TestCase
 				$captured = $event;
 			});
 
-		$svc = new AuditService($dispatcher);
+		$svc = new AuditService($dispatcher, $this->createMock(LoggerInterface::class));
 		$svc->log('admin', 'app_admins_changed', ['count' => 1, 'webhook_url' => 'https://evil.example/hook']);
 
 		self::assertInstanceOf(CriticalActionPerformedEvent::class, $captured);
@@ -40,5 +44,27 @@ class AuditServiceTest extends TestCase
 		self::assertStringContainsString('app_admins_changed', $captured->getLogMessage());
 		self::assertStringContainsString('[redacted]', $captured->getLogMessage());
 		self::assertStringNotContainsString('evil.example', $captured->getLogMessage());
+	}
+
+	public function testLogWritesDurableAppLogLine(): void
+	{
+		$dispatcher = $this->createMock(IEventDispatcher::class);
+		$logged = null;
+		$logger = $this->createMock(LoggerInterface::class);
+		$logger->expects(self::once())
+			->method('warning')
+			->willReturnCallback(static function (string $message, array $context = []) use (&$logged): void {
+				$logged = [$message, $context];
+			});
+
+		$svc = new AuditService($dispatcher, $logger);
+		$svc->log('admin', 'watch_toggled', ['enabled' => 1, 'url' => 'https://evil.example/hook']);
+
+		self::assertIsArray($logged);
+		self::assertStringContainsString('watch_toggled', $logged[0]);
+		self::assertStringContainsString('admin', $logged[0]);
+		self::assertStringContainsString('[redacted]', $logged[0]);
+		self::assertStringNotContainsString('evil.example', $logged[0]);
+		self::assertSame('logcheck', $logged[1]['app'] ?? null);
 	}
 }

@@ -89,6 +89,7 @@
 		"Delete the log file?": "Slet logfilen?",
 		"Delete this log copy?": "Slet denne logkopi?",
 		"Detected log type: %s": "Registreret logtype: %s",
+		"Dismiss": "Luk",
 		"Does not change alert rules.": "Ændrer ikke advarselsregler.",
 		"Donate": "Donér",
 		"Donations & enterprise": "Donationer og enterprise",
@@ -294,6 +295,7 @@
 		"The current log is renamed aside. A new empty log is created. Alerts keep working from the new file.": "Den aktuelle log omdøbes. En ny tom fil oprettes. Advarsler fortsætter med den nye fil.",
 		"The last background check did not finish cleanly.": "Den seneste baggrundskontrol blev ikke afsluttet korrekt.",
 		"The log file is not writable from here. Ask your host for file permissions.": "Logfilen kan ikke skrives herfra. Bed værten om filrettigheder.",
+		"The server could not be reached. Check your connection and try again.": "Serveren kunne ikke nås. Tjek din forbindelse, og prøv igen.",
 		"This check could not run.": "Dette tjek kunne ikke køre.",
 		"This instance URL uses HTTP. Prefer HTTPS for production.": "Denne instans-URL bruger HTTP. Foretræk HTTPS i produktion.",
 		"This is an older copy. Alerts only watch the current log.": "Dette er en ældre kopi. Advarsler overvåger kun den aktuelle log.",
@@ -347,8 +349,7 @@
 		"Which apps to watch": "Hvilke apps der skal overvåges",
 		"Which log?": "Hvilken log?",
 		"Who can open HealthCheck — Nextcloud admins always can; add app admins below.": "Hvem kan åbne HealthCheck — Nextcloud-administratorer altid; tilføj appadministratorer nedenfor.",
-		"Who can open HealthCheck?": "Hvem kan åbne HealthCheck?",
-		"Dismiss": "Luk"
+		"Who can open HealthCheck?": "Hvem kan åbne HealthCheck?"
 	},
 	"pluralForm": "nplurals=2; plural=(n != 1);"
 }

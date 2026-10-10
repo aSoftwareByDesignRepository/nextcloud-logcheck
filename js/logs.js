@@ -256,11 +256,16 @@
 	}
 
 	async function getJson(url) {
-		var res = await fetch(url, {
-			method: 'GET',
-			headers: { 'requesttoken': token() },
-			credentials: 'same-origin'
-		});
+		var res;
+		try {
+			res = await fetch(url, {
+				method: 'GET',
+				headers: { 'requesttoken': token() },
+				credentials: 'same-origin'
+			});
+		} catch (e) {
+			return { status: 0, data: { message: t('The server could not be reached. Check your connection and try again.') } };
+		}
 		var data = {};
 		var ct = (res.headers.get('content-type') || '').toLowerCase();
 		if (ct.indexOf('application/json') >= 0) {
@@ -280,15 +285,20 @@
 	}
 
 	async function postJson(url, body) {
-		var res = await fetch(url, {
-			method: 'POST',
-			headers: {
-				'Content-Type': 'application/json',
-				'requesttoken': token()
-			},
-			credentials: 'same-origin',
-			body: JSON.stringify(body || {})
-		});
+		var res;
+		try {
+			res = await fetch(url, {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json',
+					'requesttoken': token()
+				},
+				credentials: 'same-origin',
+				body: JSON.stringify(body || {})
+			});
+		} catch (e) {
+			return { status: 0, data: { message: t('The server could not be reached. Check your connection and try again.') } };
+		}
 		var data = {};
 		var ct = (res.headers.get('content-type') || '').toLowerCase();
 		if (ct.indexOf('application/json') >= 0) {
