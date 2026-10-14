@@ -166,8 +166,6 @@ class UpgradeBackupService
 			try {
 				$snapshots[] = $this->readManifest($this->getSnapshotFolder($snapshotId), $snapshotId);
 			} catch (\Throwable $e) {
-				// best-effort: a corrupt folder must not break listing; it is
-				// skipped here and removed by purgeIncompleteSnapshotFolders().
 				$this->logger->warning('HealthCheck: skipping unreadable upgrade backup folder', [
 					'app' => UpgradeBackupCatalog::APP_ID,
 					'folder' => $snapshotId,
@@ -239,9 +237,10 @@ class UpgradeBackupService
 				$this->db->executeStatement('ALTER SESSION SET CONSTRAINTS = DEFERRED');
 				$oracleConstraintsDeferred = true;
 			} catch (\Throwable $e) {
-				// best-effort: deferral is an optimisation; on failure the sorted
-				// restore table order keeps foreign keys satisfiable, so the
-				// restore may safely proceed without it.
+				// best-effort: deferred constraints are an optimization; when the
+				// ALTER SESSION fails the FK-safe table order from
+				// UpgradeBackupCatalog::sortedRestoreTables still keeps the
+				// restore consistent, so warn and continue.
 				$this->logger->warning('HealthCheck: Oracle constraints could not be deferred for restore; relying on restore table order.', [
 					'exception' => $e,
 				]);
@@ -386,8 +385,6 @@ class UpgradeBackupService
 		try {
 			$this->getSnapshotFolder($snapshotId)->delete();
 		} catch (\Throwable) {
-			// best-effort: secondary cleanup — a failed delete leaves the folder
-			// for the next sweep; there is nothing to propagate to the caller.
 		}
 	}
 
@@ -811,8 +808,10 @@ class UpgradeBackupService
 					$folder->delete();
 				}
 			} catch (\Throwable $e) {
-				// best-effort: cleanup must not abort the purge loop; the failure is
-				// logged and compensated by a direct folder delete below.
+				// best-effort per snapshot: a corrupt/unreadable manifest or a
+				// failed ->delete() must not abort the purge sweep; the folder is
+				// still removed through the fallback path below so the corrupt
+				// snapshot cannot poison later listSnapshots() runs.
 				$this->logger->warning('HealthCheck: removing corrupt upgrade backup folder', [
 					'app' => UpgradeBackupCatalog::APP_ID,
 					'folder' => $snapshotId,

@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace OCA\LogCheck\Tests\Unit\Service;
 
 use OCA\LogCheck\Exception\UpgradeBackupException;
-use OCA\LogCheck\Migration\LogCheckTableCatalog;
+use OCA\LogCheck\Migration\HealthCheckTableCatalog;
 use OCA\LogCheck\Service\UpgradeBackupCatalog;
 use OCA\LogCheck\Service\UpgradeBackupIntegrity;
 use PHPUnit\Framework\TestCase;
