@@ -312,13 +312,13 @@
 }
 
 #content.app-logcheck .lck-badge[data-state="watching"] .lck-badge__dot {
-	background: var(--color-element-success, var(--color-success));
+	background: var(--color-success, var(--color-border-maxcontrast));
 }
 
 #content.app-logcheck .lck-badge[data-state="stale"] .lck-badge__dot,
 #content.app-logcheck .lck-badge[data-state="degraded"] .lck-badge__dot,
 #content.app-logcheck .lck-badge[data-state="unsupported"] .lck-badge__dot {
-	background: var(--color-element-warning, var(--color-warning));
+	background: var(--color-warning, var(--color-border-maxcontrast));
 }
 
 /* Callouts: use notification-surfaces.css (--lck-tint-*, 5px left border). Do not override here. */
@@ -1220,30 +1220,30 @@
 	margin-top: var(--lck-space-4);
 }
 
-#content.app-logcheck .lck-dialog__form {
+.lck-dialog__form {
 	display: flex;
 	flex-direction: column;
 	min-height: 0;
 }
 
-#content.app-logcheck .lck-dialog__header,
-#content.app-logcheck .lck-dialog__body,
-#content.app-logcheck .lck-dialog__footer {
+.lck-dialog__header,
+.lck-dialog__body,
+.lck-dialog__footer {
 	padding: var(--lck-space-4);
 }
 
-#content.app-logcheck .lck-dialog__body {
+.lck-dialog__body {
 	display: flex;
 	flex-direction: column;
 	gap: var(--lck-space-2);
 }
 
-#content.app-logcheck .lck-dialog__title {
+.lck-dialog__title {
 	margin: 0;
 	font-size: var(--lck-fs-lg);
 }
 
-#content.app-logcheck .lck-dialog__footer {
+.lck-dialog__footer {
 	display: flex;
 	flex-wrap: wrap;
 	justify-content: flex-end;

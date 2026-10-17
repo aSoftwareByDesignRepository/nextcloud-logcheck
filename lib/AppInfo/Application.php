@@ -18,6 +18,8 @@ use OCA\LogCheck\Notification\Notifier;
 use OCA\LogCheck\Repair\EnsureLogCheckSchema;
 use OCA\LogCheck\Repair\UninstallDropTables;
 use OCA\LogCheck\Support\SupportUsLinks;
+use OCA\LogCheck\Service\AccessService;
+use OCA\LogCheck\Support\NavGate;
 use OCP\AppFramework\App;
 use OCP\AppFramework\Bootstrap\IBootContext;
 use OCP\AppFramework\Bootstrap\IBootstrap;
@@ -79,5 +81,16 @@ class Application extends App implements IBootstrap
 
 	public function boot(IBootContext $context): void
 	{
+		$app = $context->getAppContainer();
+		// Menu entry only for entitled users — a static <navigation> entry
+		// would advertise the app to users the entitlement gate denies.
+		NavGate::register(
+			$app,
+			'logcheck.page.index',
+			'app.svg',
+			'HealthCheck',
+			55,
+			static fn(string $uid): bool => $app->get(AccessService::class)->isEntitled($uid),
+		);
 	}
 }

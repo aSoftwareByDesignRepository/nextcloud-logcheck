@@ -160,7 +160,12 @@ test.describe('LogCheck UI invariants (atlas-ui-invariants)', () => {
 			await gotoLogCheck(page, path);
 			await page.waitForLoadState('networkidle').catch(() => {});
 			assertNoConsoleErrors(errs, { allow: [/favicon/i] });
-			await assertNoRawI18nKeys(page, { content: CONTENT });
+			// /logs renders instance log CONTENT — any dotted-lowercase token in a
+			// real log line (fixture uids like snk.docs.denied, foreign-app class
+			// names) is payload, not a leaked i18n key. The app-chrome regions
+			// (filters, buttons, callouts) stay scanned.
+			const exclude = label === 'logs' ? '#lck-logs-viewer, #lck-logs-viewer-raw' : null;
+			await assertNoRawI18nKeys(page, { content: CONTENT, exclude });
 		});
 	}
 

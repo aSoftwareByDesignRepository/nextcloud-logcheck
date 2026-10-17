@@ -82,6 +82,7 @@ final class UpgradeBackupCatalog
 	}
 
 	/**
+	 * @param list<string> $presentTables
 	 * @return list<string>
 	 */
 	public static function sortedRestoreTables(array $presentTables): array

@@ -9,6 +9,9 @@ use OCA\LogCheck\Middleware\EntitlementMiddleware;
 use OCA\LogCheck\Notification\Notifier;
 use OCP\AppFramework\Bootstrap\IBootContext;
 use OCP\AppFramework\Bootstrap\IRegistrationContext;
+use OCP\AppFramework\IAppContainer;
+use OCP\INavigationManager;
+use OCP\IUserSession;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -27,13 +30,46 @@ final class ApplicationBootstrapInvokeTest extends TestCase
 		$app->register($context);
 	}
 
-	public function testBootIsInvokableNoOp(): void
+	public function testBootRegistersNavGateClosure(): void
 	{
-		$boot = $this->createMock(IBootContext::class);
-		$boot->expects(self::never())->method(self::anything());
+		$nav = $this->createMock(INavigationManager::class);
+		$nav->expects(self::once())->method('add')->with(self::isInstanceOf(\Closure::class));
 
-		$app = new Application();
-		$app->boot($boot);
-		self::assertTrue(true);
+		$container = $this->createMock(IAppContainer::class);
+		$container->method('get')->willReturnMap([
+			[INavigationManager::class, $nav],
+		]);
+
+		$boot = $this->createMock(IBootContext::class);
+		$boot->expects(self::once())->method('getAppContainer')->willReturn($container);
+
+		(new Application())->boot($boot);
+	}
+
+	public function testNavGateClosureHidesEntryForAnonymous(): void
+	{
+		$captured = null;
+		$nav = $this->createMock(INavigationManager::class);
+		$nav->method('add')->willReturnCallback(static function (\Closure $entry) use (&$captured): void {
+			$captured = $entry;
+		});
+
+		$session = $this->createMock(IUserSession::class);
+		$session->method('getUser')->willReturn(null);
+
+		$container = $this->createMock(IAppContainer::class);
+		$container->method('get')->willReturnMap([
+			[INavigationManager::class, $nav],
+			[IUserSession::class, $session],
+		]);
+
+		$boot = $this->createMock(IBootContext::class);
+		$boot->method('getAppContainer')->willReturn($container);
+		(new Application())->boot($boot);
+
+		self::assertInstanceOf(\Closure::class, $captured);
+		$entry = $captured();
+		self::assertSame('logcheck', $entry['id']);
+		self::assertSame('hidden', $entry['type']);
 	}
 }

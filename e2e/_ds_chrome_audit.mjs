@@ -977,6 +977,45 @@ async function phaseStates(browser) {
 		record(r)
 	}
 
+	// NavGate: entitlement-gated app-menu entry — denied user must not see
+	// HealthCheck in rendered chrome or the OCS navigation endpoint; the
+	// entitled probe must see it in both (nav_entry_access_leak live proof).
+	{
+		const navCell = { id: 'navgate-entry-visibility', checks: {}, status: 'ok', fails: [] }
+		const deniedState = await loginState(browser, 'denied')
+		const probeState = await loginState(browser, 'probe')
+		const navOf = async (state) => {
+			const c = await browser.newContext({ baseURL: BASE, storageState: state })
+			const p = await c.newPage()
+			await p.goto(`${BASE}/index.php`, { waitUntil: 'domcontentloaded' })
+			await p.waitForTimeout(1500)
+			const domHas = await p.evaluate(() => {
+				for (const a of document.querySelectorAll('#appmenu a[href*="/apps/"], header a[href*="/apps/"]')) {
+					if ((a.getAttribute('href') || '').includes('/apps/logcheck')) return true
+				}
+				return false
+			})
+			const req = await c.request.get(`${BASE}/ocs/v2.php/core/navigation/apps`, {
+				headers: { 'OCS-APIRequest': 'true', Accept: 'application/json' },
+			})
+			const ocsBody = req.ok() ? await req.json() : {}
+			const ocsHas = (ocsBody?.ocs?.data || []).some((e) => e.id === 'logcheck')
+			await c.close()
+			return { domHas, ocsHas }
+		}
+		const deniedNav = await navOf(deniedState)
+		const probeNav = await navOf(probeState)
+		Object.assign(navCell.checks, {
+			denied_dom_hidden: deniedNav.domHas === false,
+			denied_ocs_hidden: deniedNav.ocsHas === false,
+			probe_dom_present: probeNav.domHas === true,
+			probe_ocs_present: probeNav.ocsHas === true,
+		})
+		for (const [k, v] of Object.entries(navCell.checks)) if (v !== true) navCell.fails.push(k)
+		if (navCell.fails.length) navCell.status = 'fail'
+		record(navCell)
+	}
+
 	await ctx.close()
 }
 

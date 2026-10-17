@@ -117,14 +117,7 @@ Wir verbessern diese App mit Rückmeldungen aus der Praxis. Fehlerberichte, Stol
 			<step>OCA\LogCheck\Repair\UninstallDropTables</step>
 		</uninstall>
 	</repair-steps>
-	<navigations>
-		<navigation>
-			<id>logcheck</id>
-			<name>HealthCheck</name>
-			<route>logcheck.page.index</route>
-			<icon>app.svg</icon>
-			<order>55</order>
-			<type>link</type>
-		</navigation>
-	</navigations>
+	<!-- No <navigation> here: the menu entry is registered conditionally via
+	     NavGate — a static entry would advertise the app to users the
+	     access gate denies. -->
 </info>

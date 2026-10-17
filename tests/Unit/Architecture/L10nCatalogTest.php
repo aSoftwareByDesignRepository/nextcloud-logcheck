@@ -81,11 +81,10 @@ class L10nCatalogTest extends TestCase
 
 	public function testRequiredPortfolioLocalesPresent(): void
 	{
-		foreach (['en', 'de', 'fr', 'es', 'da', 'nl', 'it', 'pl', 'sv', 'nb', 'pt_BR'] as $lang) {
+		foreach (['en', 'de', 'fr', 'es', 'da', 'nl', 'it', 'pl', 'sv', 'nb', 'pt', 'pt_BR'] as $lang) {
 			self::assertFileExists($this->root . '/l10n/' . $lang . '.json');
 			self::assertFileExists($this->root . '/l10n/' . $lang . '.js');
 		}
-		self::assertFileDoesNotExist($this->root . '/l10n/pt.json');
 		self::assertFileDoesNotExist($this->root . '/l10n/pt_PT.json');
 	}
 
