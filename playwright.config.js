@@ -3,6 +3,10 @@ const { defineConfig, devices } = require('@playwright/test');
 
 module.exports = defineConfig({
 	testDir: './e2e',
+	globalTeardown: './e2e/global-teardown.mjs',
+
+	globalSetup: './e2e/global-setup.mjs',
+
 	timeout: 90000,
 	retries: 1,
 	workers: 1,
