@@ -1,6 +1,8 @@
 <?php
 /** @var array $_ */
 /** @var \OCP\IL10N $l */
+use OCA\LogCheck\Service\Health\HealthDashboardService;
+
 $status = $_['status'] ?? [];
 $cards = $_['healthCards'] ?? [];
 $summaryState = (string)($_['healthSummaryState'] ?? 'unknown');
@@ -18,15 +20,7 @@ $stateLabels = [
 	'critical' => $l->t('Critical'),
 	'unknown' => $l->t('Unknown'),
 ];
-$cardTitles = [
-	'log' => $l->t('Log alerts'),
-	'jobs' => $l->t('Background jobs'),
-	'php' => $l->t('PHP'),
-	'db' => $l->t('Database'),
-	'disk' => $l->t('Data disk'),
-	'https' => $l->t('HTTPS'),
-	'updates' => $l->t('Updates'),
-];
+$cardTitles = HealthDashboardService::cardTitles($l);
 if (!isset($stateLabels[$summaryState])) {
 	$summaryState = 'unknown';
 }
@@ -106,6 +100,16 @@ include __DIR__ . '/common/page-start.php';
 				</li>
 			<?php endforeach; ?>
 		</ul>
+	<?php endif; ?>
+
+	<?php if ($cards === []): ?>
+		<div class="lck-callout lck-callout--info" role="status">
+			<p><?php p($l->t('All health checks are turned off.')); ?>
+				<?php if (!empty($_['isNcAdmin'])): ?>
+					<a href="<?php p((string)($urls['rules'] ?? '#')); ?>"><?php p($l->t('Turn checks back on in settings.')); ?></a>
+				<?php endif; ?>
+			</p>
+		</div>
 	<?php endif; ?>
 
 	<?php if (!$supported): ?>

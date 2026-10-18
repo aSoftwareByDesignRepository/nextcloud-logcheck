@@ -8,6 +8,7 @@ use OCA\LogCheck\AppInfo\Application;
 use OCA\LogCheck\Exception\ConflictException;
 use OCA\LogCheck\Exception\ForbiddenException;
 use OCA\LogCheck\Exception\ValidationException;
+use OCA\LogCheck\Service\Health\HealthDashboardService;
 use OCP\IDBConnection;
 use Psr\Log\LoggerInterface;
 
@@ -60,6 +61,9 @@ final class SettingsService
 			'max_lines_per_digest' => 10000,
 			'max_fingerprints_in_payload' => 20,
 			'allow_private_webhooks' => false,
+			'health_disabled_probes' => [],
+			'health_https_probe_url' => '',
+			'health_https_probe_ip' => '',
 			'channels' => [
 				'notification' => [
 					'enabled' => true,
@@ -200,7 +204,17 @@ final class SettingsService
 			throw $e;
 		}
 
-		$this->emitAudits($current, $merged, $actorUid);
+		// The save already committed — a failed audit write must not surface
+		// as a failed save (client would retry on a stale version, see 409s).
+		try {
+			$this->emitAudits($current, $merged, $actorUid);
+		} catch (\Throwable $auditError) {
+			// best-effort post-commit side effect — failure logged, not thrown.
+			$this->logger->warning('HealthCheck settings audit record failed', [
+				'app' => Application::APP_ID,
+				'exception' => $auditError,
+			]);
+		}
 		return ['version' => $newVersion, 'settings' => $merged];
 	}
 
@@ -404,6 +418,51 @@ final class SettingsService
 				throw new ForbiddenException('Only Nextcloud admins can allow private webhook addresses.');
 			}
 			$out['allow_private_webhooks'] = InputCoercion::asBool($input['allow_private_webhooks'], 'allow_private_webhooks');
+		}
+
+		if (array_key_exists('health_disabled_probes', $input)) {
+			if (!$isNcAdmin) {
+				throw new ForbiddenException('Only Nextcloud admins can change health checks.');
+			}
+			if (!is_array($input['health_disabled_probes'])) {
+				throw new ValidationException('Invalid checks list.', ['health_disabled_probes' => 'Invalid checks list.']);
+			}
+			$ids = [];
+			foreach ($input['health_disabled_probes'] as $rawId) {
+				if (!is_string($rawId)) {
+					throw new ValidationException('Invalid check.', ['health_disabled_probes' => 'Invalid check.']);
+				}
+				$id = strtolower(trim($rawId));
+				if ($id === '') {
+					continue;
+				}
+				if (!in_array($id, HealthDashboardService::PROBE_IDS, true)) {
+					throw new ValidationException('Unknown check.', ['health_disabled_probes' => 'Unknown check.']);
+				}
+				$ids[] = $id;
+			}
+			$out['health_disabled_probes'] = array_values(array_unique($ids));
+		}
+
+		// HTTPS self-check target: an admin may pin which address the card
+		// checks (e.g. the internal name from overwrite.cli.url while the
+		// browser hits the public ingress, or a fixed connect-IP under
+		// split-horizon DNS). Never an arbitrary outbound target — the probe
+		// itself still enforces host-match + /status.php + SSRF policy.
+		if (array_key_exists('health_https_probe_url', $input) || array_key_exists('health_https_probe_ip', $input)) {
+			if (!$isNcAdmin) {
+				throw new ForbiddenException('Only Nextcloud admins can change health checks.');
+			}
+			if (array_key_exists('health_https_probe_url', $input)) {
+				$out['health_https_probe_url'] = self::normalizeProbeTargetUrl(
+					InputCoercion::asString($input['health_https_probe_url'], 'health_https_probe_url')
+				);
+			}
+			if (array_key_exists('health_https_probe_ip', $input)) {
+				$out['health_https_probe_ip'] = self::normalizeProbeTargetIp(
+					InputCoercion::asString($input['health_https_probe_ip'], 'health_https_probe_ip')
+				);
+			}
 		}
 
 		if (isset($input['channels']) && is_array($input['channels'])) {
@@ -677,6 +736,90 @@ final class SettingsService
 	}
 
 	/**
+	 * Normalize the admin-pinned HTTPS self-check base URL. Empty clears the
+	 * pin. Anything stored here is later constrained a second time by
+	 * SafeHttpClient::getInstanceStatus (canonical host match, /status.php
+	 * path, SSRF pin) — this boundary keeps obviously-broken values out of
+	 * the durable settings row so the card degrades honestly instead of
+	 * pointing at a shape that can never succeed.
+	 */
+	private static function normalizeProbeTargetUrl(string $raw): string
+	{
+		$url = trim($raw);
+		if ($url === '') {
+			return '';
+		}
+		if (strlen($url) > 2048) {
+			throw new ValidationException(
+				'Check address is too long.',
+				['health_https_probe_url' => 'Check address is too long.'],
+			);
+		}
+		$parts = parse_url($url);
+		if (!is_array($parts) || empty($parts['scheme']) || empty($parts['host'])) {
+			throw new ValidationException(
+				'Enter a valid HTTPS address.',
+				['health_https_probe_url' => 'Enter a valid HTTPS address, e.g. https://cloud.example.'],
+			);
+		}
+		if (strtolower((string)$parts['scheme']) !== 'https') {
+			throw new ValidationException(
+				'Only HTTPS addresses can be checked.',
+				['health_https_probe_url' => 'Only HTTPS addresses can be checked.'],
+			);
+		}
+		if (isset($parts['user']) || isset($parts['pass']) || isset($parts['query']) || isset($parts['fragment'])) {
+			throw new ValidationException(
+				'The address may not contain credentials, a query, or a fragment.',
+				['health_https_probe_url' => 'The address may not contain credentials, a query, or a fragment.'],
+			);
+		}
+		if (isset($parts['port']) && ($parts['port'] < 1 || $parts['port'] > 65535)) {
+			throw new ValidationException(
+				'Enter a valid HTTPS address.',
+				['health_https_probe_url' => 'The port must be between 1 and 65535.'],
+			);
+		}
+		$path = (string)($parts['path'] ?? '');
+		// Pasted ".../status.php" means the same base — strip it rather than
+		// storing an address whose own status URL can never validate.
+		if (strcasecmp($path, '/status.php') === 0) {
+			$path = '';
+		}
+		if ($path !== '' && $path !== '/' && preg_match('#^/[A-Za-z0-9_-]+$#', $path) !== 1) {
+			throw new ValidationException(
+				'Enter a valid HTTPS address.',
+				['health_https_probe_url' => 'The address may contain at most one path segment (the install folder).'],
+			);
+		}
+		$host = (string)$parts['host'];
+		return 'https://' . $host
+			. (isset($parts['port']) ? ':' . (int)$parts['port'] : '')
+			. ($path === '/' ? '' : $path);
+	}
+
+	/**
+	 * Normalize the optional pinned connect address (dial this IP while the
+	 * URL's host name is kept for TLS/SNI/Host). Canonical inet_ntop form so
+	 * stored and compared values are identical strings.
+	 */
+	private static function normalizeProbeTargetIp(string $raw): string
+	{
+		$ip = trim($raw);
+		if ($ip === '') {
+			return '';
+		}
+		$packed = @inet_pton($ip);
+		if ($packed === false) {
+			throw new ValidationException(
+				'Not a valid IP address.',
+				['health_https_probe_ip' => 'Not a valid IP address.'],
+			);
+		}
+		return inet_ntop($packed);
+	}
+
+	/**
 	 * @param array<string, mixed> $before
 	 * @param array<string, mixed> $after
 	 */
@@ -690,6 +833,25 @@ final class SettingsService
 		}
 		if ((bool)$before['allow_private_webhooks'] !== (bool)$after['allow_private_webhooks']) {
 			$this->auditService->log($actorUid, 'private_webhooks_toggled', ['enabled' => (bool)$after['allow_private_webhooks']]);
+		}
+		$beforeProbes = $before['health_disabled_probes'] ?? [];
+		$afterProbes = $after['health_disabled_probes'] ?? [];
+		if ($beforeProbes !== $afterProbes) {
+			$this->auditService->log($actorUid, 'health_probes_changed', ['disabled' => implode(',', $afterProbes)]);
+		}
+		$beforeTarget = [
+			(string)($before['health_https_probe_url'] ?? ''),
+			(string)($before['health_https_probe_ip'] ?? ''),
+		];
+		$afterTarget = [
+			(string)($after['health_https_probe_url'] ?? ''),
+			(string)($after['health_https_probe_ip'] ?? ''),
+		];
+		if ($beforeTarget !== $afterTarget) {
+			$this->auditService->log($actorUid, 'health_probe_target_changed', [
+				'url' => $afterTarget[0] !== '' ? $afterTarget[0] : null,
+				'ip' => $afterTarget[1] !== '' ? $afterTarget[1] : null,
+			]);
 		}
 		$beforeAdmins = $before['access']['app_admins'] ?? [];
 		$afterAdmins = $after['access']['app_admins'] ?? [];

@@ -109,7 +109,15 @@ async function shot(page, file, opts = {}) {
 		await expect(page.locator(opts.waitFor).first()).toBeVisible({ timeout: 45_000 });
 	}
 	if (opts.settleMs) {
-		await page.waitForTimeout(opts.settleMs);
+		// Wait for real animation settle (not a blind sleep): resolves early when
+		// all running animations finish; settleMs is only the worst-case budget.
+		await page
+			.waitForFunction(
+				() => document.getAnimations({ subtree: true }).every((a) => a.playState === 'finished'),
+				undefined,
+				{ timeout: opts.settleMs }
+			)
+			.catch(() => {});
 	}
 	await page.screenshot({ path: file, fullPage: !!opts.fullPage });
 	const st = fs.statSync(file);

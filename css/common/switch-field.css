@@ -15,11 +15,15 @@
 
 #content.app-logcheck #app-content.lck-app .lck-switch-field__input,
 .lck-nc-admin-settings .lck-switch-field__input {
+	/* The native input is visually replaced by the track, so its geometry
+	   must cover the whole control — not a 1px dot at the corner. AT and
+	   geometry checks (atlas-ui-invariants label-band rule) then see the
+	   real control bounds; clip/opacity keep it invisible, pointer-events
+	   stays off so the label owns all interaction. */
 	position: absolute;
-	inset-inline-start: 0;
-	top: 0;
-	width: 1px;
-	height: 1px;
+	inset: 0;
+	width: 100%;
+	height: 100%;
 	min-width: 0;
 	min-height: 0;
 	max-width: none;

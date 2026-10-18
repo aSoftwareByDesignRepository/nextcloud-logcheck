@@ -747,6 +747,63 @@ async function phaseDialogs(browser) {
 }
 
 /* ───────────────────────────── states ───────────────────────────── */
+/**
+ * Visual defect lck-vis-toast-text-link-overlap-narrow: at <=~430px the
+ * single-row flex toast crushed .lck-toast__text to ~24px and the nowrap
+ * feedback link painted over the message mid-word. Permanent leg: error
+ * toast at 320px — text/link/close bounding boxes must not intersect,
+ * text must keep a readable column, nothing may overflow the viewport.
+ */
+async function probeToastNarrow(browser, adminState) {
+	const r = { id: 'toast-narrow-no-overlap', checks: {}, status: 'ok', fails: [] }
+	const nctx = await browser.newContext({ baseURL: BASE, storageState: adminState, viewport: { width: 320, height: 640 } })
+	const np = await nctx.newPage()
+	await np.route('**/apps/logcheck/api/settings', (route) => {
+		if (route.request().method() === 'PUT') return route.abort('failed')
+		return route.continue()
+	})
+	await np.goto(`${BASE}${ROUTES['settings-rules'].path}`, { waitUntil: 'domcontentloaded' })
+	await settle(np)
+	await np.locator('#lck-settings-form button[type="submit"]').first().click()
+	await np.waitForTimeout(1200)
+	r.checks = await np.evaluate(() => {
+		const rectOf = (sel) => {
+			const el = document.querySelector(sel)
+			if (!el) return null
+			const b = el.getBoundingClientRect()
+			return { l: b.left, r: b.right, t: b.top, b: b.bottom, w: b.width, h: b.height }
+		}
+		const hit = (a, b) => !!(a && b) && !(a.r <= b.l || b.r <= a.l || a.b <= b.t || b.b <= a.t)
+		const toast = rectOf('.lck-toast--error')
+		const text = rectOf('.lck-toast--error .lck-toast__text')
+		const link = rectOf('.lck-toast--error .lck-toast__feedback')
+		const close = rectOf('.lck-toast--error .lck-toast__close')
+		const vw = document.documentElement.clientWidth
+		return {
+			vw, toast, text, link, close,
+			overlapTextLink: hit(text, link),
+			overlapTextClose: hit(text, close),
+			overlapLinkClose: hit(link, close),
+			textOverflowsToast: !!(text && toast && (text.r > toast.r + 1 || text.l < toast.l - 1)),
+			toastOverflowsViewport: !!(toast && toast.r > vw + 1),
+		}
+	})
+	await snap(np, 'state__toast-320', { fullPage: true })
+	if (!r.checks.toast) r.fails.push('no error toast rendered at 320')
+	if (!r.checks.text) r.fails.push('error toast has no .lck-toast__text')
+	if (!r.checks.link) r.fails.push('error toast missing feedback link (family contract)')
+	if (!r.checks.close) r.fails.push('error toast missing close control')
+	if (r.checks.overlapTextLink) r.fails.push('text/link bounding boxes intersect')
+	if (r.checks.overlapTextClose) r.fails.push('text/close bounding boxes intersect')
+	if (r.checks.overlapLinkClose) r.fails.push('link/close bounding boxes intersect')
+	if (r.checks.textOverflowsToast) r.fails.push('text column overflows the toast box')
+	if (r.checks.toastOverflowsViewport) r.fails.push('toast overflows the 320 viewport')
+	if (r.checks.text && r.checks.text.w < 60) r.fails.push(`text column crushed to ${Math.round(r.checks.text.w)}px`)
+	await nctx.close()
+	if (r.fails.length) r.status = 'fail'
+	record(r)
+}
+
 async function phaseStates(browser) {
 	// anon → login redirect
 	const anon = await browser.newContext({ baseURL: BASE, viewport: { width: 1440, height: 900 } })
@@ -799,6 +856,10 @@ async function phaseStates(browser) {
 	if (errFails.length) { errCell.status = 'fail'; errCell.fails = errFails }
 	record(errCell)
 	await page.unroute('**/apps/logcheck/api/settings')
+
+	// lck-vis-toast-text-link-overlap-narrow permanent leg (also runnable
+	// standalone via phase 'toast' for the learned-regression assert).
+	await probeToastNarrow(browser, adminState)
 
 	// aria-invalid painted (learned class aria_invalid_unpainted / wcag-331):
 	// real 422 save — alerts: enable excerpts without CONFIRM → server
@@ -1014,6 +1075,97 @@ async function phaseStates(browser) {
 		for (const [k, v] of Object.entries(navCell.checks)) if (v !== true) navCell.fails.push(k)
 		if (navCell.fails.length) navCell.status = 'fail'
 		record(navCell)
+	}
+
+	// New surface (health-checks wave): the "Checks on the Health page"
+	// fieldset on settings/rules is NC-admin only — must render fully for
+	// lck_ds_admin and be absent (not merely hidden) for the app admin.
+	{
+		const r = { id: 'rules-health-probes-fieldset', checks: {}, status: 'ok', fails: [] }
+		await page.goto(`${BASE}${ROUTES['settings-rules'].path}`, { waitUntil: 'domcontentloaded' })
+		await settle(page)
+		r.checks.admin = await page.evaluate(() => ({
+			fieldset: !!document.getElementById('lck-health-probes'),
+			switches: document.querySelectorAll('#lck-health-probes input[name="health_probes[]"]').length,
+			urlInput: !!document.getElementById('lck-probe-target-url'),
+			ipInput: !!document.getElementById('lck-probe-target-ip'),
+			ncAdminAttr: document.getElementById('lck-settings-form')?.getAttribute('data-nc-admin'),
+			switchRolesOk: [...document.querySelectorAll('#lck-health-probes input[name="health_probes[]"]')].every(
+				(el) => el.getAttribute('role') === 'switch' && document.querySelector(`label[for="${el.id}"]`)
+			),
+		}))
+		await ensureSectionInFrame(page, '#lck-health-probes')
+		await snap(page, 'state__rules-health-probes-admin')
+		if (r.checks.admin.fieldset !== true) r.fails.push('admin: fieldset missing')
+		if (r.checks.admin.switches !== 7) r.fails.push(`admin: ${r.checks.admin.switches} probe switches (want 7)`)
+		if (!r.checks.admin.urlInput || !r.checks.admin.ipInput) r.fails.push('admin: https probe target inputs missing')
+		if (r.checks.admin.ncAdminAttr !== '1') r.fails.push(`admin: data-nc-admin=${r.checks.admin.ncAdminAttr}`)
+		if (r.checks.admin.switchRolesOk !== true) r.fails.push('admin: probe input lacks role=switch or label')
+		const probeState = await loginState(browser, 'probe')
+		const pctx = await browser.newContext({ baseURL: BASE, storageState: probeState, viewport: { width: 1440, height: 900 } })
+		const pp = await pctx.newPage()
+		await pp.goto(`${BASE}${ROUTES['settings-rules'].path}`, { waitUntil: 'domcontentloaded' })
+		await settle(pp)
+		r.checks.appAdmin = await pp.evaluate(() => ({
+			fieldset: !!document.getElementById('lck-health-probes'),
+			switches: document.querySelectorAll('input[name="health_probes[]"]').length,
+			ncAdminAttr: document.getElementById('lck-settings-form')?.getAttribute('data-nc-admin'),
+		}))
+		await pctx.close()
+		if (r.checks.appAdmin.fieldset !== false || r.checks.appAdmin.switches !== 0)
+			r.fails.push(`app admin sees health-probes fieldset — admin-only leak: ${JSON.stringify(r.checks.appAdmin)}`)
+		if (r.checks.appAdmin.ncAdminAttr !== '0') r.fails.push(`app admin data-nc-admin=${r.checks.appAdmin.ncAdminAttr} (want 0)`)
+		if (r.fails.length) r.status = 'fail'
+		record(r)
+	}
+
+	// New surface: all health checks off → home renders the info callout
+	// (role=status, admin CTA link) instead of a card grid — then restore.
+	{
+		const r = { id: 'home-all-checks-off', checks: {}, status: 'ok', fails: [] }
+		const putSettings = async (disabled) => page.evaluate(async (list) => {
+			const token = (window.OC && window.OC.requestToken)
+				|| document.querySelector('head[data-requesttoken]')?.getAttribute('data-requesttoken') || ''
+			const headers = { requesttoken: token, 'OCS-APIRequest': 'true', Accept: 'application/json', 'Content-Type': 'application/json' }
+			const got = await fetch('/index.php/apps/logcheck/api/settings', { credentials: 'same-origin', headers })
+			if (!got.ok) return { error: `GET settings HTTP ${got.status}` }
+			const dto = await got.json()
+			const res = await fetch('/index.php/apps/logcheck/api/settings', {
+				method: 'PUT', credentials: 'same-origin', headers,
+				body: JSON.stringify({ expected_version: dto.version, settings: { health_disabled_probes: list } }),
+			})
+			return { status: res.status, body: await res.json().catch(() => null) }
+		}, disabled)
+		try {
+			r.checks.disableAll = await putSettings(['log', 'jobs', 'php', 'db', 'disk', 'https', 'updates'])
+			if (r.checks.disableAll.status !== 200) r.fails.push(`disable-all PUT HTTP ${r.checks.disableAll.status}`)
+			await page.goto(`${BASE}${ROUTES.home.path}`, { waitUntil: 'domcontentloaded' })
+			await settle(page)
+			r.checks.emptyState = await page.evaluate(() => {
+				const callout = document.querySelector('.lck-callout--info')
+				return {
+					cards: document.querySelectorAll('.lck-health-card').length,
+					calloutPresent: !!callout,
+					calloutRole: callout?.getAttribute('role') ?? null,
+					ctaLink: !!callout?.querySelector('a[href]'),
+				}
+			})
+			await ensureSectionInFrame(page, '.lck-callout--info, .lck-home')
+			await snap(page, 'state__home-all-checks-off')
+			if (r.checks.emptyState.cards !== 0) r.fails.push(`${r.checks.emptyState.cards} cards rendered with all checks off`)
+			if (!r.checks.emptyState.calloutPresent) r.fails.push('info callout missing')
+			if (r.checks.emptyState.calloutRole !== 'status') r.fails.push(`callout role=${r.checks.emptyState.calloutRole}`)
+			if (!r.checks.emptyState.ctaLink) r.fails.push('admin CTA link missing in callout')
+		} finally {
+			r.checks.restore = await putSettings([])
+			if (r.checks.restore.status !== 200) r.fails.push(`restore PUT HTTP ${r.checks.restore.status}`)
+			await page.goto(`${BASE}${ROUTES.home.path}`, { waitUntil: 'domcontentloaded' })
+			await settle(page)
+			r.checks.cardsAfterRestore = await page.evaluate(() => document.querySelectorAll('.lck-health-card').length)
+			if (r.checks.cardsAfterRestore !== 7) r.fails.push(`restore left ${r.checks.cardsAfterRestore} cards (want 7)`)
+		}
+		if (r.fails.length) r.status = 'fail'
+		record(r)
 	}
 
 	await ctx.close()
@@ -1239,6 +1391,7 @@ try {
 	if (PHASE === 'sweep') await phaseSweep(browser)
 	else if (PHASE === 'dialogs') await phaseDialogs(browser)
 	else if (PHASE === 'states') await phaseStates(browser)
+	else if (PHASE === 'toast') await probeToastNarrow(browser, await loginState(browser, 'admin'))
 	else if (PHASE === 'theatre') await phaseTheatre(browser)
 	else if (PHASE === 'a11y') await phaseA11y(browser)
 	else throw new Error('unknown phase ' + PHASE)

@@ -4,15 +4,21 @@ declare(strict_types=1);
 
 namespace OCA\LogCheck\Service;
 
+use OCA\LogCheck\Exception\HttpTransportException;
+use OCP\ICertificateManager;
+
 /**
  * SSRF-safe HTTPS client. Curl is required: CURLOPT_RESOLVE pins the validated IP
  * while preserving TLS/SNI hostname checks. No stream/hostname reconnect fallback
- * (DNS-rebinding TOCTOU).
+ * (DNS-rebinding TOCTOU). TLS trusts the same bundle Nextcloud's HTTP client uses
+ * (shipped CAs + admin-uploaded roots + system bundle) so private-CA instances —
+ * home labs behind self-signed/.local certs — verify like the rest of Nextcloud.
  */
 final class SafeHttpClient
 {
 	public function __construct(
 		private readonly SsrfGuard $ssrfGuard,
+		private readonly ICertificateManager $certificateManager,
 	) {
 	}
 
@@ -34,9 +40,14 @@ final class SafeHttpClient
 	 * Host must match $expectedHost; path must end with /status.php under optional webroot;
 	 * no query/fragment/userinfo. Private IPs allowed only after those checks.
 	 *
+	 * $forceIp (admin-configured connect address) dials a chosen leg — e.g. the
+	 * public ingress IP while internal DNS resolves the name split-horizon —
+	 * without touching TLS/SNI/Host. SsrfGuard::pinTo applies the same block
+	 * policy to the literal that pin() applies to resolved addresses.
+	 *
 	 * @return array{status: int, body: string}
 	 */
-	public function getInstanceStatus(string $absoluteStatusUrl, string $expectedHost): array
+	public function getInstanceStatus(string $absoluteStatusUrl, string $expectedHost, ?string $forceIp = null): array
 	{
 		if (!function_exists('curl_init')) {
 			throw new \RuntimeException('HTTPS self-check requires PHP curl.');
@@ -82,7 +93,9 @@ final class SafeHttpClient
 		$port = isset($parts['port']) ? ':' . (int)$parts['port'] : '';
 		$hostForUrl = self::hostForUrl($hostAscii);
 		$canonical = 'https://' . $hostForUrl . $port . $path;
-		$pin = $this->ssrfGuard->pin($canonical, true);
+		$pin = $forceIp !== null
+			? $this->ssrfGuard->pinTo($canonical, $forceIp, true)
+			: $this->ssrfGuard->pin($canonical, true);
 		// Soft budget: total 1.5s so Health page stays responsive (HCK NFR).
 		return $this->requestViaCurl($pin, 'GET', null, 1, 1);
 	}
@@ -145,6 +158,10 @@ final class SafeHttpClient
 				'Accept: */*',
 			],
 		];
+		$caBundle = $this->caBundlePath();
+		if ($caBundle !== null) {
+			$opts[CURLOPT_CAINFO] = $caBundle;
+		}
 		if ($method === 'POST') {
 			$opts[CURLOPT_POST] = true;
 			$opts[CURLOPT_POSTFIELDS] = $body ?? '';
@@ -156,13 +173,31 @@ final class SafeHttpClient
 		$response = curl_exec($ch);
 		$status = (int)curl_getinfo($ch, CURLINFO_RESPONSE_CODE);
 		$errno = curl_errno($ch);
+		$error = (string)curl_error($ch);
 		curl_close($ch);
 		if ($errno !== 0 || $response === false) {
-			throw new \RuntimeException($method === 'POST'
-				? 'Webhook failed (HTTP 0).'
-				: 'HTTPS request failed (HTTP 0).');
+			throw new HttpTransportException(
+				$method === 'POST' ? 'Webhook failed (HTTP 0).' : 'HTTPS request failed (HTTP 0).',
+				$errno,
+				$error,
+			);
 		}
 		return ['status' => $status, 'body' => is_string($response) ? mb_substr($response, 0, 2048) : ''];
+	}
+
+	/**
+	 * Same trust store as Nextcloud's own HTTP client: shipped CA bundle +
+	 * admin-uploaded roots + system bundle (ICertificateManager). Null → curl
+	 * falls back to its compiled-in default store.
+	 */
+	private function caBundlePath(): ?string
+	{
+		try {
+			$path = $this->certificateManager->getAbsoluteBundlePath();
+		} catch (\Throwable) {
+			return null;
+		}
+		return is_string($path) && $path !== '' && is_readable($path) ? $path : null;
 	}
 
 	public function assertSuccess(array $result): void

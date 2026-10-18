@@ -26,6 +26,74 @@ final class SsrfGuard
 	 */
 	public function pin(string $url, bool $allowPrivate = false): array
 	{
+		$target = $this->parseAllowedUrl($url);
+
+		$ips = $this->resolveIps($target['host']);
+		if ($ips === []) {
+			throw new ValidationException('Webhook URL is not allowed.', ['url' => 'Webhook URL is not allowed.'], 'LCK_HOST_UNRESOLVED');
+		}
+
+		$chosen = null;
+		foreach ($ips as $ip) {
+			if ($this->isAlwaysBlocked($ip)) {
+				throw new ValidationException('Webhook URL is not allowed.', ['url' => 'Webhook URL is not allowed.'], 'LCK_INVALID_URL');
+			}
+			if ($this->isBlockedIp($ip) && !$allowPrivate) {
+				throw new ValidationException('Webhook URL is not allowed.', ['url' => 'Webhook URL is not allowed.'], 'LCK_INVALID_URL');
+			}
+			if ($chosen === null) {
+				$chosen = $ip;
+			}
+		}
+		if ($chosen === null) {
+			throw new ValidationException('Webhook URL is not allowed.', ['url' => 'Webhook URL is not allowed.'], 'LCK_INVALID_URL');
+		}
+
+		return [
+			'url' => $url,
+			'host' => $target['host'],
+			'ip' => $chosen,
+			'port' => $target['port'],
+			'path' => $target['path'],
+		];
+	}
+
+	/**
+	 * Like pin(), but the caller supplies the connect address: the URL's host is
+	 * kept for TLS/SNI/Host while the dial goes to $ip (admin-pinned probe
+	 * target — e.g. check the external address while internal DNS answers a
+	 * split-horizon name). The literal IP passes the same block policy as a
+	 * resolved one — allowPrivate still never admits metadata endpoints.
+	 *
+	 * @return array{url: string, host: string, ip: string, port: int, path: string}
+	 */
+	public function pinTo(string $url, string $ip, bool $allowPrivate = false): array
+	{
+		$target = $this->parseAllowedUrl($url);
+		$ip = trim($ip);
+		if ($ip === '' || filter_var($ip, FILTER_VALIDATE_IP) === false) {
+			throw new ValidationException('Webhook URL is not allowed.', ['url' => 'Webhook URL is not allowed.'], 'LCK_INVALID_URL');
+		}
+		if ($this->isAlwaysBlocked($ip) || ($this->isBlockedIp($ip) && !$allowPrivate)) {
+			throw new ValidationException('Webhook URL is not allowed.', ['url' => 'Webhook URL is not allowed.'], 'LCK_INVALID_URL');
+		}
+		return [
+			'url' => $url,
+			'host' => $target['host'],
+			'ip' => $ip,
+			'port' => $target['port'],
+			'path' => $target['path'],
+		];
+	}
+
+	/**
+	 * Shared URL-shape validation for pin()/pinTo(): https only, no userinfo,
+	 * no metadata host names; returns normalized host + port + path.
+	 *
+	 * @return array{host: string, port: int, path: string}
+	 */
+	private function parseAllowedUrl(string $url): array
+	{
 		$parts = parse_url($url);
 		if (!is_array($parts) || empty($parts['scheme']) || empty($parts['host'])) {
 			throw new ValidationException('Webhook URL is not allowed.', ['url' => 'Webhook URL is not allowed.'], 'LCK_INVALID_URL');
@@ -54,27 +122,6 @@ final class SsrfGuard
 			throw new ValidationException('Webhook URL is not allowed.', ['url' => 'Webhook URL is not allowed.'], 'LCK_INVALID_URL');
 		}
 
-		$ips = $this->resolveIps($hostAscii);
-		if ($ips === []) {
-			throw new ValidationException('Webhook URL is not allowed.', ['url' => 'Webhook URL is not allowed.'], 'LCK_INVALID_URL');
-		}
-
-		$chosen = null;
-		foreach ($ips as $ip) {
-			if ($this->isAlwaysBlocked($ip)) {
-				throw new ValidationException('Webhook URL is not allowed.', ['url' => 'Webhook URL is not allowed.'], 'LCK_INVALID_URL');
-			}
-			if ($this->isBlockedIp($ip) && !$allowPrivate) {
-				throw new ValidationException('Webhook URL is not allowed.', ['url' => 'Webhook URL is not allowed.'], 'LCK_INVALID_URL');
-			}
-			if ($chosen === null) {
-				$chosen = $ip;
-			}
-		}
-		if ($chosen === null) {
-			throw new ValidationException('Webhook URL is not allowed.', ['url' => 'Webhook URL is not allowed.'], 'LCK_INVALID_URL');
-		}
-
 		$port = isset($parts['port']) ? (int)$parts['port'] : 443;
 		if ($port <= 0 || $port > 65535) {
 			throw new ValidationException('Webhook URL is not allowed.', ['url' => 'Webhook URL is not allowed.'], 'LCK_INVALID_URL');
@@ -88,9 +135,7 @@ final class SsrfGuard
 		}
 
 		return [
-			'url' => $url,
 			'host' => $hostAscii,
-			'ip' => $chosen,
 			'port' => $port,
 			'path' => $path,
 		];
@@ -102,18 +147,26 @@ final class SsrfGuard
 		if (filter_var($host, FILTER_VALIDATE_IP)) {
 			return [$host];
 		}
-		$records = @dns_get_record($host, DNS_A + DNS_AAAA);
-		if (!is_array($records)) {
-			$ipv4 = @gethostbynamel($host);
-			return is_array($ipv4) ? array_values($ipv4) : [];
-		}
 		$ips = [];
-		foreach ($records as $rec) {
-			if (!empty($rec['ip'])) {
-				$ips[] = (string)$rec['ip'];
+		$records = @dns_get_record($host, DNS_A + DNS_AAAA);
+		if (is_array($records)) {
+			foreach ($records as $rec) {
+				if (!empty($rec['ip'])) {
+					$ips[] = (string)$rec['ip'];
+				}
+				if (!empty($rec['ipv6'])) {
+					$ips[] = (string)$rec['ipv6'];
+				}
 			}
-			if (!empty($rec['ipv6'])) {
-				$ips[] = (string)$rec['ipv6'];
+		}
+		// dns_get_record does unicast DNS only — it misses /etc/hosts and mDNS
+		// (.local home servers). gethostbynamel goes through nsswitch, the same
+		// resolution curl applies at connect time. IPv4-only; still a strict
+		// superset fix, never a downgrade (results are pinned + re-validated).
+		$nss = @gethostbynamel($host);
+		if (is_array($nss)) {
+			foreach ($nss as $ip) {
+				$ips[] = (string)$ip;
 			}
 		}
 		return array_values(array_unique($ips));

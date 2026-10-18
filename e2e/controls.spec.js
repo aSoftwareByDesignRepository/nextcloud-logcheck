@@ -51,8 +51,8 @@ test.describe('All shipped controls work', () => {
 		await gotoLogCheck(page, '/logs');
 		await expect(page.locator('#lck-logs-viewer')).toBeVisible({ timeout: 15000 });
 
-		// Wait for initial tail
-		await page.waitForTimeout(500);
+		// Initial tail finished when rows or the empty state rendered.
+		await expect(page.locator('.lck-logs-row, #lck-logs-empty:not([hidden])').first()).toBeAttached({ timeout: 15000 });
 		await expect(page.locator('#lck-logs-reload')).toBeVisible();
 		await page.locator('#lck-logs-reload').click();
 		await page.waitForResponse((r) => r.url().includes('/api/logs/tail') && r.status() < 500);

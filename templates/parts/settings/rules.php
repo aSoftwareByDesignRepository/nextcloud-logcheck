@@ -1,12 +1,18 @@
 <?php
 /** @var array $_ */
 /** @var \OCP\IL10N $l */
+use OCA\LogCheck\Service\Health\HealthDashboardService;
+
 $settings = $_['settings'] ?? [];
 $minLevel = (int)($settings['min_level'] ?? 3);
 $coalesce = (int)($settings['coalesce_seconds'] ?? 900);
 $mutes = $settings['mutes'] ?? [];
+$isNcAdmin = !empty($_['isNcAdmin']);
+$disabledProbes = is_array($settings['health_disabled_probes'] ?? null)
+	? array_map('strval', $settings['health_disabled_probes'])
+	: [];
 ?>
-<form id="lck-settings-form" class="lck-form" data-section="rules">
+<form id="lck-settings-form" class="lck-form" data-section="rules" data-nc-admin="<?php p($isNcAdmin ? '1' : '0'); ?>">
 	<input type="hidden" name="expected_version" value="<?php p((string)($_['settingsVersion'] ?? '1')); ?>">
 	<input type="hidden" name="min_level" id="lck-min-level" value="<?php p((string)$minLevel); ?>">
 	<input type="hidden" name="coalesce_seconds" id="lck-pace-seconds" value="<?php p((string)$coalesce); ?>">
@@ -57,6 +63,51 @@ $mutes = $settings['mutes'] ?? [];
 			p(implode(', ', $apps));
 		?>">
 	</details>
+
+	<?php if ($isNcAdmin): ?>
+	<fieldset class="lck-checks" id="lck-health-probes" data-field="health_disabled_probes">
+		<legend><?php p($l->t('Checks on the Health page')); ?></legend>
+		<p class="lck-muted"><?php p($l->t('Turn off checks that cannot run on this server.')); ?></p>
+		<?php foreach (HealthDashboardService::cardTitles($l) as $probeId => $probeLabel): ?>
+		<div class="lck-switch-field">
+			<input type="checkbox" class="lck-switch-field__input" role="switch"
+				id="lck-probe-<?php p($probeId); ?>"
+				name="health_probes[]" value="<?php p($probeId); ?>"
+				<?php if (!in_array($probeId, $disabledProbes, true)): ?>checked<?php endif; ?>>
+			<label class="lck-switch-field__label" for="lck-probe-<?php p($probeId); ?>">
+				<span class="lck-switch-field__track" aria-hidden="true"></span>
+				<span class="lck-switch-field__text"><?php p($probeLabel); ?></span>
+			</label>
+		</div>
+		<?php endforeach; ?>
+		<?php
+		$probeTargetUrl = is_string($settings['health_https_probe_url'] ?? null) ? $settings['health_https_probe_url'] : '';
+		$probeTargetIp = is_string($settings['health_https_probe_ip'] ?? null) ? $settings['health_https_probe_ip'] : '';
+		?>
+		<div class="lck-field" data-field="health_https_probe_url">
+			<label for="lck-probe-target-url"><?php p($l->t('HTTPS check address')); ?></label>
+			<input class="form-input" type="text" id="lck-probe-target-url" name="health_https_probe_url"
+				value="<?php p($probeTargetUrl); ?>"
+				placeholder="https://cloud.example.eu"
+				spellcheck="false" autocapitalize="none" autocomplete="off"
+				aria-describedby="lck-probe-target-url-hint">
+			<p class="lck-muted" id="lck-probe-target-url-hint"><?php
+				p($l->t('Address the HTTPS card checks. Leave empty to use overwrite.cli.url or the address this browser uses.'));
+			?></p>
+		</div>
+		<div class="lck-field" data-field="health_https_probe_ip">
+			<label for="lck-probe-target-ip"><?php p($l->t('Connect to this address instead (optional)')); ?></label>
+			<input class="form-input" type="text" id="lck-probe-target-ip" name="health_https_probe_ip"
+				value="<?php p($probeTargetIp); ?>"
+				placeholder="203.0.113.10"
+				spellcheck="false" autocapitalize="none" autocomplete="off" inputmode="decimal"
+				aria-describedby="lck-probe-target-ip-hint">
+			<p class="lck-muted" id="lck-probe-target-ip-hint"><?php
+				p($l->t('Dial this IP while keeping the name above — for example the public address while internal DNS resolves the name privately.'));
+			?></p>
+		</div>
+	</fieldset>
+	<?php endif; ?>
 
 	<div class="lck-form-actions">
 		<button type="submit" class="lck-btn lck-btn--primary"><?php p($l->t('Save')); ?></button>

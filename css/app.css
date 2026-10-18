@@ -207,6 +207,7 @@
 
 #content.app-logcheck .lck-chip {
 	box-sizing: border-box;
+	position: relative;
 	min-height: var(--lck-touch, 44px);
 	min-width: var(--lck-touch, 44px);
 	padding: var(--lck-space-2) var(--lck-space-4);
@@ -221,6 +222,18 @@
 #content.app-logcheck .lck-chip:focus-visible {
 	outline: var(--lck-focus, 3px solid var(--color-primary-element));
 	outline-offset: var(--lck-focus-offset, 2px);
+}
+
+/* Replaced chip control: the sr-only input is the semantic control, so its
+   geometry must cover the chip — not a 1px dot anchored to a far ancestor
+   (atlas-ui-invariants label-band rule). */
+#content.app-logcheck #app-content .lck-chip > input.lck-sr-only {
+	inset: 0;
+	width: 100% !important;
+	height: 100% !important;
+	max-width: none !important;
+	max-height: none !important;
+	margin: 0 !important;
 }
 
 #content.app-logcheck .lck-chip[aria-pressed="true"],
@@ -673,6 +686,22 @@
 	margin-bottom: var(--lck-space-5, 1.25rem);
 }
 
+/* Channel test result: JS toggles --ok/--err (js/settings.js showChannelStatus).
+   Without these rules the status line painted identical muted ink for success
+   and failure (error_state_unstyled). Error gets a left accent bar so the
+   signal is not colour-only. */
+#content.app-logcheck .lck-channel-status--ok {
+	color: var(--color-success-text, var(--color-success));
+	font-weight: 600;
+}
+
+#content.app-logcheck .lck-channel-status--err {
+	color: var(--color-error-text, var(--lck-danger-ink, var(--color-error)));
+	font-weight: 600;
+	border-inline-start: 3px solid var(--color-error-text, var(--lck-danger-ink, var(--color-error)));
+	padding-inline-start: var(--lck-space-2, 0.5rem);
+}
+
 #content.app-logcheck .lck-form-actions .lck-btn--primary {
 	min-width: 8rem;
 }
@@ -840,6 +869,13 @@
 	box-sizing: border-box;
 	cursor: pointer;
 	transition: border-color 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
+}
+
+/* Card label (tall, multi-line body) — top-align the radio with the title line.
+   Needs the extra .lck-app class level to outrank the generic
+   label:has(> input[type=radio]) inline-row centering in form-controls.css. */
+#content.app-logcheck #app-content.lck-app .lck-logs-file {
+	align-items: flex-start;
 }
 
 #content.app-logcheck .lck-logs-file:hover {
@@ -1515,13 +1551,18 @@
 	border-radius: var(--lck-radius-md);
 	box-shadow: var(--lck-shadow-md);
 	display: flex;
+	flex-wrap: wrap;
 	gap: var(--lck-space-2);
 	align-items: center;
 }
 .lck-toast__text {
 	color: inherit;
-	flex: 1;
+	/* basis:auto so an over-wide message wraps onto its own line at narrow
+	   viewports instead of crushing beside the nowrap feedback link +
+	   44px close button (lck-vis-toast-text-link-overlap-narrow). */
+	flex: 1 1 auto;
 	min-width: 0;
+	overflow-wrap: anywhere;
 }
 .lck-toast--success { border-left-color: var(--color-success-text, var(--color-success)); }
 .lck-toast--error { border-left-color: var(--color-error-text, var(--color-error)); }

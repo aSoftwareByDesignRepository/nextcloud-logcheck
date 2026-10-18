@@ -98,6 +98,20 @@ final class UpdatesHealthProbe implements HealthProbeInterface
 			);
 		}
 
+		// Core stores json_encode([]) ("[]"/"{}") when the updater request failed
+		// or returned nothing — the check ran but produced no result, which is not
+		// the same as a corrupt cache (GitHub issue #1: bare "could not be read").
+		if ($data === []) {
+			return new HealthCard(
+				'updates',
+				'Updates',
+				HealthCardState::UNKNOWN,
+				$this->l10nFactory->get(Application::APP_ID)->t('No result'),
+				$this->l10nFactory->get(Application::APP_ID)->t('The last update check returned no data — the update server may be unreachable.'),
+				$this->overviewAction(),
+			);
+		}
+
 		// Honest shape: require a string "version" key (may be empty = no update).
 		if (!array_key_exists('version', $data) || is_array($data['version'])) {
 			return new HealthCard(

@@ -46,6 +46,74 @@ test.describe('J-LCK journeys', () => {
 		await axeSeriousZero(page);
 	});
 
+	test('J-LCK-12 disabling a health check hides its card', async ({ page }) => {
+		try {
+			await gotoLogCheck(page, '/settings/rules');
+			const httpsSwitch = page.locator('input#lck-probe-https');
+			await expect(httpsSwitch).toBeChecked();
+
+			// The input is visually replaced by the switch track — toggle via label.
+			await page.locator('label[for="lck-probe-https"]').click();
+			await expect(httpsSwitch).not.toBeChecked();
+			await Promise.all([
+				page.waitForResponse((r) => r.url().includes('/api/settings') && r.request().method() === 'PUT', { timeout: 30000 }),
+				page.locator('#lck-settings-form button[type="submit"]').click(),
+			]);
+
+			await gotoLogCheck(page, '/');
+			await expect(page.locator('.lck-health-card[data-probe="https"]')).toHaveCount(0);
+			await expect(page.locator('.lck-health-card')).toHaveCount(6);
+		} finally {
+			// Restore: re-enable so J-HCK-01's 7-card contract holds for later runs.
+			await gotoLogCheck(page, '/settings/rules');
+			const httpsSwitch = page.locator('input#lck-probe-https');
+			if (!(await httpsSwitch.isChecked())) {
+				await page.locator('label[for="lck-probe-https"]').click();
+				await expect(httpsSwitch).toBeChecked();
+				await Promise.all([
+					page.waitForResponse((r) => r.url().includes('/api/settings') && r.request().method() === 'PUT', { timeout: 30000 }),
+					page.locator('#lck-settings-form button[type="submit"]').click(),
+				]);
+			}
+		}
+	});
+
+	test('J-LCK-13 pinned HTTPS check address is honored and validated', async ({ page }) => {
+		const save = () => Promise.all([
+			page.waitForResponse((r) => r.url().includes('/api/settings') && r.request().method() === 'PUT', { timeout: 30000 }),
+			page.locator('#lck-settings-form button[type="submit"]').click(),
+		]);
+		try {
+			// Boundary validation: a non-HTTPS target is refused with a painted
+			// field error (aria-invalid + inline .lck-field-error), not a silent save.
+			await gotoLogCheck(page, '/settings/rules');
+			await page.locator('#lck-probe-target-url').fill('http://localhost:8081');
+			const [badResp] = await save();
+			expect(badResp.status()).toBe(422);
+			await expect(page.locator('#lck-probe-target-url[aria-invalid="true"]')).toBeVisible();
+			await expect(page.locator('.lck-field-error')).toBeVisible();
+
+			// Honored target: an unroutable literal produces a classified card
+			// naming the checked address, not a bare "Unreachable".
+			await page.locator('#lck-probe-target-url').fill('https://192.0.2.1');
+			const [okResp] = await save();
+			expect(okResp.status()).toBe(200);
+			await gotoLogCheck(page, '/');
+			const card = page.locator('.lck-health-card[data-probe="https"]');
+			await expect(card).toBeVisible({ timeout: 20000 });
+			await expect(card).toHaveAttribute('data-state', 'critical');
+			await expect(card).toContainText('192.0.2.1');
+		} finally {
+			// Restore the derived-base check so other legs keep their baseline.
+			await gotoLogCheck(page, '/settings/rules');
+			const field = page.locator('#lck-probe-target-url');
+			if ((await field.inputValue()) !== '') {
+				await field.fill('');
+				await save();
+			}
+		}
+	});
+
 	test('J-LCK-05 settings sections reachable', async ({ page }) => {
 		for (const section of ['alerts', 'rules', 'people', 'support']) {
 			await gotoLogCheck(page, '/settings/' + section);

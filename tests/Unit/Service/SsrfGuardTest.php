@@ -142,4 +142,81 @@ class SsrfGuardTest extends TestCase
 		$this->expectException(ValidationException::class);
 		$this->guard->assertAllowed('https://[64:ff9b::a00:1]/hook');
 	}
+
+	/**
+	 * GitHub #1: local server names (/etc/hosts, .local mDNS) must resolve via
+	 * nsswitch — dns_get_record alone misses them and produced "Unreachable".
+	 * localhost is guaranteed in /etc/hosts on any sane host.
+	 */
+	public function testLocalNameResolvesViaNssForPrivatePin(): void
+	{
+		$pin = $this->guard->pin('https://localhost/hook', true);
+		self::assertSame('localhost', $pin['host']);
+		self::assertNotSame('', $pin['ip']);
+		$loopback = str_starts_with($pin['ip'], '127.') || $pin['ip'] === '::1';
+		self::assertTrue($loopback, 'localhost must pin to a loopback address, got ' . $pin['ip']);
+	}
+
+	/** Same path must still enforce the private-range deny when not allowed. */
+	public function testLocalNameStillBlockedWithoutAllowPrivate(): void
+	{
+		$this->expectException(ValidationException::class);
+		$this->guard->pin('https://localhost/hook');
+	}
+
+	// --- pinTo: caller-supplied connect address (HTTPS self-check pin) ---
+
+	public function testPinToKeepsUrlHostAndDialsLiteralIp(): void
+	{
+		$pin = $this->guard->pinTo('https://cloud.example/status.php', '203.0.113.10');
+		self::assertSame('cloud.example', $pin['host']);
+		self::assertSame('203.0.113.10', $pin['ip']);
+		self::assertSame(443, $pin['port']);
+		self::assertSame('/status.php', $pin['path']);
+		self::assertSame('https://cloud.example/status.php', $pin['url']);
+	}
+
+	/** Split-horizon: the instance answering privately is normal — allowPrivate admits it. */
+	public function testPinToAllowsPrivateLiteralWithAllowPrivate(): void
+	{
+		$pin = $this->guard->pinTo('https://cloud.example/status.php', '10.0.0.5', true);
+		self::assertSame('10.0.0.5', $pin['ip']);
+	}
+
+	public function testPinToRejectsPrivateLiteralWithoutAllowPrivate(): void
+	{
+		$this->expectException(ValidationException::class);
+		$this->guard->pinTo('https://cloud.example/status.php', '10.0.0.5');
+	}
+
+	/** Metadata endpoints stay hard-blocked even under allowPrivate — the pin is no bypass. */
+	public function testPinToRejectsMetadataIpEvenWithAllowPrivate(): void
+	{
+		$this->expectException(ValidationException::class);
+		$this->guard->pinTo('https://cloud.example/status.php', '169.254.169.254', true);
+	}
+
+	public function testPinToRejectsInvalidIpLiteral(): void
+	{
+		$this->expectException(ValidationException::class);
+		$this->guard->pinTo('https://cloud.example/status.php', 'not-an-ip');
+	}
+
+	public function testPinToStillValidatesTheUrl(): void
+	{
+		$this->expectException(ValidationException::class);
+		$this->guard->pinTo('http://cloud.example/status.php', '203.0.113.10');
+	}
+
+	public function testPinToRejectsUserinfoUrl(): void
+	{
+		$this->expectException(ValidationException::class);
+		$this->guard->pinTo('https://user:pass@cloud.example/status.php', '203.0.113.10');
+	}
+
+	public function testPinToRejectsMetadataHostName(): void
+	{
+		$this->expectException(ValidationException::class);
+		$this->guard->pinTo('https://metadata.google.internal/status.php', '203.0.113.10');
+	}
 }

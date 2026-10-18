@@ -790,12 +790,21 @@
 		viewState.filterActive = !!data.filter_active;
 	}
 
+	// Last-writer-wins guard: file switch / search / reload issue parallel
+	// fetches — a slower EARLIER response must not paint over the newer
+	// selection's surface (stale_response_render_clobber).
+	var viewerReqSeq = 0;
+
 	async function loadTail() {
+		var seq = ++viewerReqSeq;
 		syncChrome();
 		setLoading(true, t('Loading log…'));
 		var u = urls();
 		try {
 			var res = await getJson(withViewerParam(withFileParam(u.apiLogTail || '')));
+			if (seq !== viewerReqSeq) {
+				return;
+			}
 			if (res.status < 200 || res.status >= 300) {
 				toastErr((res.data && res.data.message) || t('Cannot read the log file. Check permissions.'));
 				return;
@@ -808,7 +817,9 @@
 			applyApiFilterMeta(res.data);
 			renderLines(rows, 'tail');
 		} finally {
-			setLoading(false);
+			if (seq === viewerReqSeq) {
+				setLoading(false);
+			}
 		}
 	}
 
@@ -828,12 +839,16 @@
 		if (!u.apiLogBefore) {
 			return;
 		}
+		var seq = ++viewerReqSeq;
 		setLoading(true, t('Loading log…'));
 		try {
 			var base = withFileParam(u.apiLogBefore);
 			var sep = base.indexOf('?') >= 0 ? '&' : '?';
 			var url = withViewerParam(base + sep + 'before=' + encodeURIComponent(String(viewState.fromOffset)));
 			var res = await getJson(url);
+			if (seq !== viewerReqSeq) {
+				return;
+			}
 			if (res.status < 200 || res.status >= 300) {
 				toastErr((res.data && res.data.message) || t('Cannot read the log file. Check permissions.'));
 				return;
@@ -847,7 +862,9 @@
 			applyApiFilterMeta(res.data);
 			renderLines(merged, 'tail', { preserveScroll: true });
 		} finally {
-			setLoading(false);
+			if (seq === viewerReqSeq) {
+				setLoading(false);
+			}
 		}
 	}
 
@@ -858,11 +875,15 @@
 			await loadTail();
 			return;
 		}
+		var seq = ++viewerReqSeq;
 		setLoading(true, t('Searching…'));
 		var u = urls();
 		try {
 			var base = withFileParam((u.apiLogSearch || '') + '?q=' + encodeURIComponent(q));
 			var res = await getJson(withViewerParam(base));
+			if (seq !== viewerReqSeq) {
+				return;
+			}
 			if (res.status < 200 || res.status >= 300) {
 				markFieldErrors(res.data && res.data.fields);
 				toastErr((res.data && res.data.message) || t('Search failed. Try again.'));
@@ -874,7 +895,9 @@
 			applyApiFilterMeta(res.data);
 			renderLines(res.data.matches || [], 'search');
 		} finally {
-			setLoading(false);
+			if (seq === viewerReqSeq) {
+				setLoading(false);
+			}
 		}
 	}
 

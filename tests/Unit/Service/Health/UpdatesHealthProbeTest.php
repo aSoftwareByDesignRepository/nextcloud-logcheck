@@ -79,6 +79,26 @@ class UpdatesHealthProbeTest extends TestCase
 		self::assertNotSame(HealthCardState::OK, $card->state);
 	}
 
+	/**
+	 * GitHub #1: core writes "[]" when the updater call fails/returns empty —
+	 * the check ran but produced no result, not "cache could not be read".
+	 */
+	public function testEmptyArrayCacheIsNoResultNotUnreadable(): void
+	{
+		$config = $this->createMock(IConfig::class);
+		$config->method('getSystemValueBool')->willReturn(true);
+		$config->method('getAppValue')->willReturn('[]');
+		$app = $this->createMock(IAppConfig::class);
+		$app->method('getValueInt')->willReturn(time() - 60);
+
+		$card = $this->probe($config, $app)->probe();
+		self::assertSame(HealthCardState::UNKNOWN, $card->state);
+		self::assertSame('No result', $card->label);
+		self::assertStringContainsString('no data', $card->detail);
+		self::assertStringNotContainsString('could not be read', $card->detail);
+		self::assertNotSame([], $card->actions);
+	}
+
 	public function testSourceNeverTriggersUpdaterNetwork(): void
 	{
 		$src = (string)file_get_contents(dirname(__DIR__, 4) . '/lib/Service/Health/UpdatesHealthProbe.php');

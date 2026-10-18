@@ -290,7 +290,12 @@ test.describe('LogCheck theme × responsive × a11y', () => {
 				}
 			`,
 		});
-		await page.waitForTimeout(200);
+		// Wait until the injected variables actually resolve (not a blind sleep).
+		await page.waitForFunction(
+			() => getComputedStyle(document.body).getPropertyValue('--color-main-background').trim() === '#0f172a',
+			undefined,
+			{ timeout: 10_000 }
+		);
 
 		await assertThemeTokensResolved(page);
 		await page.setViewportSize({ width: 375, height: 812 });

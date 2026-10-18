@@ -165,7 +165,9 @@ test.describe('LogCheck UI invariants (atlas-ui-invariants)', () => {
 			// names) is payload, not a leaked i18n key. The app-chrome regions
 			// (filters, buttons, callouts) stay scanned.
 			const exclude = label === 'logs' ? '#lck-logs-viewer, #lck-logs-viewer-raw' : null;
-			await assertNoRawI18nKeys(page, { content: CONTENT, exclude });
+			// `overwrite.cli.url` is a literal core config key rendered inside
+			// translated help prose (HTTPS pinned-address hint), not a leaked key.
+			await assertNoRawI18nKeys(page, { content: CONTENT, exclude, allow: [/^overwrite\.cli\.url$/] });
 		});
 	}
 

@@ -218,6 +218,14 @@ test.describe('Momos API/Auth matrix', () => {
 					allow_private_webhooks: true,
 				},
 			},
+			{
+				method: /** @type {'put'} */ ('put'),
+				path: '/index.php/apps/logcheck/api/settings',
+				data: {
+					expected_version: expectedVersion,
+					health_disabled_probes: ['https'],
+				},
+			},
 		];
 
 		for (const ep of ncOnly) {

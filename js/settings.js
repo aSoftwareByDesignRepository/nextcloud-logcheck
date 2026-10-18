@@ -57,6 +57,19 @@
 				app_list: String(map.app_list || '').split(',').map(function (s) { return s.trim(); }).filter(Boolean),
 				mutes: mutes
 			};
+			// NC-admin-only: unchecked switches = disabled checks; omit the key
+			// for App Admins so their save does not 403 (mirrors alerts pattern).
+			if (form.getAttribute('data-nc-admin') === '1') {
+				var disabledProbes = [];
+				form.querySelectorAll('input[name="health_probes[]"]').forEach(function (cb) {
+					if (!cb.checked) {
+						disabledProbes.push(cb.value);
+					}
+				});
+				settings.settings.health_disabled_probes = disabledProbes;
+				settings.settings.health_https_probe_url = String(map.health_https_probe_url || '').trim();
+				settings.settings.health_https_probe_ip = String(map.health_https_probe_ip || '').trim();
+			}
 		} else if (section === 'people') {
 			var admins = [];
 			form.querySelectorAll('input[name="access[app_admins][]"]').forEach(function (inp) {
@@ -84,6 +97,9 @@
 		'app_mode': 'lck-app-mode',
 		'app_list': 'lck-app-list',
 		'mutes': 'lck-mutes',
+		'health_disabled_probes': 'lck-health-probes',
+		'health_https_probe_url': 'lck-probe-target-url',
+		'health_https_probe_ip': 'lck-probe-target-ip',
 		// MuteRegexValidator reports bad patterns under the generic 'value'
 		// key — pin it to the mutes textarea so the 422 paints a control.
 		'value': 'lck-mutes',

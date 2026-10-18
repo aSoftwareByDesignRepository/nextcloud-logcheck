@@ -761,6 +761,89 @@ function mutants(string $root): array
 		$resolved = $this->resolveReadableFile($fileId);',
 			'filter' => 'LogFileServiceTest::testResolveDownloadForbiddenForAppAdmin',
 		],
+		[
+			'name' => 'UpdatesHealthProbe empty-result cache reports unreadable',
+			'file' => $root . '/lib/Service/Health/UpdatesHealthProbe.php',
+			'search' => 'if ($data === []) {',
+			'replace' => 'if (false && $data === []) {',
+			'filter' => 'UpdatesHealthProbeTest::testEmptyArrayCacheIsNoResultNotUnreadable',
+		],
+		[
+			'name' => 'HealthDashboardService ignores disabled probes',
+			'file' => $root . '/lib/Service/Health/HealthDashboardService.php',
+			'search' => 'if (isset($disabled[$probe->id()])) {
+				continue;
+			}',
+			'replace' => 'if (false && isset($disabled[$probe->id()])) {
+				continue;
+			}',
+			'filter' => 'HealthDashboardServiceTest::testDisabledProbeIsSkipped',
+		],
+		[
+			'name' => 'HttpsHealthProbe TLS failure loses certificate detail',
+			'file' => $root . '/lib/Service/Health/HttpsHealthProbe.php',
+			'search' => 'if (in_array($errno, self::CURL_TLS_ERRNOS, true)) {',
+			'replace' => 'if (false && in_array($errno, self::CURL_TLS_ERRNOS, true)) {',
+			'filter' => 'HttpsHealthProbeTest::testTlsFailurePointsAtPrivateCaTrust',
+		],
+		[
+			'name' => 'SettingsService accepts unknown health probe id',
+			'file' => $root . '/lib/Service/SettingsService.php',
+			'search' => 'if (!in_array($id, HealthDashboardService::PROBE_IDS, true)) {',
+			'replace' => 'if (false && !in_array($id, HealthDashboardService::PROBE_IDS, true)) {',
+			'filter' => 'SettingsServiceTest::testHealthDisabledProbesRejectsUnknownId',
+		],
+		[
+			'name' => 'HttpsHealthProbe ignores admin-pinned probe URL',
+			'file' => $root . '/lib/Service/Health/HttpsHealthProbe.php',
+			'search' => '$overrideUrl = trim((string)($settings[\'health_https_probe_url\'] ?? \'\'));',
+			'replace' => '$overrideUrl = \'\';',
+			'filter' => 'HttpsHealthProbeTest::testSettingsOverrideUrlWinsOverDerivedAndCliUrl',
+		],
+		[
+			'name' => 'HttpsHealthProbe honors http overwrite.cli.url',
+			'file' => $root . '/lib/Service/Health/HttpsHealthProbe.php',
+			'search' => 'if ($i === 1 && strtolower((string)$parts[\'scheme\']) !== \'https\') {',
+			'replace' => 'if (false && $i === 1 && strtolower((string)$parts[\'scheme\']) !== \'https\') {',
+			'filter' => 'HttpsHealthProbeTest::testHttpCliUrlIsIgnoredInFavorOfDerivedBase',
+		],
+		[
+			'name' => 'HttpsHealthProbe drops pinned connect IP',
+			'file' => $root . '/lib/Service/Health/HttpsHealthProbe.php',
+			'search' => 'if (filter_var($rawIp, FILTER_VALIDATE_IP) !== false) {
+					$forceIp = $rawIp;',
+			'replace' => 'if (false && filter_var($rawIp, FILTER_VALIDATE_IP) !== false) {
+					$forceIp = $rawIp;',
+			'filter' => 'HttpsHealthProbeTest::testPinnedConnectIpIsForwardedToClient',
+		],
+		[
+			'name' => 'SettingsService probe URL accepts http scheme',
+			'file' => $root . '/lib/Service/SettingsService.php',
+			'search' => 'if (strtolower((string)$parts[\'scheme\']) !== \'https\') {',
+			'replace' => 'if (false && strtolower((string)$parts[\'scheme\']) !== \'https\') {',
+			'filter' => 'SettingsServiceTest::testProbeTargetUrlRejectsHttp',
+		],
+		[
+			'name' => 'SettingsService probe IP accepts garbage',
+			'file' => $root . '/lib/Service/SettingsService.php',
+			'search' => 'if ($packed === false) {',
+			'replace' => 'if (false && $packed === false) {',
+			'filter' => 'SettingsServiceTest::testProbeTargetIpRejectsGarbage',
+		],
+		[
+			'name' => 'SafeHttpClient forced pin drops private allowance',
+			'file' => $root . '/lib/Service/SafeHttpClient.php',
+			'search' => '? $this->ssrfGuard->pinTo($canonical, $forceIp, true)',
+			'replace' => '? $this->ssrfGuard->pinTo($canonical, $forceIp, false)',
+			'filter' => 'SafeHttpClientInstanceStatusTest::testForceIpPinsToLiteralNotDns',
+		],
+		[
+			'name' => 'SsrfGuard pinTo ignores address policy',
+			'file' => $root . '/lib/Service/SsrfGuard.php',
+			'search' => 'if ($this->isAlwaysBlocked($ip) || ($this->isBlockedIp($ip) && !$allowPrivate)) {',
+			'replace' => 'if (false && ($this->isAlwaysBlocked($ip) || ($this->isBlockedIp($ip) && !$allowPrivate))) {',
+			'filter' => 'SsrfGuardTest::testPinToRejectsMetadataIpEvenWithAllowPrivate',
+		],
 	];
 }
 

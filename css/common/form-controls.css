@@ -294,14 +294,15 @@
 	min-height: var(--lck-touch, 44px);
 }
 
-/* Track switches: sr-only native control (see css/common/switch-field.css) */
+/* Track switches: sr-only native control (see css/common/switch-field.css).
+   Geometry covers the whole switch field so the semantic input's bounds
+   coincide with the visual track — not a 1px dot AT/geometry checks trip on. */
 #content.app-logcheck #app-content .lck-switch-field__input,
 #content.app-logcheck #app-content input[type="checkbox"].lck-switch-field__input {
 	position: absolute;
-	inset-inline-start: 0;
-	top: 0;
-	width: 1px;
-	height: 1px;
+	inset: 0;
+	width: 100%;
+	height: 100%;
 	min-width: 0;
 	min-height: 0;
 	max-width: none;

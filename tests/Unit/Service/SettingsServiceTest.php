@@ -701,6 +701,199 @@ class SettingsServiceTest extends TestCase
 		], 'admin', true);
 	}
 
+	public function testHealthDisabledProbesForbiddenForAppAdmin(): void
+	{
+		$svc = $this->svcForMerge();
+		$method = new ReflectionMethod(SettingsService::class, 'mergeAndValidate');
+		$method->setAccessible(true);
+		$this->expectException(ForbiddenException::class);
+		$method->invoke($svc, SettingsService::defaults(), [
+			'health_disabled_probes' => ['https'],
+		], 'appadmin', false);
+	}
+
+	public function testHealthDisabledProbesNormalizedForNcAdmin(): void
+	{
+		$svc = $this->svcForMerge();
+		$method = new ReflectionMethod(SettingsService::class, 'mergeAndValidate');
+		$method->setAccessible(true);
+		$out = $method->invoke($svc, SettingsService::defaults(), [
+			'health_disabled_probes' => [' HTTPS ', 'https', 'updates'],
+		], 'admin', true);
+		self::assertSame(['https', 'updates'], $out['health_disabled_probes']);
+	}
+
+	public function testHealthDisabledProbesRejectsUnknownId(): void
+	{
+		$svc = $this->svcForMerge();
+		$method = new ReflectionMethod(SettingsService::class, 'mergeAndValidate');
+		$method->setAccessible(true);
+		$this->expectException(\OCA\LogCheck\Exception\ValidationException::class);
+		$method->invoke($svc, SettingsService::defaults(), [
+			'health_disabled_probes' => ['https', 'evil-shell'],
+		], 'admin', true);
+	}
+
+	public function testHealthDisabledProbesRejectsNonList(): void
+	{
+		$svc = $this->svcForMerge();
+		$method = new ReflectionMethod(SettingsService::class, 'mergeAndValidate');
+		$method->setAccessible(true);
+		$this->expectException(\OCA\LogCheck\Exception\ValidationException::class);
+		$method->invoke($svc, SettingsService::defaults(), [
+			'health_disabled_probes' => 'https',
+		], 'admin', true);
+	}
+
+	public function testProbeTargetForbiddenForAppAdmin(): void
+	{
+		$svc = $this->svcForMerge();
+		$method = new ReflectionMethod(SettingsService::class, 'mergeAndValidate');
+		$method->setAccessible(true);
+		$this->expectException(ForbiddenException::class);
+		$method->invoke($svc, SettingsService::defaults(), [
+			'health_https_probe_url' => 'https://cloud.example',
+		], 'appadmin', false);
+	}
+
+	public function testProbeTargetIpForbiddenForAppAdmin(): void
+	{
+		$svc = $this->svcForMerge();
+		$method = new ReflectionMethod(SettingsService::class, 'mergeAndValidate');
+		$method->setAccessible(true);
+		$this->expectException(ForbiddenException::class);
+		$method->invoke($svc, SettingsService::defaults(), [
+			'health_https_probe_ip' => '203.0.113.10',
+		], 'appadmin', false);
+	}
+
+	public function testProbeTargetUrlNormalizedForNcAdmin(): void
+	{
+		$svc = $this->svcForMerge();
+		$method = new ReflectionMethod(SettingsService::class, 'mergeAndValidate');
+		$method->setAccessible(true);
+		$out = $method->invoke($svc, SettingsService::defaults(), [
+			'health_https_probe_url' => ' https://cloud.example/nextcloud ',
+			'health_https_probe_ip' => ' 203.0.113.10 ',
+		], 'admin', true);
+		self::assertSame('https://cloud.example/nextcloud', $out['health_https_probe_url']);
+		self::assertSame('203.0.113.10', $out['health_https_probe_ip']);
+	}
+
+	/** Pasted ".../status.php" means the base — stored without it. */
+	public function testProbeTargetUrlStripsStatusPhpSegment(): void
+	{
+		$svc = $this->svcForMerge();
+		$method = new ReflectionMethod(SettingsService::class, 'mergeAndValidate');
+		$method->setAccessible(true);
+		$out = $method->invoke($svc, SettingsService::defaults(), [
+			'health_https_probe_url' => 'https://cloud.example/status.php',
+		], 'admin', true);
+		self::assertSame('https://cloud.example', $out['health_https_probe_url']);
+	}
+
+	public function testProbeTargetUrlRejectsHttp(): void
+	{
+		$svc = $this->svcForMerge();
+		$method = new ReflectionMethod(SettingsService::class, 'mergeAndValidate');
+		$method->setAccessible(true);
+		try {
+			$method->invoke($svc, SettingsService::defaults(), [
+				'health_https_probe_url' => 'http://cloud.example',
+			], 'admin', true);
+			self::fail('expected ValidationException');
+		} catch (\OCA\LogCheck\Exception\ValidationException $e) {
+			self::assertArrayHasKey('health_https_probe_url', $e->getFieldErrors());
+		}
+	}
+
+	public function testProbeTargetUrlRejectsQueryAndCredentials(): void
+	{
+		$svc = $this->svcForMerge();
+		$method = new ReflectionMethod(SettingsService::class, 'mergeAndValidate');
+		$method->setAccessible(true);
+		foreach (['https://user:pass@cloud.example', 'https://cloud.example/?x=1', 'https://cloud.example#a'] as $bad) {
+			try {
+				$method->invoke($svc, SettingsService::defaults(), [
+					'health_https_probe_url' => $bad,
+				], 'admin', true);
+				self::fail('expected ValidationException for ' . $bad);
+			} catch (\OCA\LogCheck\Exception\ValidationException $e) {
+				self::assertArrayHasKey('health_https_probe_url', $e->getFieldErrors());
+			}
+		}
+	}
+
+	public function testProbeTargetUrlRejectsMultiSegmentPath(): void
+	{
+		$svc = $this->svcForMerge();
+		$method = new ReflectionMethod(SettingsService::class, 'mergeAndValidate');
+		$method->setAccessible(true);
+		$this->expectException(\OCA\LogCheck\Exception\ValidationException::class);
+		$method->invoke($svc, SettingsService::defaults(), [
+			'health_https_probe_url' => 'https://cloud.example/a/b',
+		], 'admin', true);
+	}
+
+	public function testProbeTargetUrlRejectsGarbage(): void
+	{
+		$svc = $this->svcForMerge();
+		$method = new ReflectionMethod(SettingsService::class, 'mergeAndValidate');
+		$method->setAccessible(true);
+		foreach (['notaurl', 'https://', 'ftp://cloud.example'] as $bad) {
+			try {
+				$method->invoke($svc, SettingsService::defaults(), [
+					'health_https_probe_url' => $bad,
+				], 'admin', true);
+				self::fail('expected ValidationException for ' . $bad);
+			} catch (\OCA\LogCheck\Exception\ValidationException $e) {
+				self::assertArrayHasKey('health_https_probe_url', $e->getFieldErrors());
+			}
+		}
+	}
+
+	public function testProbeTargetEmptyStringClears(): void
+	{
+		$svc = $this->svcForMerge();
+		$method = new ReflectionMethod(SettingsService::class, 'mergeAndValidate');
+		$method->setAccessible(true);
+		$current = SettingsService::defaults();
+		$current['health_https_probe_url'] = 'https://cloud.example';
+		$current['health_https_probe_ip'] = '203.0.113.10';
+		$out = $method->invoke($svc, $current, [
+			'health_https_probe_url' => '',
+			'health_https_probe_ip' => '',
+		], 'admin', true);
+		self::assertSame('', $out['health_https_probe_url']);
+		self::assertSame('', $out['health_https_probe_ip']);
+	}
+
+	public function testProbeTargetIpRejectsGarbage(): void
+	{
+		$svc = $this->svcForMerge();
+		$method = new ReflectionMethod(SettingsService::class, 'mergeAndValidate');
+		$method->setAccessible(true);
+		try {
+			$method->invoke($svc, SettingsService::defaults(), [
+				'health_https_probe_ip' => 'cloud.example',
+			], 'admin', true);
+			self::fail('expected ValidationException');
+		} catch (\OCA\LogCheck\Exception\ValidationException $e) {
+			self::assertArrayHasKey('health_https_probe_ip', $e->getFieldErrors());
+		}
+	}
+
+	public function testProbeTargetIpCanonicalizesIpv6(): void
+	{
+		$svc = $this->svcForMerge();
+		$method = new ReflectionMethod(SettingsService::class, 'mergeAndValidate');
+		$method->setAccessible(true);
+		$out = $method->invoke($svc, SettingsService::defaults(), [
+			'health_https_probe_ip' => '2001:0DB8:0000:0000:0000:0000:0000:0001',
+		], 'admin', true);
+		self::assertSame('2001:db8::1', $out['health_https_probe_ip']);
+	}
+
 	private function svcForMerge(): SettingsService
 	{
 		return new SettingsService(

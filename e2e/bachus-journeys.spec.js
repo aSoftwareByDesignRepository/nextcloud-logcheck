@@ -96,7 +96,9 @@ test.describe('J-BACH Bachus journeys', () => {
 		const errorsChip = page.locator('#lck-logs-filter-chips label:has(input[value="4"])').first();
 		if (await errorsChip.count()) {
 			await errorsChip.click();
-			await page.waitForTimeout(300);
+			// onFilterChange re-renders synchronously — wait for a rendered outcome
+			// (rows or the empty state), never a fixed delay.
+			await expect(page.locator('.lck-logs-row, #lck-logs-empty:not([hidden])').first()).toBeAttached({ timeout: 15000 });
 			const empty = page.locator('#lck-logs-empty');
 			if (await empty.isVisible()) {
 				await expect(page.locator('#lck-logs-empty-text')).not.toHaveText(/^\s*$/);
