@@ -398,7 +398,7 @@
 	user-select: none;
 }
 #app-content.lck-app .lck-breadcrumb__link {
-	color: var(--color-primary-element);
+	color: var(--lck-accent-ink, var(--color-primary-element));
 	font-weight: 600;
 	text-decoration: none;
 	border-radius: var(--lck-radius-sm);
@@ -462,7 +462,7 @@
 	height: 56px;
 	border-radius: var(--lck-radius-md);
 	background: var(--lck-tint-info);
-	color: var(--color-primary-element);
+	color: var(--lck-accent-ink, var(--color-primary-element));
 }
 .lck-page-header__icon-svg {
 	width: 28px;

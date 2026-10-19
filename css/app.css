@@ -894,7 +894,7 @@
 }
 
 #content.app-logcheck .lck-logs-file--live .lck-logs-file__title {
-	color: var(--color-primary-element);
+	color: var(--lck-accent-ink, var(--color-primary-element));
 }
 
 #content.app-logcheck .lck-logs-file--disabled {
