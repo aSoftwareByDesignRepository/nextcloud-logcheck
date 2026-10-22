@@ -633,7 +633,7 @@
 	box-shadow: none;
 }
 
-@media (max-width: 768px) {
+@media (max-width: 768.98px) {
 	/* Dense list tables without card reflow: horizontal scroll */
 	#app-content.lck-app .table-container .table:not(.lck-table--matrix):not(.lck-table--responsive),
 	#app-content.lck-app .table-container .grid-table:not(.lck-table--matrix):not(.lck-table--responsive) {

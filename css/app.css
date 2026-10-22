@@ -179,7 +179,7 @@
 }
 
 /* ≥768px tablet+: watching badge + switch sit on one row (NC tablet band) */
-@media (min-width: 768px) {
+@media (min-width: 769px) {
 	#content.app-logcheck .lck-watching-row {
 		flex-direction: row;
 		flex-wrap: wrap;
@@ -253,7 +253,7 @@
 }
 
 /* ≥768px: slightly roomier setup panel padding (matches prior desktop look) */
-@media (min-width: 768px) {
+@media (min-width: 769px) {
 	#content.app-logcheck .lck-setup-panel {
 		padding: var(--lck-space-5);
 	}
@@ -1106,7 +1106,7 @@
 	border-bottom: 0;
 }
 
-@media (max-width: 640px) {
+@media (max-width: 640.98px) {
 	#content.app-logcheck .lck-logs-row {
 		grid-template-columns: 1fr;
 		gap: var(--lck-space-1);
@@ -1535,7 +1535,7 @@
 	z-index: 1200;
 	max-width: min(400px, calc(100vw - 2 * var(--lck-space-4)));
 }
-@media (min-width: 768px) {
+@media (min-width: 769px) {
 	.lck-toasts {
 		inset-inline-start: auto;
 		inset-inline-end: calc(var(--lck-space-4) + env(safe-area-inset-right, 0px));
