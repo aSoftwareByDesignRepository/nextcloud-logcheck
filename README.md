@@ -23,6 +23,7 @@ Install from the Nextcloud App Store, or place this app in `custom_apps/logcheck
 ## Limits
 
 - Syslog / systemd / errorlog backends are not supported in V1.
+- Links inside notification emails/webhooks are built in background jobs, so set `overwrite.cli.url` in `config.php` to your instance's public URL (e.g. `https://cloud.example.com`) — otherwise they point at the CLI default host.
 - The Logs page reads the systemconfig logfile (and allowlisted siblings in the same folder) in bounded chunks — never a user-chosen path.
 - Start fresh / delete require a Nextcloud system admin and typed confirmation.
 - Raw log excerpts in *alerts* stay off unless a system admin opts in with confirmation.
