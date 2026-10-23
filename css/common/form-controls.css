@@ -7,7 +7,7 @@
 #content.app-logcheck {
 	--lck-form-bg: var(--color-main-background);
 	--lck-form-fg: var(--color-main-text);
-	--lck-form-border: var(--color-border, var(--lck-border, color-mix(in srgb, var(--color-main-text) 18%, transparent)));
+	--lck-form-border: var(--color-border-maxcontrast, var(--lck-border-strong, color-mix(in srgb, var(--color-main-text) 24%, transparent)));
 	--lck-form-border-focus: var(--color-primary-element);
 	/* Soft halo is decorative only — WCAG 2.4.11 focus contrast comes from solid --lck-focus outline */
 	--lck-form-ring: color-mix(in srgb, var(--color-primary-element) 28%, transparent);
