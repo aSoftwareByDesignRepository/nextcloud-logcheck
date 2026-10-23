@@ -1,0 +1,9 @@
+# LogCheck sv — reviewed OOV tokens for check-l10n-real-lexicon.py
+# Triaged 2026-10-23 (web_api restore+reverify @3.5.17).
+# Marker after '#': loanword | proper | abbrev | shared | reviewed
+url # abbrev — universal URL acronym; da_DK homograph coincidence, not donor bleed
+dämplingsmönster # reviewed — compound (dämpning + mönster), 'mute patterns' UI term
+cronfel # reviewed — compound (cron + fel), 'cron errors' UI term
+admininställningarna # reviewed — definite compound (admin + inställningar + na)
+admininställningar # reviewed — compound (admin + inställningar)
+systemcron # reviewed — compound (system + cron), Nextcloud cron mode name

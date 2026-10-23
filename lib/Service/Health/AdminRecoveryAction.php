@@ -22,10 +22,17 @@ final class AdminRecoveryAction
 	 */
 	public static function adminSection(IURLGenerator $url, IL10N $l10n, string $id, string $section, string $label): array
 	{
+		// Only registered admin sections may mint a link — a stray slug would
+		// render a dead "Access denied" recovery action (GH #2 shape).
+		$href = match ($section) {
+			'overview' => $url->linkToRouteAbsolute('settings.AdminSettings.index', ['section' => 'overview']),
+			'security' => $url->linkToRouteAbsolute('settings.AdminSettings.index', ['section' => 'security']),
+			default => null,
+		};
 		return [[
 			'id' => $id,
 			'label' => $label,
-			'href' => $url->linkToRouteAbsolute('settings.AdminSettings.index', ['section' => $section]),
+			'href' => $href,
 		]];
 	}
 }

@@ -17,13 +17,14 @@ use OCP\IURLGenerator;
 use OCP\IUser;
 use OCP\IUserSession;
 use PHPUnit\Framework\TestCase;
+use Psr\Log\LoggerInterface;
 
 /**
  * Momos: door checks are not optional — every Page/Api entry must fail closed.
  */
 class EntitlementMiddlewareTest extends TestCase
 {
-	private function middleware(AccessService $access, ?IUser $user, string $pathInfo = '/apps/logcheck/api/status'): EntitlementMiddleware
+	private function middleware(AccessService $access, ?IUser $user, string $pathInfo = '/apps/logcheck/api/status', ?LoggerInterface $logger = null): EntitlementMiddleware
 	{
 		$session = $this->createMock(IUserSession::class);
 		$session->method('getUser')->willReturn($user);
@@ -31,7 +32,7 @@ class EntitlementMiddlewareTest extends TestCase
 		$request->method('getPathInfo')->willReturn($pathInfo);
 		$url = $this->createMock(IURLGenerator::class);
 		$url->method('linkToRoute')->willReturn('/apps/files/');
-		return new EntitlementMiddleware($session, $access, $url, $request);
+		return new EntitlementMiddleware($session, $access, $url, $request, $logger ?? $this->createMock(LoggerInterface::class));
 	}
 
 	public function testUnauthenticatedApiThrowsForbidden(): void
@@ -101,5 +102,27 @@ class EntitlementMiddlewareTest extends TestCase
 		self::assertInstanceOf(TemplateResponse::class, $res);
 		// An authorization failure must not answer 200 — deny at HTTP level too.
 		self::assertSame(403, $res->getStatus());
+	}
+
+	public function testAfterExceptionWrapsUnexpectedApiFailureInJsonEnvelope(): void
+	{
+		$access = $this->createMock(AccessService::class);
+		$api = $this->createMock(ApiController::class);
+		$logger = $this->createMock(LoggerInterface::class);
+		$logger->expects(self::once())->method('error');
+		$mw = $this->middleware($access, null, '/apps/logcheck/api/status', $logger);
+		$res = $mw->afterException($api, 'getStatus', new \RuntimeException('db gone'));
+		self::assertInstanceOf(JSONResponse::class, $res);
+		self::assertSame(500, $res->getStatus());
+		self::assertSame('LCK_INTERNAL', $res->getData()['error']);
+	}
+
+	public function testAfterExceptionRethrowsUnexpectedPageFailure(): void
+	{
+		$access = $this->createMock(AccessService::class);
+		$page = $this->createMock(PageController::class);
+		$mw = $this->middleware($access, null, '/apps/logcheck/home');
+		$this->expectException(\RuntimeException::class);
+		$mw->afterException($page, 'home', new \RuntimeException('db gone'));
 	}
 }

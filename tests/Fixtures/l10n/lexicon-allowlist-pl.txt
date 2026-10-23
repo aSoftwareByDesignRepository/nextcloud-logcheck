@@ -1,0 +1,7 @@
+# LogCheck pl — reviewed OOV tokens for check-l10n-real-lexicon.py
+# Triaged 2026-10-23 (web_api restore+reverify @3.5.17).
+# Marker after '#': loanword | proper | abbrev | shared | reviewed
+nextclouda # proper — genitive inflection of the product name Nextcloud
+slacka # proper — genitive inflection of the product name Slack
+crona # reviewed — genitive inflection of the loanword 'cron'
+url # abbrev — universal URL acronym used in Polish IT copy

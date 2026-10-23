@@ -1,0 +1,7 @@
+# LogCheck nb (Bokmål) — reviewed OOV tokens for check-l10n-real-lexicon.py
+# Triaged 2026-10-23 (web_api restore+reverify @3.5.17).
+# Marker after '#': loanword | proper | abbrev | shared | reviewed
+url # abbrev — universal URL acronym; da_DK homograph coincidence, not donor bleed
+deaktivert # reviewed — past participle of deaktivere; flat wordlist gap, correct Bokmål
+admininnstillingene # reviewed — definite compound (admin + innstillinger + ne)
+admininnstillinger # reviewed — compound (admin + innstillinger)

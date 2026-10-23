@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace OCA\LogCheck\Middleware;
 
+use OCA\LogCheck\AppInfo\Application;
 use OCA\LogCheck\Controller\ApiController;
 use OCA\LogCheck\Controller\PageController;
 use OCA\LogCheck\Exception\ForbiddenException;
@@ -17,6 +18,7 @@ use OCP\AppFramework\Http\Response;
 use OCP\IRequest;
 use OCP\IURLGenerator;
 use OCP\IUserSession;
+use Psr\Log\LoggerInterface;
 
 final class EntitlementMiddleware extends Middleware
 {
@@ -25,6 +27,7 @@ final class EntitlementMiddleware extends Middleware
 		private readonly AccessService $accessService,
 		private readonly IURLGenerator $urlGenerator,
 		private readonly IRequest $request,
+		private readonly LoggerInterface $logger,
 	) {
 	}
 
@@ -42,10 +45,23 @@ final class EntitlementMiddleware extends Middleware
 
 	public function afterException($controller, string $methodName, \Exception $exception): Response
 	{
+		$isApi = $controller instanceof ApiController
+			|| str_starts_with($this->request->getPathInfo() ?? '', '/apps/logcheck/api');
 		if (!$exception instanceof ForbiddenException) {
+			if ($isApi) {
+				// API clients always get the JSON envelope — never a core HTML 500.
+				$this->logger->error('HealthCheck API request failed unexpectedly', [
+					'app' => Application::APP_ID,
+					'exception' => $exception,
+				]);
+				return new JSONResponse(
+					['error' => 'LCK_INTERNAL', 'message' => 'Unexpected server error.'],
+					Http::STATUS_INTERNAL_SERVER_ERROR,
+				);
+			}
 			throw $exception;
 		}
-		if ($controller instanceof ApiController || str_starts_with($this->request->getPathInfo() ?? '', '/apps/logcheck/api')) {
+		if ($isApi) {
 			return new JSONResponse(['error' => 'LCK_FORBIDDEN', 'message' => 'Not authorized.'], Http::STATUS_FORBIDDEN);
 		}
 		// beforeController throws before PageController::registerAssets() runs —

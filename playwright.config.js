@@ -18,6 +18,7 @@ module.exports = defineConfig({
 		{
 			name: 'chromium',
 			use: { ...devices['Desktop Chrome'] },
+			testIgnore: /capture-screenshot-matrix\.spec\.js/,
 		},
 	],
 });

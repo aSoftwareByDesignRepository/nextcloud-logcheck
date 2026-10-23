@@ -1,0 +1,51 @@
+{
+	"prefix": "lck",
+	"outDir": "craft/web",
+	"viewports": [
+		{ "name": "mobile", "width": 320, "height": 800 },
+		{ "name": "tablet", "width": 768, "height": 800 },
+		{ "name": "desktop", "width": 1280, "height": 800 }
+	],
+	"surfaces": [
+		{
+			"id": "home",
+			"path": "/",
+			"states": ["populated", "empty"],
+			"emptyDriver": "allProbesOff",
+			"dark": true
+		},
+		{
+			"id": "logs",
+			"path": "/logs",
+			"states": ["populated"],
+			"dark": true
+		},
+		{
+			"id": "settings-alerts",
+			"path": "/settings/alerts",
+			"states": ["current"],
+			"dark": true
+		},
+		{
+			"id": "settings-rules",
+			"path": "/settings/rules",
+			"states": ["current"]
+		},
+		{
+			"id": "settings-people",
+			"path": "/settings/people",
+			"states": ["current"]
+		},
+		{
+			"id": "settings-support",
+			"path": "/settings/support",
+			"states": ["current"]
+		},
+		{
+			"id": "denied",
+			"path": "/",
+			"states": ["current"],
+			"user": "denied"
+		}
+	]
+}

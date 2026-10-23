@@ -504,6 +504,15 @@
 	}
 }
 
+/* Legacy alias tables keep NC core's td { white-space: nowrap } — give
+   their cells an explicit wrap path so long values never clip at the
+   screen edge (WCAG 1.4.10 reflow; the farm's table_actions_fit gate). */
+#app-content.lck-app .grid-table td,
+#app-content.lck-app .lck-table td,
+.lck-pub .lck-table td {
+	white-space: normal;
+}
+
 #app-content.lck-app .table thead th,
 #app-content.lck-app .grid-table thead th,
 #app-content.lck-app .lck-table thead th {

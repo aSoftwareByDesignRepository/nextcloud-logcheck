@@ -15,7 +15,7 @@
 		"A rotated copy with that name already exists. Try again.": "Eine umbenannte Kopie mit diesem Namen existiert bereits. Bitte erneut versuchen.",
 		"Active session context": "Aktueller Sitzungskontext",
 		"Add app admin": "App-Admin hinzufügen",
-		"Address the HTTPS card checks. Leave empty to use overwrite.cli.url or the address this browser uses.": "Adresse, die die HTTPS-Karte prüft. Leer lassen, um overwrite.cli.url oder die Adresse zu verwenden, die dieser Browser nutzt.",
+		"Address the HTTPS card checks. Leave empty to use overwrite.cli.url or the address this browser uses.": "Adresse, welche die HTTPS-Karte prüft. Leer lassen, um overwrite.cli.url oder die Adresse zu verwenden, die dieser Browser nutzt.",
 		"Advanced": "Erweitert",
 		"Advanced filters": "Erweiterte Filter",
 		"After you fix errors, rename the old log aside and begin a clean file. Or delete it completely.": "Nachdem Sie Fehler behoben haben, benennen Sie das alte Protokoll um und beginnen Sie mit einer leeren Datei. Oder löschen Sie es vollständig.",
