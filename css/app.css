@@ -12,6 +12,7 @@
 /* ── Health dashboard cards ─────────────────────────────────── */
 #content.app-logcheck .lck-health-summary {
 	display: flex;
+	flex-wrap: wrap;
 	align-items: center;
 	gap: var(--lck-space-2);
 	margin: 0 0 var(--lck-space-4);
@@ -795,6 +796,21 @@
 	min-width: 0;
 	max-width: 100%;
 	overflow-wrap: anywhere;
+}
+
+/* Atomic control labels never break mid-word: the anywhere guard above is a
+   prose/URL safety net — inherited into a control it shrinks flex min-content
+   to ~1ch, so a squeezed CTA shreds its label ('Sprawdź ponowni e', lck-mf-20,
+   clipped_control_text_at_screen_edge). Controls wrap on whole words or drop
+   to their own line; overflow inside one stays a bug, never silent shredding. */
+#content.app-logcheck .lck-btn,
+#content.app-logcheck .lck-badge,
+#content.app-logcheck .lck-chip,
+#content.app-logcheck .lck-switch-field__text,
+#content.app-logcheck .lck-logs-more-menu > summary {
+	max-width: 100%;
+	white-space: normal;
+	overflow-wrap: normal;
 }
 
 @media (prefers-reduced-motion: reduce) {

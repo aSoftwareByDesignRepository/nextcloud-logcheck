@@ -84,6 +84,61 @@ test.describe('J-LCK-21 shell layout', () => {
 		expect(geom.docOverflow).toBeLessThanOrEqual(2);
 	});
 
+	test('mobile 320: atomic control labels never break mid-word (lck-mf-20)', async ({ page }) => {
+		// clipped_control_text_at_screen_edge — the .lck-main overflow-wrap:anywhere
+		// prose guard inherited into the 'Check again' CTA and shredded it
+		// ('Sprawdź' / 'ponowni' / 'e' at pl/320). Controls must keep
+		// overflow-wrap:normal and the summary row must offer a wrap path.
+		await page.setViewportSize({ width: 320, height: 800 });
+		await gotoLogCheck(page, '/');
+		const probe = await page.evaluate(() => {
+			const summary = document.querySelector('.lck-health-summary');
+			const btn = document.querySelector('.lck-health-summary .lck-btn');
+			if (!summary || !btn) {
+				return { ok: false, reason: 'health-summary/CTA not rendered' };
+			}
+			const sCs = getComputedStyle(summary);
+			const bCs = getComputedStyle(btn);
+			const badge = summary.querySelector('.lck-badge');
+			const badgeCs = badge ? getComputedStyle(badge) : null;
+			// Natural min-content width of the CTA label: longest word rendered
+			// on one line in the same font.
+			const longest = btn.textContent.trim().split(/\s+/).sort((a, b) => b.length - a.length)[0] || '';
+			const ruler = document.createElement('span');
+			ruler.style.cssText = 'position:absolute;visibility:hidden;white-space:nowrap;'
+				+ `font:${bCs.fontWeight} ${bCs.fontSize}/${bCs.lineHeight} ${bCs.fontFamily}`;
+			ruler.textContent = longest;
+			document.body.appendChild(ruler);
+			const wordW = ruler.getBoundingClientRect().width;
+			ruler.remove();
+			const b = btn.getBoundingClientRect();
+			const padX = parseFloat(bCs.paddingLeft) + parseFloat(bCs.paddingRight)
+				+ parseFloat(bCs.borderLeftWidth) + parseFloat(bCs.borderRightWidth);
+			const badgeR = badge ? badge.getBoundingClientRect() : null;
+			return {
+				ok: true,
+				flexWrap: sCs.flexWrap,
+				btnWrap: bCs.overflowWrap,
+				btnWhiteSpace: bCs.whiteSpace,
+				badgeWrap: badgeCs ? badgeCs.overflowWrap : 'absent',
+				btnWidth: b.width,
+				wordFloor: wordW + padX,
+				btnTop: b.top,
+				badgeBottom: badgeR ? badgeR.bottom : null,
+				textOverflow: btn.scrollWidth - btn.clientWidth,
+			};
+		});
+		expect(probe.ok, probe.reason || 'probe failed').toBeTruthy();
+		expect(probe.flexWrap).toBe('wrap');
+		expect(probe.btnWrap).toBe('normal');
+		expect(probe.btnWhiteSpace).toBe('normal');
+		expect(probe.badgeWrap).toBe('normal');
+		// The CTA keeps at least its longest word + chrome — never a sliver.
+		expect(probe.btnWidth).toBeGreaterThanOrEqual(probe.wordFloor - 2);
+		// No label text overflowing the control box.
+		expect(probe.textOverflow).toBeLessThanOrEqual(1);
+	});
+
 	test('mobile: in-page Menu reveals navigation (AZC#33 / Atlas contract)', async ({ page }) => {
 		await page.setViewportSize({ width: 375, height: 812 });
 		await gotoLogCheck(page, '/');

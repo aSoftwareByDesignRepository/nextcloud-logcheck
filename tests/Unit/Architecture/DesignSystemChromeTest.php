@@ -339,4 +339,35 @@ class DesignSystemChromeTest extends TestCase
 		self::assertStringContainsString("LogCheckToasts.showSuccess(msg)", $js);
 		self::assertStringNotContainsString('LogCheckToasts.show(', $js);
 	}
+
+	/**
+	 * lck-mf-20 (clipped_control_text_at_screen_edge): the .lck-main
+	 * overflow-wrap:anywhere prose guard inherits into atomic controls and
+	 * shrinks their flex min-content to ~1ch — at 320px the health-summary CTA
+	 * rendered 'Sprawdź' / 'ponowni' / 'e' (mid-word break + orphan letter).
+	 * Controls must wrap on whole words or drop to their own line.
+	 */
+	public function testAtomicControlLabelsNeverBreakMidWord(): void
+	{
+		$css = (string)file_get_contents($this->root . '/css/app.css');
+		// The summary row needs a wrap path so pill + CTA never share a sliver.
+		self::assertMatchesRegularExpression(
+			'/\.lck-health-summary\s*\{[^}]*flex-wrap:\s*wrap/s',
+			$css,
+			'.lck-health-summary must flex-wrap so the CTA can drop to its own line'
+		);
+		// Atomic controls opt out of the inherited anywhere-wrap.
+		foreach (['.lck-btn', '.lck-badge', '.lck-chip', '.lck-switch-field__text'] as $sel) {
+			self::assertMatchesRegularExpression(
+				'/' . preg_quote($sel, '/') . '\s*[,>][^{]*\{[^}]*overflow-wrap:\s*normal/s',
+				$css,
+				"$sel must reset overflow-wrap to normal (never mid-word breaks)"
+			);
+		}
+		// The prose guard itself must survive — long URLs/log lines still need it.
+		self::assertMatchesRegularExpression(
+			'/\.lck-main[^{]*\{[^}]*overflow-wrap:\s*anywhere/s',
+			$css
+		);
+	}
 }

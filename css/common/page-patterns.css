@@ -509,6 +509,8 @@
    screen edge (WCAG 1.4.10 reflow; the farm's table_actions_fit gate). */
 #app-content.lck-app .grid-table td,
 #app-content.lck-app .lck-table td,
+#app-content.lck-app .logcheck-table td,
+#app-content.lck-app .report-table td,
 .lck-pub .lck-table td {
 	white-space: normal;
 }
