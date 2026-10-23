@@ -83,7 +83,7 @@ final class PayloadBuilder
 		];
 
 		if ($this->appManager->isEnabledForUser('logreader')) {
-			$payload['deep_link'] = $this->urlGenerator->getAbsoluteURL('/settings/admin/logreader');
+			$payload['deep_link'] = $this->urlGenerator->getAbsoluteURL('/settings/admin/logging');
 		}
 
 		return $payload;

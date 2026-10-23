@@ -844,6 +844,13 @@ function mutants(string $root): array
 			'replace' => 'if (false && ($this->isAlwaysBlocked($ip) || ($this->isBlockedIp($ip) && !$allowPrivate))) {',
 			'filter' => 'SsrfGuardTest::testPinToRejectsMetadataIpEvenWithAllowPrivate',
 		],
+		[
+			'name' => 'PayloadBuilder deep_link regresses to nonexistent logreader section (GH #2)',
+			'file' => $root . '/lib/Service/PayloadBuilder.php',
+			'search' => '$payload[\'deep_link\'] = $this->urlGenerator->getAbsoluteURL(\'/settings/admin/logging\');',
+			'replace' => '$payload[\'deep_link\'] = $this->urlGenerator->getAbsoluteURL(\'/settings/admin/logreader\');',
+			'filter' => 'PayloadBuilderTest::testDeepLinkPointsToLoggingSectionWhenLogreaderEnabled',
+		],
 	];
 }
 
@@ -868,6 +875,10 @@ function runMutant(array $m, string $phpunit, string $root): bool
 	}
 
 	$backup = $m['file'] . '.mutation-bak';
+	// Baseline-green guard (lesson mutation_runner_baseline_red_false_kill):
+	// a kill-test that is red unmutated turns nonzero exits into fake kills.
+	require_once __DIR__ . '/MutationBaseline.php';
+	mutationBaselineSelfCheck(__FILE__);
 	if (file_put_contents($backup, $original) === false) {
 		fail('cannot write backup for ' . $m['name']);
 		return false;

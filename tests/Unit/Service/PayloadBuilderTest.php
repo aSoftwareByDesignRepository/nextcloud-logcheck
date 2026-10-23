@@ -41,6 +41,36 @@ class PayloadBuilderTest extends TestCase
 		self::assertNull($payload['top_fingerprints'][0]['sample_message']);
 	}
 
+	public function testDeepLinkPointsToLoggingSectionWhenLogreaderEnabled(): void
+	{
+		$url = $this->createMock(IURLGenerator::class);
+		$url->method('getAbsoluteURL')->willReturnCallback(
+			static fn (string $p): string => 'https://cloud.example.org' . $p
+		);
+		$apps = $this->createMock(IAppManager::class);
+		$apps->method('isEnabledForUser')->with('logreader')->willReturn(true);
+
+		$builder = new PayloadBuilder($url, $apps);
+		$payload = $builder->build('evt1', ['total_matched' => 1], ['min_level' => 3], 300);
+
+		// logreader registers settings section id 'logging', not 'logreader' (GH #2)
+		self::assertSame(
+			'https://cloud.example.org/settings/admin/logging',
+			$payload['deep_link'] ?? null
+		);
+	}
+
+	public function testDeepLinkAbsentWhenLogreaderDisabled(): void
+	{
+		$url = $this->createMock(IURLGenerator::class);
+		$url->method('getAbsoluteURL')->willReturn('https://cloud.example.org/');
+		$apps = $this->createMock(IAppManager::class);
+		$apps->method('isEnabledForUser')->willReturn(false);
+		$builder = new PayloadBuilder($url, $apps);
+		$payload = $builder->build('evt1', ['total_matched' => 1], ['min_level' => 3], 300);
+		self::assertArrayNotHasKey('deep_link', $payload);
+	}
+
 	public function testRedactionWhenExcerptsOn(): void
 	{
 		$url = $this->createMock(IURLGenerator::class);
