@@ -27,7 +27,7 @@ foreach ($locales as $lang) {
 	$translations = $cat['translations'] ?? [];
 	$pluralForm = $cat['pluralForm'] ?? null;
 
-	$lines = ["OC.L10N.register(\n", "\t\"mobilitycheck\",\n", "\t{\n"];
+	$lines = ["OC.L10N.register(\n", "\t\"logcheck\",\n", "\t{\n"];
 	$first = true;
 	foreach ($translations as $key => $val) {
 		$first = false;

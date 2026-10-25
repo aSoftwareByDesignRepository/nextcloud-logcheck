@@ -1,5 +1,5 @@
 OC.L10N.register(
-	"mobilitycheck",
+	"logcheck",
 	{
 	"%s%% free" : "%s%% free",
 	"(opens in a new tab)" : "(opens in a new tab)",
