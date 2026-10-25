@@ -249,6 +249,13 @@
 	margin-bottom: var(--lck-space-2, 0.5rem);
 }
 
+/* .lck-field is a flex column whose gap already spaces label→control —
+   an extra margin here widens label→input while sibling fields sit at 0,
+   which visually pairs each label with the control above it. */
+#content.app-logcheck #app-content .lck-field > label {
+	margin-bottom: 0;
+}
+
 #content.app-logcheck #app-content .lck-filter-field > .lck-filter-field__label {
 	display: block;
 	font-size: 0.8125rem;

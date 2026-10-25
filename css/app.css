@@ -652,6 +652,14 @@
 	max-width: 100%;
 	/* Bottom pad lives above sticky Save via .lck-form-actions margin — not after it */
 	padding-bottom: 0;
+	/* Stacked form owns the field rhythm — otherwise sibling .lck-field
+	   blocks sit at 0px while label→input inside each field is larger. */
+	display: flex;
+	flex-direction: column;
+	gap: var(--lck-space-3);
+}
+#content.app-logcheck .lck-form > .lck-btn {
+	align-self: flex-start;
 }
 
 /*

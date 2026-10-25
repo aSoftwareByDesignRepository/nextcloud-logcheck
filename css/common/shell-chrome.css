@@ -446,7 +446,10 @@
 /* ≥768px tablet+: icon | title | actions on one row (NC tablet / desktop) */
 @media (min-width: 769px) {
 	.lck-page-header__main {
-		grid-template-columns: 56px 1fr auto;
+		/* minmax(0,…) — the title column must be able to shrink below its
+		   min-content (long compounds, inline chips), else it shoves the
+		   actions column off the card. Same rule as the mobile track. */
+		grid-template-columns: 56px minmax(0, 1fr) auto;
 		gap: var(--lck-space-4);
 	}
 	.lck-page-header__actions {
