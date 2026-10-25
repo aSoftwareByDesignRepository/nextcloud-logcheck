@@ -5,6 +5,35 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## 1.4.3 - 2026-10-25
+
+### Fixed
+
+- substitute %s before render on JS async paths (lck-mf-24)
+- de register — formal Sie on the 3 new indirect-t() msgids (lck-mf-22)
+- JS mirrors registered catalog under donor appid mobilitycheck (lck-mf-21)
+- port SSOT form-rhythm + minmax grid shrink fixes
+- atomic control labels never break mid-word at 320px (lck-mf-20)
+- EntitlementMiddleware JSON 500 envelope + sv/nb lexicon-bleed + grid-table wrap (lck-mf-16/17/18)
+- define dark-theme --lck-accent-ink + maxcontrast form border
+- deep_link to /settings/admin/logging, not /logreader (GH #2)
+- migrate media boundaries to 769px/768.98px family convention
+- dark-theme accent-ink token + e2e user-state reset
+
+### Added
+
+- SSRF-guarded health-probe settings + Atlas v3.5.15 seal batch
+
+### Changed
+
+- l10n: catalog 4 indirect t() msgids + add canonical JS-mirror regen script
+- notification links need overwrite.cli.url in production
+- normalize tarball modes + host-side signature audit (GH #47)
+- shared e2e instance-lock harness
+- Atlas farm v3.5.15: logcheck reseal — dual critic ACCEPT on post-seal drift
+- upgrade-backup integrity hardening; l10n parity sync
+- fleet sync — drop deprecated clip: rect(), eslint-clean app-feedback regex
+
 ## 1.4.2 - 2026-10-10
 
 ### Changed
