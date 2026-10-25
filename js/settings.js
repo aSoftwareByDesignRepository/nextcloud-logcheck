@@ -383,7 +383,7 @@
 				var remove = document.createElement('button');
 				remove.type = 'button';
 				remove.className = 'lck-btn lck-btn--ghost lck-remove-person';
-				remove.setAttribute('aria-label', t('logcheck', 'Remove %s', [displayName]));
+				remove.setAttribute('aria-label', t('logcheck', 'Remove %s').replace('%s', displayName));
 				remove.textContent = '×';
 				item.appendChild(span);
 				item.appendChild(hidden);

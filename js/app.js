@@ -179,7 +179,7 @@
 		} else {
 			cardState = 'ok';
 			label = t('logcheck', 'Watching');
-			detail = t('logcheck', 'Last check: %s', [formatLastCheck(lastCheck)]);
+			detail = t('logcheck', 'Last check: %s').replace('%s', formatLastCheck(lastCheck));
 		}
 
 		card.setAttribute('data-state', cardState);
