@@ -5,9 +5,12 @@ declare(strict_types=1);
 namespace OCA\LogCheck\Tests\Unit\BackgroundJob;
 
 use OCA\LogCheck\BackgroundJob\LogWatchJob;
+use OCA\LogCheck\Service\UpgradeBackupService;
 use OCA\LogCheck\Service\WatchRunner;
 use OCP\AppFramework\Utility\ITimeFactory;
+use OCP\Lock\ILockingProvider;
 use PHPUnit\Framework\TestCase;
+use Psr\Log\LoggerInterface;
 use ReflectionMethod;
 
 /**
@@ -20,8 +23,18 @@ final class LogWatchJobInvokeTest extends TestCase
 		$time = $this->createMock(ITimeFactory::class);
 		$runner = $this->createMock(WatchRunner::class);
 		$runner->expects(self::once())->method('run')->willReturn(['ok' => true]);
+		$locking = $this->createMock(ILockingProvider::class);
+		$locking->expects(self::once())->method('acquireLock')
+			->with(UpgradeBackupService::LOCK_KEY, ILockingProvider::LOCK_SHARED, $this->isType('string'));
+		$locking->expects(self::once())->method('releaseLock')
+			->with(UpgradeBackupService::LOCK_KEY, ILockingProvider::LOCK_SHARED);
 
-		$job = new LogWatchJob($time, $runner);
+		$job = new LogWatchJob(
+			$time,
+			$runner,
+			$this->createMock(LoggerInterface::class),
+			$locking,
+		);
 		$ref = new ReflectionMethod(LogWatchJob::class, 'run');
 		$ref->setAccessible(true);
 		$ref->invoke($job, null);
