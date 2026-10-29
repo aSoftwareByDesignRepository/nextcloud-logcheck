@@ -1426,7 +1426,8 @@
 	font-size: var(--lck-fs-sm, 0.875rem);
 	line-height: var(--lck-line-base, 1.45);
 	white-space: normal;
-	overflow-wrap: anywhere;
+	/* Menu labels keep normal word breaks — anywhere tears mid-word. */
+	overflow-wrap: break-word;
 }
 
 .lck-nav-footer__menu-item:hover {
