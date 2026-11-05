@@ -111,17 +111,7 @@ final class LeaseService
 
 	private function ensureRow(): void
 	{
-		if (!$this->db->tableExists('lck_locks')) {
-			return;
-		}
-		$qb = $this->db->getQueryBuilder();
-		$qb->select('lock_name')->from('lck_locks')
-			->where($qb->expr()->eq('lock_name', $qb->createNamedParameter(self::LOCK_NAME)))
-			->setMaxResults(1);
-		$result = $qb->executeQuery();
-		$row = $result->fetch();
-		$result->closeCursor();
-		if (is_array($row)) {
+		if (!$this->db->tableExists('lck_locks') || $this->rowExists()) {
 			return;
 		}
 		try {
@@ -131,8 +121,26 @@ final class LeaseService
 				'owner' => $ins->createNamedParameter(''),
 				'lease_until' => $ins->createNamedParameter(0),
 			])->executeStatement();
-		} catch (\Throwable) {
-			// Concurrent ensureRow — row now exists.
+		} catch (\Throwable $e) {
+			// Tolerate only the lost insert race — another process created the
+			// row between our existence check and the insert. Any other failure
+			// (DB down, schema drift) must surface: otherwise acquire() would
+			// UPDATE a row that does not exist and silently never lock.
+			if (!$this->rowExists()) {
+				throw $e;
+			}
 		}
+	}
+
+	private function rowExists(): bool
+	{
+		$qb = $this->db->getQueryBuilder();
+		$qb->select('lock_name')->from('lck_locks')
+			->where($qb->expr()->eq('lock_name', $qb->createNamedParameter(self::LOCK_NAME)))
+			->setMaxResults(1);
+		$result = $qb->executeQuery();
+		$row = $result->fetch();
+		$result->closeCursor();
+		return is_array($row);
 	}
 }
