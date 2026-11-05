@@ -210,7 +210,7 @@ OC.L10N.register(
 	"Open Alerts" : "Abrir Alertas",
 	"Open Alerts, fix the channel, then use Re-enable & test." : "Abra Alertas, corrija o canal e use Reativar e testar.",
 	"Open GitHub Issues" : "Abrir GitHub Issues",
-	"Open Logs to review the newest errors." : "Abra Logs para revisar os erros mais recentes.",
+	"Open Logs to review the newest errors." : "Abra Registros para revisar os erros mais recentes.",
 	"Open admin overview" : "Abrir visão geral do admin",
 	"Open admin settings" : "Abrir configurações de administração",
 	"Open security settings" : "Abrir configurações de segurança",

@@ -297,7 +297,7 @@ OC.L10N.register(
 	"Test sent." : "Test gesendet.",
 	"The HTTPS certificate could not be verified. If this server uses a private certificate authority, trust it under Administration settings → Security." : "Das HTTPS-Zertifikat konnte nicht verifiziert werden. Wenn dieser Server eine private Zertifizierungsstelle verwendet, vertrauen Sie dieser unter Administrationseinstellungen → Sicherheit.",
 	"The cached update check is older than two weeks." : "Der gespeicherte Update-Check ist älter als zwei Wochen.",
-	"The current log is renamed aside. A new empty log is created. Alerts keep working from the new file." : "Das aktuelle Protokoll wird umbenannt. Eine neue leere Datei wird angelegt. Alerts laufen weiter mit der neuen Datei.",
+	"The current log is renamed aside. A new empty log is created. Alerts keep working from the new file." : "Das aktuelle Protokoll wird umbenannt. Eine neue leere Datei wird angelegt. Benachrichtigungen laufen weiter mit der neuen Datei.",
 	"The instance did not answer in time over HTTPS." : "Die Instanz hat über HTTPS nicht rechtzeitig geantwortet.",
 	"The instance did not answer over HTTPS." : "Die Instanz hat über HTTPS nicht geantwortet.",
 	"The instance hostname could not be resolved on this server." : "Der Hostname der Instanz konnte auf diesem Server nicht aufgelöst werden.",

@@ -302,7 +302,7 @@
         "The instance hostname could not be resolved on this server.": "Nazwy hosta instancji nie można rozpoznać na tym serwerze.",
         "The last background check did not finish cleanly.": "Ostatnie sprawdzenie w tle nie zakończyło się poprawnie.",
         "The last update check returned no data — the update server may be unreachable.": "Ostatnia kontrola aktualizacji nie zwróciła danych — serwer aktualizacji może być nieosiągalny.",
-        "The log file is not writable from here. Ask your host for file permissions.": "Plik dziennika nie jest tu zapisywalny. Poproś hostinga o uprawnienia.",
+        "The log file is not writable from here. Ask your host for file permissions.": "Plik dziennika nie jest tu zapisywalny. Poproś administratora hostingu o nadanie uprawnień do zapisu pliku.",
         "The server could not be reached. Check your connection and try again.": "Nie można połączyć się z serwerem. Sprawdź połączenie i spróbuj ponownie.",
         "This check could not run.": "Tego sprawdzenia nie udało się uruchomić.",
         "This instance URL uses HTTP. Prefer HTTPS for production.": "Ten adres URL instancji używa HTTP. W produkcji preferuj HTTPS.",

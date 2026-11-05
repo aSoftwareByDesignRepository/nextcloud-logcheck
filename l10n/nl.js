@@ -127,7 +127,7 @@ OC.L10N.register(
 	"HealthCheck paused %s alerts after repeated failures. Re-enable & test in Alerts." : "HealthCheck heeft %s-meldingen gepauzeerd na herhaalde fouten. Schakel opnieuw in en test onder Meldingen.",
 	"HealthCheck works on one Nextcloud server that can read its log file. Several servers each with their own log file are not supported." : "HealthCheck werkt op één Nextcloud-server die zijn logbestand kan lezen. Meerdere servers met elk een eigen logbestand worden niet ondersteund.",
 	"Help" : "Hulp",
-	"Help keep HealthCheck free — donations and enterprise contact." : "Help HealthCheck gratis te houden — donaties en enterprise-contact.",
+	"Help keep HealthCheck free — donations and enterprise contact." : "Ondersteun HealthCheck om gratis te blijven — donaties en enterprise-contact.",
 	"Home" : "Start",
 	"How often?" : "Hoe vaak?",
 	"How serious?" : "Hoe ernstig?",
