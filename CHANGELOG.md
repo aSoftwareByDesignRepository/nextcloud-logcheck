@@ -223,3 +223,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Home-first “Turn on alerts” setup; Alerts / Rules / People / Support settings
 - Restricted-only access with App Admins; excerpts default off (system-admin gate)
 - Durable cursor, lease lock, pending per-channel delivery, optimistic settings versioning
+
+## [1.4.4] — 2026-11-05
+
+### Added
+
+- + hardened guard + job lock contract
+
+### Fixed
+
+- + agreement gate findings (da/de/it/nl/pt_BR/pl)
+- catches
+- break-word)
+
+### Changed
+
+- + footer glyphs
+- Refresh App Store screenshots from clean marketing captures
+
