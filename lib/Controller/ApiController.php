@@ -402,6 +402,10 @@ class ApiController extends Controller
 		}
 		$users = [];
 		foreach ($this->userManager->searchDisplayName($q, 20) as $user) {
+			// People pickers never offer deactivated accounts.
+			if (!$user->isEnabled()) {
+				continue;
+			}
 			$users[] = [
 				'uid' => $user->getUID(),
 				'displayName' => $user->getDisplayName(),
@@ -410,6 +414,9 @@ class ApiController extends Controller
 		if ($users === [] && method_exists($this->userManager, 'search')) {
 			/** @psalm-suppress UndefinedInterfaceMethod */
 			foreach ($this->userManager->search($q, 20) as $user) {
+				if (!$user->isEnabled()) {
+					continue;
+				}
 				$users[] = [
 					'uid' => $user->getUID(),
 					'displayName' => $user->getDisplayName(),

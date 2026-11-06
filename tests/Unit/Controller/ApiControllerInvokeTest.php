@@ -274,7 +274,12 @@ class ApiControllerInvokeTest extends TestCase
 		$user = $this->createMock(IUser::class);
 		$user->method('getUID')->willReturn('bob');
 		$user->method('getDisplayName')->willReturn('Bob');
-		$this->users->method('searchDisplayName')->willReturn([$user]);
+		$user->method('isEnabled')->willReturn(true);
+		$dead = $this->createMock(IUser::class);
+		$dead->method('getUID')->willReturn('dead-bob');
+		$dead->method('getDisplayName')->willReturn('Dead Bob');
+		$dead->method('isEnabled')->willReturn(false);
+		$this->users->method('searchDisplayName')->willReturn([$user, $dead]);
 		$this->request->method('getParam')->willReturn('bo');
 		$res = $this->controller()->searchDirectory('bo');
 		self::assertSame([['uid' => 'bob', 'displayName' => 'Bob']], $res->getData()['users']);
