@@ -5,6 +5,25 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## 1.4.4 - 2026-11-05
+
+### Added
+
+- Upgrade backup now ships a generated schema catalog that verifies every expected database table after an update and fails loudly if one is missing, instead of warning and continuing.
+- Restores skip database-generated columns on engines that recompute them (MySQL/MariaDB, Postgres).
+- The log-watch background job honors the upgrade-backup restore lock and pauses while a restore runs instead of writing mid-restore.
+
+### Fixed
+
+- Upgrade-backup write failures are logged instead of silently swallowed — snapshot-folder cleanup and app-data restores report problems through the log rather than disappearing into empty catch blocks.
+- The feedback footer renders its icons again (report a problem, suggest an improvement) and resolves the current page URL correctly.
+- Navigation labels keep word breaks at narrow widths, so long words no longer overflow the menu.
+- Translations repaired in Danish, German, Italian, Dutch, Brazilian Portuguese and Polish — in-app references now name the translated labels and agreement wording was corrected.
+
+### Changed
+
+- App Store screenshots refreshed with clean marketing captures.
+
 ## 1.4.3 - 2026-10-25
 
 ### Fixed
@@ -223,21 +242,3 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Home-first “Turn on alerts” setup; Alerts / Rules / People / Support settings
 - Restricted-only access with App Admins; excerpts default off (system-admin gate)
 - Durable cursor, lease lock, pending per-channel delivery, optimistic settings versioning
-
-## [1.4.4] — 2026-11-05
-
-### Added
-
-- + hardened guard + job lock contract
-
-### Fixed
-
-- + agreement gate findings (da/de/it/nl/pt_BR/pl)
-- catches
-- break-word)
-
-### Changed
-
-- + footer glyphs
-- Refresh App Store screenshots from clean marketing captures
-
