@@ -365,6 +365,5 @@ OC.L10N.register(
 	"_HealthCheck: %n new error_::_HealthCheck: %n new errors_" : ["HealthCheck: %n new error","HealthCheck: %n new errors"],
 	"a newer version" : "a newer version",
 	"memory_limit=%s" : "memory_limit=%s"
-	},
-	"nplurals=2; plural=(n != 1);"
+	}
 );
