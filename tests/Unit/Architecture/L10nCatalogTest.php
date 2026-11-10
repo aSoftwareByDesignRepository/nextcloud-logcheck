@@ -44,13 +44,14 @@ class L10nCatalogTest extends TestCase
 
 	public function testJsonJsCatalogsStayInSync(): void
 	{
-		foreach (['en', 'de', 'fr', 'es', 'da', 'nl', 'it', 'pl', 'sv', 'nb', 'pt_BR'] as $lang) {
+		foreach (['en', 'de', 'fr', 'es', 'da', 'nl', 'it', 'pl', 'sv', 'nb', 'pt', 'pt_BR', 'tr'] as $lang) {
 			$json = json_decode((string)file_get_contents($this->root . '/l10n/' . $lang . '.json'), true, 512, JSON_THROW_ON_ERROR);
 			$js = (string)file_get_contents($this->root . '/l10n/' . $lang . '.js');
 			self::assertStringContainsString('OC.L10N.register', $js);
-			self::assertSame($json['pluralForm'] ?? '', $this->extractJsPluralForm($js), $lang);
+			self::assertSame('', $this->extractJsPluralForm($js), $lang . ' js mirror must use the 2-arg register — a serialized pluralForm third arg is CSP unsafe-eval (client plurals resolve via Intl.PluralRules); .json pluralForm stays the server-side authority');
+			self::assertMatchesRegularExpression('/^nplurals=\d+; plural=.+;$/', (string)($json['pluralForm'] ?? ''), $lang . ' json pluralForm malformed');
 			$start = strpos($js, '{');
-			$end = strrpos($js, '},');
+			$end = strrpos($js, '}');
 			self::assertNotFalse($start);
 			self::assertNotFalse($end);
 			$body = substr($js, $start, $end - $start + 1);
@@ -81,7 +82,7 @@ class L10nCatalogTest extends TestCase
 
 	public function testRequiredPortfolioLocalesPresent(): void
 	{
-		foreach (['en', 'de', 'fr', 'es', 'da', 'nl', 'it', 'pl', 'sv', 'nb', 'pt', 'pt_BR'] as $lang) {
+		foreach (['en', 'de', 'fr', 'es', 'da', 'nl', 'it', 'pl', 'sv', 'nb', 'pt', 'pt_BR', 'tr'] as $lang) {
 			self::assertFileExists($this->root . '/l10n/' . $lang . '.json');
 			self::assertFileExists($this->root . '/l10n/' . $lang . '.js');
 		}
