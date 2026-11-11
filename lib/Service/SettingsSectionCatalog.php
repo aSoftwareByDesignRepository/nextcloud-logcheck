@@ -23,6 +23,7 @@ final class SettingsSectionCatalog
 		'alerts',
 		'rules',
 		'people',
+		'transfer',
 		'support',
 	];
 
@@ -55,6 +56,7 @@ final class SettingsSectionCatalog
 			'alerts' => $l->t('Alerts'),
 			'rules' => $l->t('Rules'),
 			'people' => $l->t('People'),
+			'transfer' => $l->t('Transfer configuration'),
 			'support' => $l->t('Support us'),
 			default => $l->t('Settings'),
 		};
@@ -66,6 +68,7 @@ final class SettingsSectionCatalog
 			'alerts' => $l->t('Alerts'),
 			'rules' => $l->t('Rules'),
 			'people' => $l->t('People'),
+			'transfer' => $l->t('Transfer'),
 			'support' => $l->t('Support us'),
 			default => $l->t('Settings'),
 		};
@@ -77,6 +80,7 @@ final class SettingsSectionCatalog
 			'alerts' => $l->t('Choose how HealthCheck notifies you when new errors appear.'),
 			'rules' => $l->t('Pick how serious an issue must be and how often alerts arrive.'),
 			'people' => $l->t('Who can open HealthCheck — Nextcloud admins always can; add app admins below.'),
+			'transfer' => $l->t('Copy all settings, catalogues and data between a test and a production instance — one encrypted file, dry-run before anything is written.'),
 			'support' => $l->t('Help keep HealthCheck free — donations and enterprise contact.'),
 			default => '',
 		};

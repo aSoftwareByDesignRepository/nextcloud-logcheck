@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace OCA\LogCheck\Tests\Unit\Controller;
 
+use OCA\LogCheck\ConfigTransfer\TransferReceiptStore;
 use OCA\LogCheck\Controller\PageController;
 use OCA\LogCheck\Service\AccessService;
 use OCA\LogCheck\Service\Health\HealthDashboardService;
@@ -40,6 +41,7 @@ final class PageControllerLegacyRedirectTest extends TestCase
 			new SettingsSectionCatalog(),
 			$this->createMock(SupportUsLinks::class),
 			$this->createMock(LogFileService::class),
+			$this->createMock(TransferReceiptStore::class),
 		);
 	}
 

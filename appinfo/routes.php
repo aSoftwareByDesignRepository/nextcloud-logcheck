@@ -28,6 +28,13 @@ return [
 			'requirements' => ['section' => SettingsSectionCatalog::routeRequirement()],
 		],
 
+		// ── Config & data transfer (test → production) ──────────────────
+		['name' => 'transfer_api#status', 'url' => '/api/admin/transfer/status', 'verb' => 'GET'],
+		['name' => 'transfer_api#export', 'url' => '/api/admin/transfer/export', 'verb' => 'POST'],
+		['name' => 'transfer_api#preview', 'url' => '/api/admin/transfer/preview', 'verb' => 'POST'],
+		['name' => 'transfer_api#apply', 'url' => '/api/admin/transfer/apply', 'verb' => 'POST'],
+		['name' => 'transfer_api#reconcile', 'url' => '/api/admin/transfer/reconcile', 'verb' => 'POST'],
+
 		['name' => 'api#getStatus', 'url' => '/api/status', 'verb' => 'GET'],
 		['name' => 'api#getSettings', 'url' => '/api/settings', 'verb' => 'GET'],
 		['name' => 'api#saveSettings', 'url' => '/api/settings', 'verb' => 'PUT'],

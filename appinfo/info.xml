@@ -104,6 +104,9 @@ Wir verbessern diese App mit Rückmeldungen aus der Praxis. Fehlerberichte, Stol
 		<command>OCA\LogCheck\Command\RunCommand</command>
 		<command>OCA\LogCheck\Command\TestChannelCommand</command>
 		<command>OCA\LogCheck\Command\ResetCursorCommand</command>
+		<command>OCA\LogCheck\Command\ConfigExportCommand</command>
+		<command>OCA\LogCheck\Command\ConfigImportCommand</command>
+		<command>OCA\LogCheck\Command\ConfigReconcileCommand</command>
 	</commands>
 	<repair-steps>
 		<install>

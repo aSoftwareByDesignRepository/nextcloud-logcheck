@@ -40,6 +40,7 @@ class PageController extends Controller
 		private readonly SettingsSectionCatalog $sectionCatalog,
 		private readonly SupportUsLinks $supportUsLinks,
 		private readonly LogFileService $logFileService,
+		private readonly \OCA\LogCheck\ConfigTransfer\TransferReceiptStore $transferReceipts,
 	) {
 		parent::__construct(Application::APP_ID, $request);
 	}
@@ -135,7 +136,7 @@ class PageController extends Controller
 		if (!$this->sectionCatalog->isSection($section)) {
 			return new TemplateResponse('core', '404', [], 'guest');
 		}
-		$this->registerAssets('settings');
+		$this->registerAssets('settings', $section);
 		$user = $this->userSession->getUser();
 		$uid = $user?->getUID() ?? '';
 		$dto = $this->settingsService->toUiDto();
@@ -168,6 +169,8 @@ class PageController extends Controller
 			'status' => $status,
 			'isNcAdmin' => $isNcAdmin,
 			'isAppAdmin' => $isAppAdmin,
+			'isSystemAdmin' => $isNcAdmin,
+			'transferLastReceipt' => $this->transferReceipts->lastReceipt(),
 			'supportLinks' => $this->supportUsLinks->forLocale($lang),
 			'sections' => SettingsSectionCatalog::SECTIONS,
 			'sectionCatalog' => $this->sectionCatalog,
@@ -232,6 +235,7 @@ class PageController extends Controller
 			'alerts' => $this->urlGenerator->linkToRoute('logcheck.page.settings', ['section' => 'alerts']),
 			'rules' => $this->urlGenerator->linkToRoute('logcheck.page.settings', ['section' => 'rules']),
 			'people' => $this->urlGenerator->linkToRoute('logcheck.page.settings', ['section' => 'people']),
+			'transfer' => $this->urlGenerator->linkToRoute('logcheck.page.settings', ['section' => 'transfer']),
 			'support' => $this->urlGenerator->linkToRoute('logcheck.page.settings', ['section' => 'support']),
 			'apiStatus' => $this->urlGenerator->linkToRoute('logcheck.api.getStatus'),
 			'apiSettings' => $this->urlGenerator->linkToRoute('logcheck.api.getSettings'),
@@ -251,12 +255,17 @@ class PageController extends Controller
 		];
 	}
 
-	private function registerAssets(string $extra = ''): void
+	private function registerAssets(string $extra = '', string $section = ''): void
 	{
 		AssetRegistrar::registerStyles();
 		AssetRegistrar::registerScripts();
 		if ($extra === 'settings') {
 			Util::addScript(Application::APP_ID, 'settings');
+		}
+		if ($extra === 'settings' && $section === 'transfer') {
+			Util::addStyle(Application::APP_ID, 'common/transfer');
+			Util::addScript(Application::APP_ID, 'transfer-bridge');
+			Util::addScript(Application::APP_ID, 'transfer');
 		}
 		if ($extra === 'logs') {
 			Util::addScript(Application::APP_ID, 'logs');

@@ -15,6 +15,7 @@ declare(strict_types=1);
 namespace OCA\LogCheck\Tests\Unit\BackgroundJob;
 
 use OCA\LogCheck\BackgroundJob\LogWatchJob;
+use OCA\LogCheck\BackgroundJob\TransferApplyJob;
 use OCA\LogCheck\Service\UpgradeBackupService;
 use OCA\LogCheck\Service\WatchRunner;
 use OCP\AppFramework\Utility\ITimeFactory;
@@ -28,6 +29,7 @@ final class UpgradeBackupSharedLockTest extends TestCase
 	/** Every app background job — the whole family is wired into the contract. */
 	private const JOB_CLASSES = [
 		LogWatchJob::class,
+		TransferApplyJob::class,
 	];
 
 	/**

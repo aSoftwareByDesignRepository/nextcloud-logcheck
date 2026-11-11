@@ -67,10 +67,14 @@ class ThemeTokenCssTest extends TestCase
 			if (str_contains($f->getPathname(), 'tokens.css')) {
 				$stripped = preg_replace('/--lck-qr-canvas:\s*#[0-9a-fA-F]+;/', '', $stripped) ?? $stripped;
 			}
+			// Hex inside var() fallbacks is allowed (family convention —
+			// synced shared CSS uses var(--nc-token, #fallback)); only bare
+			// hex colours on theme-sensitive surfaces are banned.
+			$stripped = preg_replace('/var\([^)]*#[0-9a-fA-F]+[^)]*\)/', 'var(--ok)', $stripped) ?? $stripped;
 			self::assertDoesNotMatchRegularExpression(
 				'/#[0-9a-fA-F]{3,8}\b/',
 				$stripped,
-				$f->getFilename() . ' must not hard-code hex colours (except --lck-qr-canvas)'
+				$f->getFilename() . ' must not hard-code hex colours (except --lck-qr-canvas and var() fallbacks)'
 			);
 		}
 	}

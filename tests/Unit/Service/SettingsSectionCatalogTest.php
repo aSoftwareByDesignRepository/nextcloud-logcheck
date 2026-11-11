@@ -12,8 +12,8 @@ class SettingsSectionCatalogTest extends TestCase
 	public function testDefaultAndSections(): void
 	{
 		self::assertSame('alerts', SettingsSectionCatalog::DEFAULT_SECTION);
-		self::assertSame(['alerts', 'rules', 'people', 'support'], SettingsSectionCatalog::SECTIONS);
-		self::assertSame('alerts|rules|people|support', SettingsSectionCatalog::routeRequirement());
+		self::assertSame(['alerts', 'rules', 'people', 'transfer', 'support'], SettingsSectionCatalog::SECTIONS);
+		self::assertSame('alerts|rules|people|transfer|support', SettingsSectionCatalog::routeRequirement());
 	}
 
 	public function testLegacyAliases(): void
