@@ -10,7 +10,20 @@ declare(strict_types=1);
  */
 
 $base = __DIR__ . '/../l10n';
-$localeFiles = ['en', 'de', 'fr', 'es', 'da', 'nl', 'it', 'pl', 'sv', 'nb', 'pt_BR'];
+// Discover every shipped catalog — a hardcoded roster goes stale on each new locale.
+$localeFiles = [];
+foreach (glob($base . '/*.json') ?: [] as $path) {
+	$name = basename($path, '.json');
+	if ($name === '' || $name[0] === '_') {
+		continue;
+	}
+	$localeFiles[] = $name;
+}
+sort($localeFiles);
+if (!in_array('en', $localeFiles, true)) {
+	fwrite(STDERR, "Reference catalog l10n/en.json missing.\n");
+	exit(1);
+}
 
 /**
  * @return list<string>
@@ -33,9 +46,15 @@ foreach ($localeFiles as $lang) {
 
 $enT = $catalogs['en']['translations'] ?? [];
 $failed = false;
-$expectedPluralCounts = [
-	'pl' => 3,
-];
+// Expected plural form count per locale comes from each catalog's own
+// pluralForm header (nplurals=N) — never a hardcoded map.
+$expectedPluralCounts = [];
+foreach ($localeFiles as $lang) {
+	$pf = (string)($catalogs[$lang]['pluralForm'] ?? '');
+	if (preg_match('/nplurals=(\d+)/', $pf, $m)) {
+		$expectedPluralCounts[$lang] = (int)$m[1];
+	}
+}
 
 foreach ($enT as $key => $enVal) {
 	$keyPrintf = is_string($enVal) ? lckPrintfPlaceholders($key) : lckPrintfPlaceholders((string)$key);

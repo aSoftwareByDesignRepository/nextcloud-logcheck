@@ -44,7 +44,7 @@ class L10nCatalogTest extends TestCase
 
 	public function testJsonJsCatalogsStayInSync(): void
 	{
-		foreach (['en', 'de', 'fr', 'es', 'da', 'nl', 'it', 'pl', 'sv', 'nb', 'pt', 'pt_BR', 'tr'] as $lang) {
+		foreach ($this->catalogLocales() as $lang) {
 			$json = json_decode((string)file_get_contents($this->root . '/l10n/' . $lang . '.json'), true, 512, JSON_THROW_ON_ERROR);
 			$js = (string)file_get_contents($this->root . '/l10n/' . $lang . '.js');
 			self::assertStringContainsString('OC.L10N.register', $js);
@@ -82,7 +82,7 @@ class L10nCatalogTest extends TestCase
 
 	public function testRequiredPortfolioLocalesPresent(): void
 	{
-		foreach (['en', 'de', 'fr', 'es', 'da', 'nl', 'it', 'pl', 'sv', 'nb', 'pt', 'pt_BR', 'tr'] as $lang) {
+		foreach (['en', 'de', 'fr', 'es', 'da', 'nl', 'it', 'pl', 'sv', 'nb', 'pt', 'pt_BR', 'tr', 'zh_CN'] as $lang) {
 			self::assertFileExists($this->root . '/l10n/' . $lang . '.json');
 			self::assertFileExists($this->root . '/l10n/' . $lang . '.js');
 		}
@@ -103,6 +103,26 @@ class L10nCatalogTest extends TestCase
 				);
 			}
 		}
+	}
+
+	/**
+	 * Every shipped catalog — derived from l10n/*.json so a new locale can never
+	 * escape the drift/contract assertions (hardcoded rosters went stale twice).
+	 *
+	 * @return list<string>
+	 */
+	private function catalogLocales(): array
+	{
+		$out = [];
+		foreach (glob($this->root . '/l10n/*.json') ?: [] as $path) {
+			$name = basename($path, '.json');
+			if ($name === '' || $name[0] === '_') {
+				continue;
+			}
+			$out[] = $name;
+		}
+		sort($out);
+		return $out;
 	}
 
 	private function extractJsPluralForm(string $js): string

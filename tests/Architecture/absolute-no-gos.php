@@ -136,7 +136,7 @@ foreach (glob($root . '/l10n/*.json') ?: [] as $path) {
 }
 ok('UX-L14: no banned ops jargon in l10n (all locales)');
 
-$requiredLocales = ['en', 'de', 'fr', 'es', 'da', 'nl', 'it', 'pl', 'sv', 'nb', 'pt_BR'];
+$requiredLocales = ['en', 'de', 'fr', 'es', 'da', 'nl', 'it', 'pl', 'sv', 'nb', 'pt', 'pt_BR', 'tr', 'zh_CN'];
 foreach ($requiredLocales as $lang) {
 	if (!is_file($root . '/l10n/' . $lang . '.json') || !is_file($root . '/l10n/' . $lang . '.js')) {
 		fail('L10N: missing portfolio locale ' . $lang);

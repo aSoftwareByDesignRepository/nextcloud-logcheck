@@ -25,7 +25,6 @@ foreach ($locales as $lang) {
 	}
 	$cat = json_decode((string)file_get_contents($jsonPath), true, 512, JSON_THROW_ON_ERROR);
 	$translations = $cat['translations'] ?? [];
-	$pluralForm = $cat['pluralForm'] ?? null;
 
 	$lines = ["OC.L10N.register(\n", "\t\"logcheck\",\n", "\t{\n"];
 	$first = true;
@@ -42,14 +41,11 @@ foreach ($locales as $lang) {
 	$last = array_pop($lines);
 	$last = rtrim($last, ",\n") . "\n";
 	$lines[] = $last;
-	if ($pluralForm !== null && $pluralForm !== '') {
-		$lines[] = "\t},\n";
-		$lines[] = "\t" . json_encode($pluralForm) . "\n";
-		$lines[] = ");\n";
-	} else {
-		$lines[] = "\t}\n";
-		$lines[] = ");\n";
-	}
+	// 2-arg register only: a serialized pluralForm third arg re-introduces CSP
+	// unsafe-eval; client plurals resolve via Intl.PluralRules, .json stays the
+	// server-side authority (mirrors L10nCatalogTest::testJsonJsCatalogsStayInSync).
+	$lines[] = "\t}\n";
+	$lines[] = ");\n";
 	file_put_contents($jsPath, implode('', $lines));
 	echo "Wrote $jsPath (" . count($translations) . " keys)\n";
 }

@@ -9,7 +9,20 @@ declare(strict_types=1);
  */
 
 $base = __DIR__ . '/../l10n';
-$localeFiles = ['en', 'de', 'fr', 'es', 'da', 'nl', 'it', 'pl', 'sv', 'nb', 'pt', 'pt_BR', 'tr'];
+// Discover every shipped catalog — a hardcoded roster goes stale on each new locale.
+$localeFiles = [];
+foreach (glob(__DIR__ . '/../l10n/*.json') ?: [] as $path) {
+	$name = basename($path, '.json');
+	if ($name === '' || $name[0] === '_') {
+		continue;
+	}
+	$localeFiles[] = $name;
+}
+sort($localeFiles);
+if (!in_array('en', $localeFiles, true)) {
+	fwrite(STDERR, "Reference catalog l10n/en.json missing.\n");
+	exit(1);
+}
 $catalogs = [];
 
 foreach ($localeFiles as $lang) {
