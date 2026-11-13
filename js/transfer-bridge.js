@@ -55,14 +55,32 @@
 			}));
 		},
 	};
-	window.HealthCheckMessaging = {
-		alert(text) {
-			if (window.OC && OC.Notification && OC.Notification.showTemporary) {
-				OC.Notification.showTemporary(text);
+	// Messaging: the synced transfer.js asks for .alert/.polite — route both
+	// to the app's own visible channel (LogCheckToasts, dedup on kind+text
+	// with timer reset), and always mirror into the hidden
+	// lck-transfer-result-live status region. OC.Notification is only a
+	// last-resort fallback — it was removed from NC>=31 bundles, so it can
+	// never be the only visible path (dead_platform_toast_api).
+	function live(text) {
+		const el = document.getElementById('lck-transfer-result-live');
+		if (el) el.textContent = text;
+	}
+	function announce(text, kind) {
+		const toasts = window.LogCheckToasts;
+		if (toasts && typeof toasts.showError === 'function' && typeof toasts.showSuccess === 'function') {
+			if (kind === 'error') {
+				toasts.showError(text);
+			} else {
+				toasts.showSuccess(text);
 			}
-			const el = document.getElementById('lck-transfer-result-live');
-			if (el) el.textContent = text;
-		},
-		polite(text) { this.alert(text); },
+			return;
+		}
+		if (window.OC && OC.Notification && OC.Notification.showTemporary) {
+			OC.Notification.showTemporary(text);
+		}
+	}
+	window.HealthCheckMessaging = {
+		alert(text) { announce(text, 'error'); live(text); },
+		polite(text) { announce(text, 'success'); live(text); },
 	};
 })();
