@@ -581,12 +581,13 @@
 	min-height: 44px;
 }
 
-/* Mobile base: tighter support blocks; ≥481px restores roomier padding */
+/* Mobile base: tighter support blocks; >480px restores roomier padding */
 #content.app-logcheck .lck-support__block {
 	padding: var(--lck-space-3);
 }
-/* ≥481px: roomier support cards (sm breakpoint token) */
-@media (min-width: 481px) {
+/* >480px: roomier support cards (sm breakpoint token — 480.02 complement of
+   the ≤480px full-bleed cap, no dead zone) */
+@media (min-width: 480.02px) {
 	#content.app-logcheck .lck-support__block {
 		padding: var(--lck-space-4);
 	}
