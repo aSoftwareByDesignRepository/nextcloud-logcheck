@@ -5,6 +5,39 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## 1.4.5 - 2026-11-13
+
+### Fixed
+
+- re-sync pack — donor danger-ink token chain (slo r10 critic mandate)
+- 375px dialog not full-bleed — check-shell [open] margin:auto outranks pack media rule
+- route transfer messaging to app-owned toasts — OC.Notification fallback only
+- overlay-scoped armor for body-mounted toast close button
+- 480px media-boundary dead zone — min edge 481 → 480.02 complement
+- re-sync config-transfer pack — dialog-qualified full-bleed selector
+- margin:auto on pack dialog — NC core reset uncenters top-layer dialogs
+- sync config-transfer pack — schema cache, file-input specificity, sheet clip
+- sync config-transfer pack — positional t() interpolation
+- un-stale locale rosters for zh_CN; generator emits 2-arg register
+- L10nCatalogTest follows the 2-arg OC.L10N.register contract
+- parity script summary lists actual checked locales
+- directory people picker skips deactivated accounts
+
+### Added
+
+- config & data transfer — encrypted test→prod pack
+
+### Changed
+
+- settings-transfer surface + report/progress dialog cells in screenshot matrix
+- l10n: catalogue 22 transfer msgids across all 15 locale catalogs + regen js mirrors
+- pack re-sync — replace-confirm token width (cramped_form_controls)
+- l10n: zh-Hant/zh_TW catalog + locale wiring
+- l10n: add zh_CN catalog
+- l10n: complete translations across the app language set
+- translation updates + parity script
+- repair v1.4.4 release section (lck-release-notes-144-fragments)
+
 ## 1.4.4 - 2026-11-05
 
 ### Added
