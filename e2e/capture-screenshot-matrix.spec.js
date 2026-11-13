@@ -32,6 +32,7 @@ const fs = require('fs');
 const path = require('path');
 const { setUserTheme, resetUserTheme } = require('./helpers/theming');
 
+const { tmpdir } = require('os');
 const nextcloudRoot = path.resolve(__dirname, '../../../../');
 
 const BASE = (process.env.LOGCHECK_BASE_URL || process.env.E2E_BASE || 'http://localhost:8081').replace(/\/$/, '');
@@ -64,8 +65,127 @@ const READY = {
 	'settings-rules': { current: '#lck-level-chips' },
 	'settings-people': { current: '#lck-settings-form' },
 	'settings-support': { current: '.lck-support' },
+	'settings-transfer': {
+		current: '#lck-transfer-export-card',
+		'report-dialog': '#lck-transfer-export-card',
+		'progress-dialog': '#lck-transfer-export-card',
+	},
 	'denied': { current: '.lck-app--denied' },
 };
+
+const MARKER = `lx-${Date.now().toString(36)}-${process.pid.toString(36)}`;
+const TRANSFER_PASS = `Atlas-Xfer-${MARKER}-secret`;
+let transferFilePath = null;
+
+/**
+ * Real .nctransfer fixture: produced by the app's own export endpoint, so the
+ * import preview decrypts honestly (no hand-crafted JSON). Cached per run.
+ */
+async function ensureTransferFile(page) {
+	if (transferFilePath) {
+		return transferFilePath;
+	}
+	const token = await page.evaluate(
+		() => (typeof window.OC !== 'undefined' && window.OC.requestToken)
+			|| document.querySelector('head[data-requesttoken]')?.getAttribute('data-requesttoken')
+			|| '');
+	const resp = await page.request.post(`${APP}/api/admin/transfer/export`, {
+		data: { passphrase: TRANSFER_PASS },
+		headers: { requesttoken: token, 'OCS-APIRequest': 'true' },
+	});
+	expect(resp.ok(), `transfer export failed: ${resp.status()}`).toBeTruthy();
+	const buf = await resp.body();
+	expect(buf.byteLength, 'transfer export returned a tiny body').toBeGreaterThan(200);
+	transferFilePath = path.join(tmpdir(), `lck-matrix-${MARKER}.nctransfer`);
+	fs.writeFileSync(transferFilePath, buf);
+	return transferFilePath;
+}
+
+/** native_dialog_margin_reset_uncentered: NC core's html,body,…,dialog
+ * reset zeroes the UA 'margin:auto' that centers a top-layer <dialog> —
+ * a pack dialog without a margin re-declaration anchors to the viewport
+ * top-left. mode 'centered' proves the pack margin:auto restored both-axis
+ * centering over the dimmed backdrop; mode 'fullbleed' proves the ≤480px
+ * media query margin:0 sheet still wins at narrow widths. */
+async function assertDialogTopLayerGeometry(dialog, mode, where) {
+	const m = await dialog.evaluate((d) => {
+		const r = d.getBoundingClientRect();
+		return { l: r.left, t: r.top, w: r.width, h: r.height, vpW: window.innerWidth, vpH: window.innerHeight };
+	});
+	if (mode === 'centered') {
+		const expL = Math.max(0, (m.vpW - m.w) / 2);
+		const expT = Math.max(0, (m.vpH - m.h) / 2);
+		expect(Math.abs(m.l - expL),
+			`${where}: dialog left ${Math.round(m.l)} ≠ centered ${Math.round(expL)} — margin:auto did not survive the NC reset`)
+			.toBeLessThanOrEqual(2);
+		expect(Math.abs(m.t - expT),
+			`${where}: dialog top ${Math.round(m.t)} ≠ centered ${Math.round(expT)}`)
+			.toBeLessThanOrEqual(2);
+		expect(m.l, `${where}: flush-left top-left anchor regression`).toBeGreaterThan(1);
+	} else {
+		expect(Math.abs(m.l), `${where}: ≤480 full-bleed sheet must pin to the left edge`).toBeLessThanOrEqual(1);
+		expect(m.w, `${where}: ≤480 full-bleed sheet must span viewport width`).toBeGreaterThanOrEqual(m.vpW - 1);
+		expect(m.t, `${where}: ≤480 full-bleed sheet must pin to the top edge`).toBeLessThanOrEqual(1);
+	}
+}
+
+async function assertTransferDialogGeometry(page, selector, where) {
+	const vpW = page.viewportSize()?.width ?? 0;
+	await assertDialogTopLayerGeometry(
+		page.locator(selector),
+		vpW <= 480 ? 'fullbleed' : 'centered',
+		`${where} @${vpW}px`,
+	);
+}
+
+async function driveTransferReport(page) {
+	const file = await ensureTransferFile(page);
+	await page.locator('#lck-transfer-import-passphrase').fill(TRANSFER_PASS);
+	await page.locator('#lck-transfer-file').setInputFiles(file);
+	await expect(page.locator('#lck-transfer-report[open]')).toBeVisible({ timeout: 45_000 });
+	await assertTransferDialogGeometry(page, '#lck-transfer-report[open]', 'report');
+}
+
+/**
+ * Modal-state drivers keyed by surface id → state name. A driver must leave
+ * the dialog open and painted; the capture happens immediately after
+ * (progress dialogs self-close on job completion — no extra settle delay).
+ */
+const DIALOG_DRIVERS = {
+	'settings-transfer': {
+		// Upload a real export → debounced preview → report dialog.
+		'report-dialog': driveTransferReport,
+		// Same flow plus confirm → async apply job opens the progress dialog.
+		// The dialog closes + reloads when the job reports done, so the caller
+		// captures immediately — no settle wait, the queue may fire any time.
+		'progress-dialog': async (page) => {
+			await driveTransferReport(page);
+			await page.locator('#lck-transfer-confirm').click();
+			const progress = page.locator('#lck-transfer-progress[open]');
+			await expect(progress).toBeVisible({ timeout: 15_000 });
+			await assertTransferDialogGeometry(page, '#lck-transfer-progress[open]', 'progress');
+		},
+	},
+};
+
+/** Execute every queued TransferApplyJob the dialog drivers left behind —
+ * dev-instance cron doesn't fire them, and a stale 'queued' row pollutes
+ * the status surface for the next lane (e2e_mutated_instance_config). */
+const composeRoot = path.join(nextcloudRoot, 'nextcloud');
+function occSweepQueuedTransferJobs() {
+	const ids = execFileSync('docker', [
+		'compose', 'exec', '-T', 'mariadb', 'bash', '-lc',
+		`mariadb -u nextcloud -pnextcloud_password nextcloud -N -e "
+			SELECT id FROM oc_jobs WHERE class LIKE '%TransferApplyJob%';"`,
+	], { cwd: composeRoot, encoding: 'utf8', timeout: 60_000 })
+		.split('\n').map((s) => s.trim()).filter(Boolean);
+	for (const id of ids) {
+		execFileSync('docker', [
+			'compose', 'exec', '-T', '-u', 'www-data', 'nextcloud',
+			'php', 'occ', 'background-job:execute', id,
+		], { cwd: composeRoot, encoding: 'utf8', timeout: 120_000 });
+	}
+}
 
 const capturedFiles = [];
 
@@ -145,7 +265,7 @@ function occRestoreProbes() {
 	].join(' ');
 	execFileSync('docker', [
 		'compose', 'exec', '-T', '-u', 'www-data', 'nextcloud', 'php', '-r', php,
-	], { cwd: nextcloudRoot, encoding: 'utf8', timeout: 60_000 });
+	], { cwd: path.join(nextcloudRoot, 'nextcloud'), encoding: 'utf8', timeout: 60_000 });
 }
 
 async function shot(page, name, meta) {
@@ -191,6 +311,11 @@ test.describe('LogCheck screenshot matrix (ATLAS §VISUAL)', () => {
 				occRestoreProbes();
 			}
 		} finally {
+			try {
+				occSweepQueuedTransferJobs();
+			} catch (e) {
+				console.warn(`transfer job sweep failed: ${e.message || e}`);
+			}
 			fs.mkdirSync(OUT, { recursive: true });
 			fs.writeFileSync(
 				path.join(OUT, '_screenshot-matrix-manifest.json'),
@@ -255,6 +380,10 @@ test.describe('LogCheck screenshot matrix (ATLAS §VISUAL)', () => {
 							// Denied surfaces must fail closed at HTTP level, not 200-theatre.
 							expect(page.url(), 'denied surface must render the access-denied shell')
 								.toContain('/apps/logcheck');
+						}
+						const dialogDriver = (DIALOG_DRIVERS[surface.id] || {})[state];
+						if (dialogDriver) {
+							await dialogDriver(page);
 						}
 						await shot(
 							page,
