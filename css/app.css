@@ -1620,6 +1620,25 @@
 	outline-offset: 2px;
 }
 
+/* Overlay control armor: <button class="lck-toast__close"> renders inside the
+   body-mounted toast stack (#lck-toasts, outside .lck-app), so page-scoped
+   rules cannot reach it and the bare 0-1-0 class rule loses to core's button
+   repaint (width:130px / pale fill / border / margin). The id/class-scoped
+   selectors pin every repainted property !important
+   (overlay_toast_button_armor_gap; family donor: whistlecheck
+   #wc-toasts button.wc-toast__close). */
+#lck-toasts button.lck-toast__close,
+.lck-toasts button.lck-toast__close {
+	width: auto !important;
+	margin: 0 !important;
+	margin-inline-start: auto !important;
+	padding: var(--lck-space-2) !important;
+	background: transparent !important;
+	border: 0 !important;
+	min-width: 44px;
+	min-height: 44px;
+}
+
 /*
  * Control-border baseline (WCAG 1.4.11 >= 3:1 vs background) — DESIGN-SYSTEM §3.6.0.
  * NC core styles every button/input with the faint `--color-border-dark`, and its
