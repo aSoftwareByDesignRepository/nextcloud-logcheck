@@ -63,7 +63,7 @@
 .lck-radio { display: flex; gap: var(--lck-space-2, 8px); align-items: flex-start; min-height: 44px; padding: var(--lck-space-1, 4px) 0; }
 .lck-radio input { margin-top: 4px; min-width: 20px; min-height: 20px; }
 .lck-radio span { min-width: 0; }
-.lck-radio--danger strong { color: var(--color-element-error, #e9322d); }
+.lck-radio--danger strong { color: var(--color-error-text, var(--color-element-error, var(--color-error))); }
 /* NC core pins input[type=file] to width:auto (inputs.css, 0-1-1) — the
    intrinsic ~320px min-size overflows narrow sheets. check-shell
    form-controls.css re-pins it at #content.app-* #app-content level (2-2-1)
@@ -129,7 +129,7 @@ dialog.lck-dialog:not([open]) {
 }
 .lck-dialog__footer .lck-actions { display: flex; gap: var(--lck-space-3, 12px); justify-content: flex-end; }
 .lck-transfer-report__verdict { font-size: 1.05rem; font-weight: 600; }
-.lck-transfer-report__verdict.is-danger { color: var(--color-element-error, #e9322d); }
+.lck-transfer-report__verdict.is-danger { color: var(--color-error-text, var(--color-element-error, var(--color-error))); }
 .lck-transfer-group { margin: var(--lck-space-2, 8px) 0; }
 .lck-transfer-group summary {
 	cursor: pointer;
@@ -139,7 +139,7 @@ dialog.lck-dialog:not([open]) {
 	font-weight: 600;
 }
 .lck-transfer-group.is-security summary {
-	color: var(--color-element-error, #e9322d);
+	color: var(--color-error-text, var(--color-element-error, var(--color-error)));
 }
 .lck-transfer-group ul { margin: 0 0 var(--lck-space-2, 8px); padding-inline-start: 1.5rem; }
 .lck-transfer-group li { padding: 2px 0; font-family: var(--lck-mono, monospace); font-size: .92em; word-break: break-all; }
