@@ -32,7 +32,6 @@ final class CommandExecuteInvokeTest extends TestCase
 	private function invokeExecute(object $command, InputInterface $input, OutputInterface $output): int
 	{
 		$ref = new ReflectionMethod($command, 'execute');
-		$ref->setAccessible(true);
 		return (int)$ref->invoke($command, $input, $output);
 	}
 

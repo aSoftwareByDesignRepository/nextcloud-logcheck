@@ -72,7 +72,6 @@ class ApiControllerLocalizationTest extends TestCase
 		);
 
 		$method = new ReflectionMethod(ApiController::class, 'localizedStatus');
-		$method->setAccessible(true);
 		/** @var array<string, mixed> $out */
 		$out = $method->invoke($ctrl);
 

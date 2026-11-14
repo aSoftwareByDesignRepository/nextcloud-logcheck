@@ -80,7 +80,6 @@ class ApiControllerRateLimitTest extends TestCase
 	{
 		$ctrl = $this->controller($this->atomicCache());
 		$method = new ReflectionMethod(ApiController::class, 'consumeTestRate');
-		$method->setAccessible(true);
 		$method->invoke($ctrl, 'admin');
 		$this->expectException(ValidationException::class);
 		$method->invoke($ctrl, 'admin');
@@ -90,7 +89,6 @@ class ApiControllerRateLimitTest extends TestCase
 	{
 		$ctrl = $this->controller($this->atomicCache());
 		$consume = new ReflectionMethod(ApiController::class, 'consumeRate');
-		$consume->setAccessible(true);
 		$consume->invoke($ctrl, 'admin', 'test:', 30);
 		$consume->invoke($ctrl, 'admin', 'run:', 10);
 		$this->addToAssertionCount(1);
@@ -103,7 +101,6 @@ class ApiControllerRateLimitTest extends TestCase
 		$cache = $this->createMock(ICache::class);
 		$ctrl = $this->controller($cache);
 		$consume = new ReflectionMethod(ApiController::class, 'consumeRate');
-		$consume->setAccessible(true);
 		$this->expectException(ValidationException::class);
 		$consume->invoke($ctrl, 'admin', 'test:', 30);
 	}

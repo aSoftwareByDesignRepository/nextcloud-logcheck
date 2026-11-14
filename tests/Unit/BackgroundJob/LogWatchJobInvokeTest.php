@@ -36,7 +36,6 @@ final class LogWatchJobInvokeTest extends TestCase
 			$locking,
 		);
 		$ref = new ReflectionMethod(LogWatchJob::class, 'run');
-		$ref->setAccessible(true);
 		$ref->invoke($job, null);
 	}
 }

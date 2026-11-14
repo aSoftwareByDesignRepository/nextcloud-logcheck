@@ -115,7 +115,6 @@ class SafeHttpClientInstanceStatusTest extends TestCase
 		$certs->method('getAbsoluteBundlePath')->willReturn($bundle);
 		try {
 			$method = new ReflectionMethod(SafeHttpClient::class, 'caBundlePath');
-			$method->setAccessible(true);
 			self::assertSame($bundle, $method->invoke(new SafeHttpClient(new SsrfGuard(), $certs)));
 		} finally {
 			@unlink($bundle);
@@ -125,7 +124,6 @@ class SafeHttpClientInstanceStatusTest extends TestCase
 	public function testCaBundlePathFallsBackToCurlDefaultWhenManagerFails(): void
 	{
 		$method = new ReflectionMethod(SafeHttpClient::class, 'caBundlePath');
-		$method->setAccessible(true);
 
 		$throwing = $this->createMock(ICertificateManager::class);
 		$throwing->method('getAbsoluteBundlePath')->willThrowException(new \RuntimeException('not installed'));

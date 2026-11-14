@@ -71,16 +71,24 @@ $lastReceipt = is_array($_['transferLastReceipt'] ?? null) ? $_['transferLastRec
 	</p>
 	<?php endif; ?>
 	<form id="lck-transfer-import-form" class="lck-form" novalidate>
-		<fieldset class="lck-form-row lck-fieldset">
+		<fieldset class="lck-form-row lck-fieldset" aria-describedby="lck-transfer-replace-hint">
 			<legend><?php p($l->t('Mode')); ?></legend>
-			<label class="lck-radio">
-				<input type="radio" name="mode" value="merge" checked>
-				<span><strong><?php p($l->t('Merge')); ?></strong> — <?php p($l->t('add and update; nothing is deleted')); ?></span>
-			</label>
-			<label class="lck-radio lck-radio--danger">
-				<input type="radio" name="mode" value="replace" <?php if (!$isSystemAdmin): ?>disabled<?php endif; ?>>
-				<span><strong><?php p($l->t('Replace')); ?></strong> — <?php p($l->t('make identical to the file; prod-only rows are deleted')); ?></span>
-			</label>
+			<div class="lck-choice-cards">
+				<label class="lck-choice-card">
+					<input type="radio" name="mode" value="merge" checked>
+					<span class="lck-choice-card__copy">
+						<span class="lck-choice-card__title"><?php p($l->t('Merge')); ?></span>
+						<span class="lck-choice-card__hint"><?php p($l->t('add and update; nothing is deleted')); ?></span>
+					</span>
+				</label>
+				<label class="lck-choice-card lck-choice-card--danger">
+					<input type="radio" name="mode" value="replace" <?php if (!$isSystemAdmin): ?>disabled<?php endif; ?>>
+					<span class="lck-choice-card__copy">
+						<span class="lck-choice-card__title"><?php p($l->t('Replace')); ?></span>
+						<span class="lck-choice-card__hint"><?php p($l->t('make identical to the file; prod-only rows are deleted')); ?></span>
+					</span>
+				</label>
+			</div>
 			<p class="lck-form-row__hint" id="lck-transfer-replace-hint">
 				<?php if ($isSystemAdmin): ?>
 					<?php p($l->t('Replace needs maintenance mode ON (occ maintenance:mode --on) — you will type REPLACE in the preview to confirm.')); ?>

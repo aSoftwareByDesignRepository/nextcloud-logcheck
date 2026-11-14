@@ -34,7 +34,6 @@ class SettingsServiceTest extends TestCase
 		);
 
 		$method = new ReflectionMethod(SettingsService::class, 'mergeAndValidate');
-		$method->setAccessible(true);
 
 		$this->expectException(ForbiddenException::class);
 		$this->expectExceptionMessage('Only Nextcloud admins can allow private webhook addresses.');
@@ -58,7 +57,6 @@ class SettingsServiceTest extends TestCase
 		);
 
 		$method = new ReflectionMethod(SettingsService::class, 'mergeAndValidate');
-		$method->setAccessible(true);
 
 		$out = $method->invoke($svc, SettingsService::defaults(), [
 			'allow_private_webhooks' => true,
@@ -82,7 +80,6 @@ class SettingsServiceTest extends TestCase
 			$this->createMock(ChannelTestProof::class),
 		);
 		$method = new ReflectionMethod(SettingsService::class, 'mergeAndValidate');
-		$method->setAccessible(true);
 
 		$this->expectException(\OCA\LogCheck\Exception\ValidationException::class);
 		$method->invoke($svc, SettingsService::defaults(), [
@@ -111,7 +108,6 @@ class SettingsServiceTest extends TestCase
 			$this->createMock(ChannelTestProof::class),
 		);
 		$method = new ReflectionMethod(SettingsService::class, 'mergeAndValidate');
-		$method->setAccessible(true);
 
 		$out = $method->invoke($svc, SettingsService::defaults(), [
 			'channels' => [
@@ -138,7 +134,6 @@ class SettingsServiceTest extends TestCase
 			$this->createMock(ChannelTestProof::class),
 		);
 		$method = new ReflectionMethod(SettingsService::class, 'mergeAndValidate');
-		$method->setAccessible(true);
 
 		$this->expectException(\OCA\LogCheck\Exception\ValidationException::class);
 		$method->invoke($svc, SettingsService::defaults(), [
@@ -160,7 +155,6 @@ class SettingsServiceTest extends TestCase
 			$this->createMock(ChannelTestProof::class),
 		);
 		$method = new ReflectionMethod(SettingsService::class, 'mergeAndValidate');
-		$method->setAccessible(true);
 
 		$out = $method->invoke($svc, SettingsService::defaults(), [
 			'coalesce_seconds' => 3600,
@@ -183,7 +177,6 @@ class SettingsServiceTest extends TestCase
 			$this->createMock(ChannelTestProof::class),
 		);
 		$method = new ReflectionMethod(SettingsService::class, 'mergeAndValidate');
-		$method->setAccessible(true);
 
 		$this->expectException(ForbiddenException::class);
 		$this->expectExceptionMessage('Only Nextcloud admins can change who can open HealthCheck.');
@@ -212,7 +205,6 @@ class SettingsServiceTest extends TestCase
 			$proof,
 		);
 		$method = new ReflectionMethod(SettingsService::class, 'mergeAndValidate');
-		$method->setAccessible(true);
 		$current = SettingsService::defaults();
 		$current['channels']['slack']['webhook_url_cipher'] = 'cipher';
 
@@ -241,7 +233,6 @@ class SettingsServiceTest extends TestCase
 			$this->createMock(ChannelTestProof::class),
 		);
 		$method = new ReflectionMethod(SettingsService::class, 'mergeAndValidate');
-		$method->setAccessible(true);
 
 		$out = $method->invoke($svc, SettingsService::defaults(), [
 			'watch_enabled' => true,
@@ -266,7 +257,6 @@ class SettingsServiceTest extends TestCase
 			$this->createMock(ChannelTestProof::class),
 		);
 		$method = new ReflectionMethod(SettingsService::class, 'mergeAndValidate');
-		$method->setAccessible(true);
 		$current = SettingsService::defaults();
 		$current['watch_enabled'] = true;
 		$current['runtime']['watcher_node'] = 'node-abc';
@@ -292,7 +282,6 @@ class SettingsServiceTest extends TestCase
 			$this->createMock(ChannelTestProof::class),
 		);
 		$method = new ReflectionMethod(SettingsService::class, 'mergeAndValidate');
-		$method->setAccessible(true);
 		$current = SettingsService::defaults();
 		$current['channels']['notification']['enabled'] = true;
 		$current['channels']['notification']['recipient_uids'] = ['admin'];
@@ -326,7 +315,6 @@ class SettingsServiceTest extends TestCase
 			$proof,
 		);
 		$method = new ReflectionMethod(SettingsService::class, 'mergeAndValidate');
-		$method->setAccessible(true);
 		$out = $method->invoke(
 			$svc,
 			SettingsService::defaults(),
@@ -370,7 +358,6 @@ class SettingsServiceTest extends TestCase
 			$proof,
 		);
 		$method = new ReflectionMethod(SettingsService::class, 'mergeAndValidate');
-		$method->setAccessible(true);
 		$current = SettingsService::defaults();
 		$current['channels']['slack']['webhook_url_cipher'] = 'old-cipher';
 
@@ -402,7 +389,6 @@ class SettingsServiceTest extends TestCase
 			$proof2,
 		);
 		$method2 = new ReflectionMethod(SettingsService::class, 'mergeAndValidate');
-		$method2->setAccessible(true);
 		$this->expectException(\OCA\LogCheck\Exception\ValidationException::class);
 		$method2->invoke($svc2, $afterChange, [
 			'channels' => [
@@ -432,7 +418,6 @@ class SettingsServiceTest extends TestCase
 			$proof,
 		);
 		$method = new ReflectionMethod(SettingsService::class, 'mergeAndValidate');
-		$method->setAccessible(true);
 		$current = SettingsService::defaults();
 		$current['channels']['webhook']['url_cipher'] = 'old';
 
@@ -451,7 +436,6 @@ class SettingsServiceTest extends TestCase
 	{
 		$svc = $this->svcForMerge();
 		$method = new ReflectionMethod(SettingsService::class, 'mergeAndValidate');
-		$method->setAccessible(true);
 		$huge = [];
 		for ($i = 0; $i < SettingsService::APP_LIST_MAX + 1; $i++) {
 			$huge[] = 'app' . $i;
@@ -467,7 +451,6 @@ class SettingsServiceTest extends TestCase
 	{
 		$svc = $this->svcForMerge();
 		$method = new ReflectionMethod(SettingsService::class, 'mergeAndValidate');
-		$method->setAccessible(true);
 		$this->expectException(\OCA\LogCheck\Exception\ValidationException::class);
 		$method->invoke($svc, SettingsService::defaults(), [
 			'app_list' => [str_repeat('a', SettingsService::APP_ID_MAX_LEN + 1)],
@@ -478,7 +461,6 @@ class SettingsServiceTest extends TestCase
 	{
 		$svc = $this->svcForMerge();
 		$method = new ReflectionMethod(SettingsService::class, 'mergeAndValidate');
-		$method->setAccessible(true);
 		$this->expectException(ForbiddenException::class);
 		$this->expectExceptionMessage('Only Nextcloud admins can change log excerpt settings.');
 		$method->invoke($svc, SettingsService::defaults(), [
@@ -491,7 +473,6 @@ class SettingsServiceTest extends TestCase
 	{
 		$svc = $this->svcForMerge();
 		$method = new ReflectionMethod(SettingsService::class, 'mergeAndValidate');
-		$method->setAccessible(true);
 		$current = SettingsService::defaults();
 		$current['include_message_excerpts'] = true;
 		$this->expectException(ForbiddenException::class);
@@ -504,7 +485,6 @@ class SettingsServiceTest extends TestCase
 	{
 		$svc = $this->svcForMerge();
 		$method = new ReflectionMethod(SettingsService::class, 'mergeAndValidate');
-		$method->setAccessible(true);
 		$this->expectException(\OCA\LogCheck\Exception\ValidationException::class);
 		$method->invoke($svc, SettingsService::defaults(), [
 			'include_message_excerpts' => true,
@@ -529,7 +509,6 @@ class SettingsServiceTest extends TestCase
 			$proof,
 		);
 		$method = new ReflectionMethod(SettingsService::class, 'mergeAndValidate');
-		$method->setAccessible(true);
 		$this->expectException(\OCA\LogCheck\Exception\ValidationException::class);
 		$this->expectExceptionMessage('Send a successful test before turning this channel on.');
 		$method->invoke($svc, SettingsService::defaults(), [
@@ -546,7 +525,6 @@ class SettingsServiceTest extends TestCase
 	{
 		$svc = $this->svcForMerge();
 		$method = new ReflectionMethod(SettingsService::class, 'mergeAndValidate');
-		$method->setAccessible(true);
 		$out = $method->invoke($svc, SettingsService::defaults(), [
 			'channels' => [
 				'email' => [
@@ -575,7 +553,6 @@ class SettingsServiceTest extends TestCase
 			$this->createMock(ChannelTestProof::class),
 		);
 		$method = new ReflectionMethod(SettingsService::class, 'mergeAndValidate');
-		$method->setAccessible(true);
 		$uids = array_map(static fn (int $i): string => 'u' . $i, range(0, SettingsService::NOTIFICATION_RECIPIENTS_MAX + 1));
 		$this->expectException(\OCA\LogCheck\Exception\ValidationException::class);
 		$this->expectExceptionMessage('Too many notification recipients.');
@@ -593,7 +570,6 @@ class SettingsServiceTest extends TestCase
 	{
 		$svc = $this->svcForMerge();
 		$method = new ReflectionMethod(SettingsService::class, 'mergeAndValidate');
-		$method->setAccessible(true);
 		$current = SettingsService::defaults();
 		$current['allow_private_webhooks'] = false;
 		// The proven live hole: PHP (bool)"false" === true flipped the SSRF
@@ -608,7 +584,6 @@ class SettingsServiceTest extends TestCase
 	{
 		$svc = $this->svcForMerge();
 		$method = new ReflectionMethod(SettingsService::class, 'mergeAndValidate');
-		$method->setAccessible(true);
 		$out = $method->invoke($svc, SettingsService::defaults(), [
 			'allow_private_webhooks' => 'true',
 		], 'admin', true);
@@ -619,7 +594,6 @@ class SettingsServiceTest extends TestCase
 	{
 		$svc = $this->svcForMerge();
 		$method = new ReflectionMethod(SettingsService::class, 'mergeAndValidate');
-		$method->setAccessible(true);
 		$this->expectException(\OCA\LogCheck\Exception\ValidationException::class);
 		$method->invoke($svc, SettingsService::defaults(), [
 			'allow_private_webhooks' => 'banana',
@@ -630,7 +604,6 @@ class SettingsServiceTest extends TestCase
 	{
 		$svc = $this->svcForMerge();
 		$method = new ReflectionMethod(SettingsService::class, 'mergeAndValidate');
-		$method->setAccessible(true);
 		$current = SettingsService::defaults();
 		$current['watch_enabled'] = true;
 		$out = $method->invoke($svc, $current, [
@@ -643,7 +616,6 @@ class SettingsServiceTest extends TestCase
 	{
 		$svc = $this->svcForMerge();
 		$method = new ReflectionMethod(SettingsService::class, 'mergeAndValidate');
-		$method->setAccessible(true);
 		$this->expectException(\OCA\LogCheck\Exception\ValidationException::class);
 		$method->invoke($svc, SettingsService::defaults(), [
 			'watch_enabled' => 'banana',
@@ -654,7 +626,6 @@ class SettingsServiceTest extends TestCase
 	{
 		$svc = $this->svcForMerge();
 		$method = new ReflectionMethod(SettingsService::class, 'mergeAndValidate');
-		$method->setAccessible(true);
 		$this->expectException(\OCA\LogCheck\Exception\ValidationException::class);
 		$method->invoke($svc, SettingsService::defaults(), [
 			'min_level' => 'banana',
@@ -665,7 +636,6 @@ class SettingsServiceTest extends TestCase
 	{
 		$svc = $this->svcForMerge();
 		$method = new ReflectionMethod(SettingsService::class, 'mergeAndValidate');
-		$method->setAccessible(true);
 		$current = SettingsService::defaults();
 		$current['channels']['email']['enabled'] = true;
 		$out = $method->invoke($svc, $current, [
@@ -680,7 +650,6 @@ class SettingsServiceTest extends TestCase
 	{
 		$svc = $this->svcForMerge();
 		$method = new ReflectionMethod(SettingsService::class, 'mergeAndValidate');
-		$method->setAccessible(true);
 		$this->expectException(\OCA\LogCheck\Exception\ValidationException::class);
 		$method->invoke($svc, SettingsService::defaults(), [
 			'channels' => [
@@ -693,7 +662,6 @@ class SettingsServiceTest extends TestCase
 	{
 		$svc = $this->svcForMerge();
 		$method = new ReflectionMethod(SettingsService::class, 'mergeAndValidate');
-		$method->setAccessible(true);
 		$this->expectException(\OCA\LogCheck\Exception\ValidationException::class);
 		$method->invoke($svc, SettingsService::defaults(), [
 			'app_mode' => 'allowlist',
@@ -705,7 +673,6 @@ class SettingsServiceTest extends TestCase
 	{
 		$svc = $this->svcForMerge();
 		$method = new ReflectionMethod(SettingsService::class, 'mergeAndValidate');
-		$method->setAccessible(true);
 		$this->expectException(ForbiddenException::class);
 		$method->invoke($svc, SettingsService::defaults(), [
 			'health_disabled_probes' => ['https'],
@@ -716,7 +683,6 @@ class SettingsServiceTest extends TestCase
 	{
 		$svc = $this->svcForMerge();
 		$method = new ReflectionMethod(SettingsService::class, 'mergeAndValidate');
-		$method->setAccessible(true);
 		$out = $method->invoke($svc, SettingsService::defaults(), [
 			'health_disabled_probes' => [' HTTPS ', 'https', 'updates'],
 		], 'admin', true);
@@ -727,7 +693,6 @@ class SettingsServiceTest extends TestCase
 	{
 		$svc = $this->svcForMerge();
 		$method = new ReflectionMethod(SettingsService::class, 'mergeAndValidate');
-		$method->setAccessible(true);
 		$this->expectException(\OCA\LogCheck\Exception\ValidationException::class);
 		$method->invoke($svc, SettingsService::defaults(), [
 			'health_disabled_probes' => ['https', 'evil-shell'],
@@ -738,7 +703,6 @@ class SettingsServiceTest extends TestCase
 	{
 		$svc = $this->svcForMerge();
 		$method = new ReflectionMethod(SettingsService::class, 'mergeAndValidate');
-		$method->setAccessible(true);
 		$this->expectException(\OCA\LogCheck\Exception\ValidationException::class);
 		$method->invoke($svc, SettingsService::defaults(), [
 			'health_disabled_probes' => 'https',
@@ -749,7 +713,6 @@ class SettingsServiceTest extends TestCase
 	{
 		$svc = $this->svcForMerge();
 		$method = new ReflectionMethod(SettingsService::class, 'mergeAndValidate');
-		$method->setAccessible(true);
 		$this->expectException(ForbiddenException::class);
 		$method->invoke($svc, SettingsService::defaults(), [
 			'health_https_probe_url' => 'https://cloud.example',
@@ -760,7 +723,6 @@ class SettingsServiceTest extends TestCase
 	{
 		$svc = $this->svcForMerge();
 		$method = new ReflectionMethod(SettingsService::class, 'mergeAndValidate');
-		$method->setAccessible(true);
 		$this->expectException(ForbiddenException::class);
 		$method->invoke($svc, SettingsService::defaults(), [
 			'health_https_probe_ip' => '203.0.113.10',
@@ -771,7 +733,6 @@ class SettingsServiceTest extends TestCase
 	{
 		$svc = $this->svcForMerge();
 		$method = new ReflectionMethod(SettingsService::class, 'mergeAndValidate');
-		$method->setAccessible(true);
 		$out = $method->invoke($svc, SettingsService::defaults(), [
 			'health_https_probe_url' => ' https://cloud.example/nextcloud ',
 			'health_https_probe_ip' => ' 203.0.113.10 ',
@@ -785,7 +746,6 @@ class SettingsServiceTest extends TestCase
 	{
 		$svc = $this->svcForMerge();
 		$method = new ReflectionMethod(SettingsService::class, 'mergeAndValidate');
-		$method->setAccessible(true);
 		$out = $method->invoke($svc, SettingsService::defaults(), [
 			'health_https_probe_url' => 'https://cloud.example/status.php',
 		], 'admin', true);
@@ -796,7 +756,6 @@ class SettingsServiceTest extends TestCase
 	{
 		$svc = $this->svcForMerge();
 		$method = new ReflectionMethod(SettingsService::class, 'mergeAndValidate');
-		$method->setAccessible(true);
 		try {
 			$method->invoke($svc, SettingsService::defaults(), [
 				'health_https_probe_url' => 'http://cloud.example',
@@ -811,7 +770,6 @@ class SettingsServiceTest extends TestCase
 	{
 		$svc = $this->svcForMerge();
 		$method = new ReflectionMethod(SettingsService::class, 'mergeAndValidate');
-		$method->setAccessible(true);
 		foreach (['https://user:pass@cloud.example', 'https://cloud.example/?x=1', 'https://cloud.example#a'] as $bad) {
 			try {
 				$method->invoke($svc, SettingsService::defaults(), [
@@ -828,7 +786,6 @@ class SettingsServiceTest extends TestCase
 	{
 		$svc = $this->svcForMerge();
 		$method = new ReflectionMethod(SettingsService::class, 'mergeAndValidate');
-		$method->setAccessible(true);
 		$this->expectException(\OCA\LogCheck\Exception\ValidationException::class);
 		$method->invoke($svc, SettingsService::defaults(), [
 			'health_https_probe_url' => 'https://cloud.example/a/b',
@@ -839,7 +796,6 @@ class SettingsServiceTest extends TestCase
 	{
 		$svc = $this->svcForMerge();
 		$method = new ReflectionMethod(SettingsService::class, 'mergeAndValidate');
-		$method->setAccessible(true);
 		foreach (['notaurl', 'https://', 'ftp://cloud.example'] as $bad) {
 			try {
 				$method->invoke($svc, SettingsService::defaults(), [
@@ -856,7 +812,6 @@ class SettingsServiceTest extends TestCase
 	{
 		$svc = $this->svcForMerge();
 		$method = new ReflectionMethod(SettingsService::class, 'mergeAndValidate');
-		$method->setAccessible(true);
 		$current = SettingsService::defaults();
 		$current['health_https_probe_url'] = 'https://cloud.example';
 		$current['health_https_probe_ip'] = '203.0.113.10';
@@ -872,7 +827,6 @@ class SettingsServiceTest extends TestCase
 	{
 		$svc = $this->svcForMerge();
 		$method = new ReflectionMethod(SettingsService::class, 'mergeAndValidate');
-		$method->setAccessible(true);
 		try {
 			$method->invoke($svc, SettingsService::defaults(), [
 				'health_https_probe_ip' => 'cloud.example',
@@ -887,7 +841,6 @@ class SettingsServiceTest extends TestCase
 	{
 		$svc = $this->svcForMerge();
 		$method = new ReflectionMethod(SettingsService::class, 'mergeAndValidate');
-		$method->setAccessible(true);
 		$out = $method->invoke($svc, SettingsService::defaults(), [
 			'health_https_probe_ip' => '2001:0DB8:0000:0000:0000:0000:0000:0001',
 		], 'admin', true);
