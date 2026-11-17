@@ -2,14 +2,14 @@
    (CheckFieldErrors.markValidationFields) from the server's localized
    `fields` map (WCAG 3.3.1/3.3.3). Synced from
    apps/_shared/field-errors/field-errors.css — lck = app prefix. */
-#app-content.lck-app .lck-input[aria-invalid="true"],
-#app-content.lck-app input[aria-invalid="true"],
-#app-content.lck-app select[aria-invalid="true"],
-#app-content.lck-app textarea[aria-invalid="true"] {
+:is(#app-content.lck-app, .lck-dialog) .lck-input[aria-invalid="true"],
+:is(#app-content.lck-app, .lck-dialog) input[aria-invalid="true"],
+:is(#app-content.lck-app, .lck-dialog) select[aria-invalid="true"],
+:is(#app-content.lck-app, .lck-dialog) textarea[aria-invalid="true"] {
 	border-color: var(--color-error-text, var(--lck-danger-ink, var(--color-error)));
 	box-shadow: 0 0 0 1px var(--color-error-text, var(--lck-danger-ink, var(--color-error)));
 }
-#app-content.lck-app .lck-field-error {
+:is(#app-content.lck-app, .lck-dialog) .lck-field-error {
 	margin: 0.25rem 0 0;
 	font-size: 0.875rem;
 	font-weight: 600;
