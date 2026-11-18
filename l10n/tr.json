@@ -152,7 +152,7 @@
         "How often?": "Ne sıklıkla?",
         "How serious?": "Ne kadar ciddi?",
         "Ignore messages that match (one pattern per line)": "Eşleşen iletileri yok say (satır başına bir desen)",
-        "Import applied. %d settings and %d rows written.": "İçe aktarma uygulandı. %d ayar ve %d satır yazıldı.",
+        "Import applied. %1$s and %2$s written.": "İçe aktarma uygulandı. %1$s ve %2$s yazıldı.",
         "Import configuration": "Yapılandırmayı içe aktar",
         "Import failed — nothing was changed.": "İçe aktarma başarısız — hiçbir şey değiştirilmedi.",
         "Import preview": "İçe aktarma önizlemesi",
@@ -367,7 +367,7 @@
         "This log file is too large to download here. Use SSH or your host panel, or start a fresh log.": "Bu günlük dosyası buradan indirilemeyecek kadar büyük. SSH'yi veya barındırıcı panelinizi kullanın ya da yeni bir günlük başlatın.",
         "This permanently deletes the current log. Prefer “Start fresh log” if you want to keep a copy.": "Bu, geçerli günlüğü kalıcı olarak siler. Bir kopya tutmak istiyorsanız “Yeni günlük başlat”ı tercih edin.",
         "This permanently deletes this older copy. The current log is not changed.": "Bu, eski kopyayı kalıcı olarak siler. Geçerli günlük değişmez.",
-        "This will update %d settings and %d rows — nothing is deleted.": "Bu işlem %d ayarı ve %d satırı güncelleyecek — hiçbir şey silinmeyecek.",
+        "This will update %1$s and %2$s — nothing is deleted.": "Bu işlem %1$s ve %2$s güncelleyecek — hiçbir şey silinmeyecek.",
         "Timezone": "Saat dilimi",
         "Toggle navigation menu": "Gezinme menüsünü aç/kapat",
         "Too many attempts — wait a minute and try again.": "Çok fazla deneme — bir dakika bekleyip yeniden deneyin.",
@@ -435,43 +435,39 @@
         "You can close this — the result is saved and shown under “Last transfer”.": "Bunu kapatabilirsiniz — sonuç kaydedilir ve “Son aktarım” altında gösterilir.",
         "You do not have the rights for this action.": "Bu işlem için yetkiniz yok.",
         "_(1 env-bound value emptied)_::_(%n env-bound values emptied)_": [
-            "(%n örneğe bağlı değer boşaltıldı)",
             "(%n örneğe bağlı değer boşaltıldı)"
         ],
         "_(1 filtered)_::_(%n filtered)_": [
-            "(%n filtrelendi)",
             "(%n filtrelendi)"
         ],
         "_(1 secret redacted)_::_(%n secrets redacted)_": [
-            "(%n sır gizlendi)",
             "(%n sır gizlendi)"
         ],
         "_(1 unresolved ref)_::_(%n unresolved refs)_": [
-            "(%n çözümlenemeyen başvuru)",
             "(%n çözümlenemeyen başvuru)"
         ],
         "_1 reference unresolved — see the groups below._::_%n references unresolved — see the groups below._": [
-            "%n başvuru çözümlenemedi — aşağıdaki gruplara bakın.",
             "%n başvuru çözümlenemedi — aşağıdaki gruplara bakın."
         ],
         "_1 row needs a value on this instance_::_%n rows need a value on this instance_": [
-            "%n satırın bu örnekte bir değere ihtiyacı var",
             "%n satırın bu örnekte bir değere ihtiyacı var"
         ],
         "_1 row skipped._::_%n rows skipped._": [
-            "%n satır atlandı.",
             "%n satır atlandı."
         ],
+        "_1 row_::_%n rows_": [
+            "%n satır"
+        ],
+        "_1 setting_::_%n settings_": [
+            "%n ayar"
+        ],
         "_HealthCheck found %n new error_::_HealthCheck found %n new errors_": [
-            "HealthCheck %n yeni hata buldu",
             "HealthCheck %n yeni hata buldu"
         ],
         "_HealthCheck: %n new error_::_HealthCheck: %n new errors_": [
-            "HealthCheck: %n yeni hata",
             "HealthCheck: %n yeni hata"
         ],
         "_Warning: 1 row will be permanently deleted, then the file data is loaded._::_Warning: %n rows will be permanently deleted, then the file data is loaded._": [
-            "Uyarı: %n satır kalıcı olarak silinecek, ardından dosya verileri yüklenecek.",
             "Uyarı: %n satır kalıcı olarak silinecek, ardından dosya verileri yüklenecek."
         ],
         "a newer version": "daha yeni bir sürüm",
@@ -486,5 +482,5 @@
         "undo via snapshot": "anlık görüntüyle geri al",
         "will be skipped": "atlanacak"
     },
-    "pluralForm": "nplurals=2; plural=(n != 1);"
+    "pluralForm": "nplurals=1; plural=0;"
 }

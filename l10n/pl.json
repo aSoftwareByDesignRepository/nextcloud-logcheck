@@ -152,7 +152,7 @@
         "How often?": "Jak często?",
         "How serious?": "Jak poważne?",
         "Ignore messages that match (one pattern per line)": "Ignoruj pasujące komunikaty (jeden wzorzec na wiersz)",
-        "Import applied. %d settings and %d rows written.": "Import zastosowany. Zapisano %d ustawień i %d wierszy.",
+        "Import applied. %1$s and %2$s written.": "Import zastosowany. Zapisano %1$s i %2$s.",
         "Import configuration": "Importuj konfigurację",
         "Import failed — nothing was changed.": "Import nie powiódł się — nic nie zmieniono.",
         "Import preview": "Podgląd importu",
@@ -367,7 +367,7 @@
         "This log file is too large to download here. Use SSH or your host panel, or start a fresh log.": "Ten plik dziennika jest zbyt duży, by pobrać go tutaj. Użyj SSH lub panelu hosta albo rozpocznij nowy dziennik.",
         "This permanently deletes the current log. Prefer “Start fresh log” if you want to keep a copy.": "To trwale usuwa bieżący dziennik. Wybierz „Zacznij nowy dziennik”, jeśli chcesz zachować kopię.",
         "This permanently deletes this older copy. The current log is not changed.": "To trwale usuwa tę starszą kopię. Bieżący dziennik nie jest zmieniany.",
-        "This will update %d settings and %d rows — nothing is deleted.": "Spowoduje to aktualizację %d ustawień i %d wierszy — nic nie zostanie usunięte.",
+        "This will update %1$s and %2$s — nothing is deleted.": "Spowoduje to aktualizację %1$s i %2$s — nic nie zostanie usunięte.",
         "Timezone": "Strefa czasowa",
         "Toggle navigation menu": "Przełącz menu nawigacji",
         "Too many attempts — wait a minute and try again.": "Za dużo prób — odczekaj minutę i spróbuj ponownie.",
@@ -468,6 +468,16 @@
             "Pominięto %n wiersz.",
             "Pominięto %n wiersze.",
             "Pominięto %n wierszy."
+        ],
+        "_1 row_::_%n rows_": [
+            "%n wiersz",
+            "%n wiersze",
+            "%n wierszy"
+        ],
+        "_1 setting_::_%n settings_": [
+            "%n ustawienie",
+            "%n ustawienia",
+            "%n ustawień"
         ],
         "_HealthCheck found %n new error_::_HealthCheck found %n new errors_": [
             "HealthCheck znalazł %n nowy błąd",

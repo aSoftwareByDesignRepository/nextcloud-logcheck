@@ -152,7 +152,7 @@
         "How often?": "Hoe vaak?",
         "How serious?": "Hoe ernstig?",
         "Ignore messages that match (one pattern per line)": "Passende berichten negeren (één patroon per regel)",
-        "Import applied. %d settings and %d rows written.": "Import toegepast. %d instellingen en %d rijen geschreven.",
+        "Import applied. %1$s and %2$s written.": "Import toegepast. %1$s en %2$s geschreven.",
         "Import configuration": "Configuratie importeren",
         "Import failed — nothing was changed.": "Import mislukt — er is niets gewijzigd.",
         "Import preview": "Importvoorbeeld",
@@ -367,7 +367,7 @@
         "This log file is too large to download here. Use SSH or your host panel, or start a fresh log.": "Dit logbestand is te groot om hier te downloaden. Gebruik SSH of het hostpaneel, of start een nieuw log.",
         "This permanently deletes the current log. Prefer “Start fresh log” if you want to keep a copy.": "Dit verwijdert het huidige log permanent. Kies „Nieuw log starten“ als u een kopie wilt bewaren.",
         "This permanently deletes this older copy. The current log is not changed.": "Dit verwijdert deze oudere kopie permanent. Het huidige log verandert niet.",
-        "This will update %d settings and %d rows — nothing is deleted.": "Dit werkt %d instellingen en %d rijen bij — er wordt niets verwijderd.",
+        "This will update %1$s and %2$s — nothing is deleted.": "Dit werkt %1$s en %2$s bij — er wordt niets verwijderd.",
         "Timezone": "Tijdzone",
         "Toggle navigation menu": "Navigatiemenu openen of sluiten",
         "Too many attempts — wait a minute and try again.": "Te veel pogingen — wacht een minuut en probeer het opnieuw.",
@@ -461,6 +461,14 @@
         "_1 row skipped._::_%n rows skipped._": [
             "%n rij overgeslagen.",
             "%n rijen overgeslagen."
+        ],
+        "_1 row_::_%n rows_": [
+            "%n rij",
+            "%n rijen"
+        ],
+        "_1 setting_::_%n settings_": [
+            "%n instelling",
+            "%n instellingen"
         ],
         "_HealthCheck found %n new error_::_HealthCheck found %n new errors_": [
             "HealthCheck heeft %n nieuwe fout gevonden",

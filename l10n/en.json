@@ -152,7 +152,7 @@
         "How often?": "How often?",
         "How serious?": "How serious?",
         "Ignore messages that match (one pattern per line)": "Ignore messages that match (one pattern per line)",
-        "Import applied. %d settings and %d rows written.": "Import applied. %d settings and %d rows written.",
+        "Import applied. %1$s and %2$s written.": "Import applied. %1$s and %2$s written.",
         "Import configuration": "Import configuration",
         "Import failed — nothing was changed.": "Import failed — nothing was changed.",
         "Import preview": "Import preview",
@@ -367,7 +367,7 @@
         "This log file is too large to download here. Use SSH or your host panel, or start a fresh log.": "This log file is too large to download here. Use SSH or your host panel, or start a fresh log.",
         "This permanently deletes the current log. Prefer “Start fresh log” if you want to keep a copy.": "This permanently deletes the current log. Prefer “Start fresh log” if you want to keep a copy.",
         "This permanently deletes this older copy. The current log is not changed.": "This permanently deletes this older copy. The current log is not changed.",
-        "This will update %d settings and %d rows — nothing is deleted.": "This will update %d settings and %d rows — nothing is deleted.",
+        "This will update %1$s and %2$s — nothing is deleted.": "This will update %1$s and %2$s — nothing is deleted.",
         "Timezone": "Timezone",
         "Toggle navigation menu": "Toggle navigation menu",
         "Too many attempts — wait a minute and try again.": "Too many attempts — wait a minute and try again.",
@@ -461,6 +461,14 @@
         "_1 row skipped._::_%n rows skipped._": [
             "%n row skipped.",
             "%n rows skipped."
+        ],
+        "_1 row_::_%n rows_": [
+            "%n row",
+            "%n rows"
+        ],
+        "_1 setting_::_%n settings_": [
+            "%n setting",
+            "%n settings"
         ],
         "_HealthCheck found %n new error_::_HealthCheck found %n new errors_": [
             "HealthCheck found %n new error",

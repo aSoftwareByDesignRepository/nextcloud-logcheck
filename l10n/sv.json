@@ -152,7 +152,7 @@
         "How often?": "Hur ofta?",
         "How serious?": "Hur allvarligt?",
         "Ignore messages that match (one pattern per line)": "Ignorera matchande meddelanden (ett mönster per rad)",
-        "Import applied. %d settings and %d rows written.": "Importen har tillämpats. %d inställningar och %d rader skrivna.",
+        "Import applied. %1$s and %2$s written.": "Importen har tillämpats. %1$s och %2$s skrivna.",
         "Import configuration": "Importera konfiguration",
         "Import failed — nothing was changed.": "Importen misslyckades — inget ändrades.",
         "Import preview": "Förhandsgranskning av import",
@@ -367,7 +367,7 @@
         "This log file is too large to download here. Use SSH or your host panel, or start a fresh log.": "Denna loggfil är för stor att ladda ner här. Använd SSH eller hostpanelen, eller starta en ny logg.",
         "This permanently deletes the current log. Prefer “Start fresh log” if you want to keep a copy.": "Detta tar bort den aktuella loggen permanent. Välj „Starta ny logg“ om en kopia ska behållas.",
         "This permanently deletes this older copy. The current log is not changed.": "Detta tar permanent bort den här äldre kopian. Den aktuella loggen ändras inte.",
-        "This will update %d settings and %d rows — nothing is deleted.": "Detta uppdaterar %d inställningar och %d rader — inget raderas.",
+        "This will update %1$s and %2$s — nothing is deleted.": "Detta uppdaterar %1$s och %2$s — inget raderas.",
         "Timezone": "Tidszon",
         "Toggle navigation menu": "Visa eller dölj navigeringsmenyn",
         "Too many attempts — wait a minute and try again.": "För många försök — vänta en minut och försök igen.",
@@ -461,6 +461,14 @@
         "_1 row skipped._::_%n rows skipped._": [
             "%n rad hoppades över.",
             "%n rader hoppades över."
+        ],
+        "_1 row_::_%n rows_": [
+            "%n rad",
+            "%n rader"
+        ],
+        "_1 setting_::_%n settings_": [
+            "%n inställning",
+            "%n inställningar"
         ],
         "_HealthCheck found %n new error_::_HealthCheck found %n new errors_": [
             "HealthCheck hittade %n nytt fel",

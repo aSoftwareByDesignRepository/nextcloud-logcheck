@@ -152,7 +152,7 @@
         "How often?": "Hvor ofte?",
         "How serious?": "Hvor alvorligt?",
         "Ignore messages that match (one pattern per line)": "Ignorer matchende beskeder (ét mønster pr. linje)",
-        "Import applied. %d settings and %d rows written.": "Import anvendt. %d indstillinger og %d rækker skrevet.",
+        "Import applied. %1$s and %2$s written.": "Import anvendt. %1$s og %2$s skrevet.",
         "Import configuration": "Importér konfiguration",
         "Import failed — nothing was changed.": "Import mislykkedes — intet blev ændret.",
         "Import preview": "Importforhåndsvisning",
@@ -367,7 +367,7 @@
         "This log file is too large to download here. Use SSH or your host panel, or start a fresh log.": "Denne logfil er for stor til at downloade her. Brug SSH eller hostpanelet, eller start en ny log.",
         "This permanently deletes the current log. Prefer “Start fresh log” if you want to keep a copy.": "Dette sletter den aktuelle log permanent. Foretræk „Start ny log“, hvis en kopi skal beholdes.",
         "This permanently deletes this older copy. The current log is not changed.": "Dette sletter permanent denne ældre kopi. Den aktuelle log ændres ikke.",
-        "This will update %d settings and %d rows — nothing is deleted.": "Dette opdaterer %d indstillinger og %d rækker — intet slettes.",
+        "This will update %1$s and %2$s — nothing is deleted.": "Dette opdaterer %1$s og %2$s — intet slettes.",
         "Timezone": "Tidszone",
         "Toggle navigation menu": "Skift navigationsmenu",
         "Too many attempts — wait a minute and try again.": "For mange forsøg — vent et minut og prøv igen.",
@@ -461,6 +461,14 @@
         "_1 row skipped._::_%n rows skipped._": [
             "%n række sprunget over.",
             "%n rækker sprunget over."
+        ],
+        "_1 row_::_%n rows_": [
+            "%n række",
+            "%n rækker"
+        ],
+        "_1 setting_::_%n settings_": [
+            "%n indstilling",
+            "%n indstillinger"
         ],
         "_HealthCheck found %n new error_::_HealthCheck found %n new errors_": [
             "HealthCheck fandt %n ny fejl",

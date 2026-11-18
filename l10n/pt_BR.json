@@ -152,7 +152,7 @@
         "How often?": "Com que frequência?",
         "How serious?": "Quão grave?",
         "Ignore messages that match (one pattern per line)": "Ignorar mensagens correspondentes (um padrão por linha)",
-        "Import applied. %d settings and %d rows written.": "Importação aplicada. %d configurações e %d linhas gravadas.",
+        "Import applied. %1$s and %2$s written.": "Importação aplicada. %1$s e %2$s gravadas.",
         "Import configuration": "Importar configuração",
         "Import failed — nothing was changed.": "A importação falhou — nada foi alterado.",
         "Import preview": "Pré-visualização da importação",
@@ -367,7 +367,7 @@
         "This log file is too large to download here. Use SSH or your host panel, or start a fresh log.": "Este arquivo de log é grande demais para baixar aqui. Use SSH ou o painel do provedor, ou inicie um log novo.",
         "This permanently deletes the current log. Prefer “Start fresh log” if you want to keep a copy.": "Isso exclui permanentemente o log atual. Prefira “Iniciar log limpo” se quiser guardar uma cópia.",
         "This permanently deletes this older copy. The current log is not changed.": "Isso exclui permanentemente esta cópia anterior. O registro atual não é alterado.",
-        "This will update %d settings and %d rows — nothing is deleted.": "Isso atualizará %d configurações e %d linhas — nada será excluído.",
+        "This will update %1$s and %2$s — nothing is deleted.": "Isso atualizará %1$s e %2$s — nada será excluído.",
         "Timezone": "Fuso horário",
         "Toggle navigation menu": "Abrir ou fechar o menu de navegação",
         "Too many attempts — wait a minute and try again.": "Muitas tentativas — aguarde um minuto e tente novamente.",
@@ -461,6 +461,14 @@
         "_1 row skipped._::_%n rows skipped._": [
             "%n linha ignorada.",
             "%n linhas ignoradas."
+        ],
+        "_1 row_::_%n rows_": [
+            "%n linha",
+            "%n linhas"
+        ],
+        "_1 setting_::_%n settings_": [
+            "%n configuração",
+            "%n configurações"
         ],
         "_HealthCheck found %n new error_::_HealthCheck found %n new errors_": [
             "HealthCheck encontrou %n novo erro",
