@@ -1,12 +1,6 @@
 {
     "translations": {
-        "%d row(s) need a value on this instance": "%d rij(en) hebben een waarde nodig op deze installatie",
-        "%d row(s) skipped and %d reference(s) unresolved — see the groups below.": "%d rij(en) overgeslagen en %d verwijzing(en) onopgelost — zie de groepen hieronder.",
         "%s%% free": "%s %% vrij",
-        "(%d env-bound value(s) emptied)": "(%d installatiegebonden waarden geleegd)",
-        "(%d filtered)": "(%d gefilterd)",
-        "(%d secret(s) redacted)": "(%d geheimen gemaskeerd)",
-        "(%d unresolved ref)": "(%d onopgeloste verwijzingen)",
         "(opens in a new tab)": "(opent in een nieuw tabblad)",
         "(opens in a new window)": "(opent in een nieuw venster)",
         "(unknown — skipped)": "(onbekend — overgeslagen)",
@@ -419,7 +413,6 @@
         "View, search, start fresh": "Bekijken, zoeken, opnieuw beginnen",
         "Waiting for the job…": "Wachten op de taak…",
         "Warning": "Waarschuwing",
-        "Warning: %d row(s) will be permanently deleted, then the file data is loaded.": "Waarschuwing: %d rij(en) worden definitief verwijderd, daarna worden de bestandsgegevens geladen.",
         "Warnings too": "Ook waarschuwingen",
         "Warnings+": "Waarschuwingen+",
         "Watch": "Bewaking",
@@ -441,6 +434,34 @@
         "Writing settings": "Instellingen worden geschreven",
         "You can close this — the result is saved and shown under “Last transfer”.": "U kunt dit sluiten — het resultaat wordt opgeslagen en getoond onder “Laatste overdracht”.",
         "You do not have the rights for this action.": "U heeft geen rechten voor deze actie.",
+        "_(1 env-bound value emptied)_::_(%n env-bound values emptied)_": [
+            "(%n installatiegebonden waarde geleegd)",
+            "(%n installatiegebonden waarden geleegd)"
+        ],
+        "_(1 filtered)_::_(%n filtered)_": [
+            "(%n gefilterd)",
+            "(%n gefilterd)"
+        ],
+        "_(1 secret redacted)_::_(%n secrets redacted)_": [
+            "(%n geheim gemaskeerd)",
+            "(%n geheimen gemaskeerd)"
+        ],
+        "_(1 unresolved ref)_::_(%n unresolved refs)_": [
+            "(%n onopgeloste verwijzing)",
+            "(%n onopgeloste verwijzingen)"
+        ],
+        "_1 reference unresolved — see the groups below._::_%n references unresolved — see the groups below._": [
+            "%n verwijzing onopgelost — zie de groepen hieronder.",
+            "%n verwijzingen onopgelost — zie de groepen hieronder."
+        ],
+        "_1 row needs a value on this instance_::_%n rows need a value on this instance_": [
+            "%n rij heeft een waarde nodig op deze installatie",
+            "%n rijen hebben een waarde nodig op deze installatie"
+        ],
+        "_1 row skipped._::_%n rows skipped._": [
+            "%n rij overgeslagen.",
+            "%n rijen overgeslagen."
+        ],
         "_HealthCheck found %n new error_::_HealthCheck found %n new errors_": [
             "HealthCheck heeft %n nieuwe fout gevonden",
             "HealthCheck heeft %n nieuwe fouten gevonden"
@@ -448,6 +469,10 @@
         "_HealthCheck: %n new error_::_HealthCheck: %n new errors_": [
             "HealthCheck: %n nieuwe fout",
             "HealthCheck: %n nieuwe fouten"
+        ],
+        "_Warning: 1 row will be permanently deleted, then the file data is loaded._::_Warning: %n rows will be permanently deleted, then the file data is loaded._": [
+            "Waarschuwing: %n rij wordt definitief verwijderd, daarna worden de bestandsgegevens geladen.",
+            "Waarschuwing: %n rijen worden definitief verwijderd, daarna worden de bestandsgegevens geladen."
         ],
         "a newer version": "een nieuwere versie",
         "add and update; nothing is deleted": "toevoegen en bijwerken; niets wordt verwijderd",

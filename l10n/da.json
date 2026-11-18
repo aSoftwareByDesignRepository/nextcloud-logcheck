@@ -1,12 +1,6 @@
 {
     "translations": {
-        "%d row(s) need a value on this instance": "%d række(r) kræver en værdi på denne instans",
-        "%d row(s) skipped and %d reference(s) unresolved — see the groups below.": "%d række(r) sprunget over og %d reference(r) uopløst — se grupperne nedenfor.",
         "%s%% free": "%s %% ledigt",
-        "(%d env-bound value(s) emptied)": "(%d instansbundne værdier tømt)",
-        "(%d filtered)": "(%d filtreret)",
-        "(%d secret(s) redacted)": "(%d hemmelighed(er) sløret)",
-        "(%d unresolved ref)": "(%d uopløst reference)",
         "(opens in a new tab)": "(åbner i en ny fane)",
         "(opens in a new window)": "(åbner i et nyt vindue)",
         "(unknown — skipped)": "(ukendt — sprunget over)",
@@ -419,7 +413,6 @@
         "View, search, start fresh": "Se, søg, start forfra",
         "Waiting for the job…": "Venter på jobbet…",
         "Warning": "Advarsel",
-        "Warning: %d row(s) will be permanently deleted, then the file data is loaded.": "Advarsel: %d række(r) slettes permanent, derefter indlæses fildataene.",
         "Warnings too": "Også advarsler",
         "Warnings+": "Advarsler+",
         "Watch": "Overvågning",
@@ -441,6 +434,34 @@
         "Writing settings": "Skriver indstillinger",
         "You can close this — the result is saved and shown under “Last transfer”.": "Du kan lukke dette — resultatet gemmes og vises under “Seneste overførsel”.",
         "You do not have the rights for this action.": "Du har ikke rettigheder til denne handling.",
+        "_(1 env-bound value emptied)_::_(%n env-bound values emptied)_": [
+            "(%n instansbunden værdi tømt)",
+            "(%n instansbundne værdier tømt)"
+        ],
+        "_(1 filtered)_::_(%n filtered)_": [
+            "(%n filtreret)",
+            "(%n filtreret)"
+        ],
+        "_(1 secret redacted)_::_(%n secrets redacted)_": [
+            "(%n hemmelighed sløret)",
+            "(%n hemmeligheder sløret)"
+        ],
+        "_(1 unresolved ref)_::_(%n unresolved refs)_": [
+            "(%n uopløst reference)",
+            "(%n uopløste referencer)"
+        ],
+        "_1 reference unresolved — see the groups below._::_%n references unresolved — see the groups below._": [
+            "%n reference uopløst — se grupperne nedenfor.",
+            "%n referencer uopløst — se grupperne nedenfor."
+        ],
+        "_1 row needs a value on this instance_::_%n rows need a value on this instance_": [
+            "%n række kræver en værdi på denne instans",
+            "%n rækker kræver en værdi på denne instans"
+        ],
+        "_1 row skipped._::_%n rows skipped._": [
+            "%n række sprunget over.",
+            "%n rækker sprunget over."
+        ],
         "_HealthCheck found %n new error_::_HealthCheck found %n new errors_": [
             "HealthCheck fandt %n ny fejl",
             "HealthCheck fandt %n nye fejl"
@@ -448,6 +469,10 @@
         "_HealthCheck: %n new error_::_HealthCheck: %n new errors_": [
             "HealthCheck: %n ny fejl",
             "HealthCheck: %n nye fejl"
+        ],
+        "_Warning: 1 row will be permanently deleted, then the file data is loaded._::_Warning: %n rows will be permanently deleted, then the file data is loaded._": [
+            "Advarsel: %n række slettes permanent, derefter indlæses fildataene.",
+            "Advarsel: %n rækker slettes permanent, derefter indlæses fildataene."
         ],
         "a newer version": "en nyere version",
         "add and update; nothing is deleted": "tilføj og opdatér; intet slettes",

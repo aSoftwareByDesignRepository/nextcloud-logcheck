@@ -1,12 +1,6 @@
 {
     "translations": {
-        "%d row(s) need a value on this instance": "%d fila(s) necesitan un valor en esta instancia",
-        "%d row(s) skipped and %d reference(s) unresolved — see the groups below.": "%d fila(s) omitida(s) y %d referencia(s) sin resolver — consulta los grupos siguientes.",
         "%s%% free": "%s %% libre",
-        "(%d env-bound value(s) emptied)": "(%d valor(es) ligados a la instancia vaciados)",
-        "(%d filtered)": "(%d filtrada(s))",
-        "(%d secret(s) redacted)": "(%d secreto(s) ocultado(s))",
-        "(%d unresolved ref)": "(%d referencia(s) sin resolver)",
         "(opens in a new tab)": "(se abre en una pestaña nueva)",
         "(opens in a new window)": "(se abre en una ventana nueva)",
         "(unknown — skipped)": "(desconocido — omitido)",
@@ -419,7 +413,6 @@
         "View, search, start fresh": "Ver, buscar, empezar de nuevo",
         "Waiting for the job…": "Esperando el trabajo…",
         "Warning": "Advertencia",
-        "Warning: %d row(s) will be permanently deleted, then the file data is loaded.": "Advertencia: %d fila(s) se eliminarán permanentemente y después se cargarán los datos del archivo.",
         "Warnings too": "También advertencias",
         "Warnings+": "Advertencias+",
         "Watch": "Vigilancia",
@@ -441,6 +434,34 @@
         "Writing settings": "Escribiendo ajustes",
         "You can close this — the result is saved and shown under “Last transfer”.": "Puede cerrar esto — el resultado se guarda y se muestra en “Última transferencia”.",
         "You do not have the rights for this action.": "No tiene permisos para esta acción.",
+        "_(1 env-bound value emptied)_::_(%n env-bound values emptied)_": [
+            "(%n valor ligado a la instancia vaciado)",
+            "(%n valores ligados a la instancia vaciados)"
+        ],
+        "_(1 filtered)_::_(%n filtered)_": [
+            "(%n filtrada)",
+            "(%n filtradas)"
+        ],
+        "_(1 secret redacted)_::_(%n secrets redacted)_": [
+            "(%n secreto ocultado)",
+            "(%n secretos ocultados)"
+        ],
+        "_(1 unresolved ref)_::_(%n unresolved refs)_": [
+            "(%n referencia sin resolver)",
+            "(%n referencias sin resolver)"
+        ],
+        "_1 reference unresolved — see the groups below._::_%n references unresolved — see the groups below._": [
+            "%n referencia sin resolver — consulta los grupos siguientes.",
+            "%n referencias sin resolver — consulta los grupos siguientes."
+        ],
+        "_1 row needs a value on this instance_::_%n rows need a value on this instance_": [
+            "%n fila necesita un valor en esta instancia",
+            "%n filas necesitan un valor en esta instancia"
+        ],
+        "_1 row skipped._::_%n rows skipped._": [
+            "%n fila omitida.",
+            "%n filas omitidas."
+        ],
         "_HealthCheck found %n new error_::_HealthCheck found %n new errors_": [
             "HealthCheck ha encontrado %n error nuevo",
             "HealthCheck ha encontrado %n errores nuevos"
@@ -448,6 +469,10 @@
         "_HealthCheck: %n new error_::_HealthCheck: %n new errors_": [
             "HealthCheck: %n error nuevo",
             "HealthCheck: %n errores nuevos"
+        ],
+        "_Warning: 1 row will be permanently deleted, then the file data is loaded._::_Warning: %n rows will be permanently deleted, then the file data is loaded._": [
+            "Advertencia: %n fila se eliminará permanentemente y después se cargarán los datos del archivo.",
+            "Advertencia: %n filas se eliminarán permanentemente y después se cargarán los datos del archivo."
         ],
         "a newer version": "una versión más reciente",
         "add and update; nothing is deleted": "añadir y actualizar; nada se elimina",
