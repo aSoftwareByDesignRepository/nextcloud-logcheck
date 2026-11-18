@@ -463,11 +463,11 @@
             "%n rader hoppet over."
         ],
         "_1 row_::_%n rows_": [
-            "%n rad",
+            "1 rad",
             "%n rader"
         ],
         "_1 setting_::_%n settings_": [
-            "%n innstilling",
+            "1 innstilling",
             "%n innstillinger"
         ],
         "_HealthCheck found %n new error_::_HealthCheck found %n new errors_": [
@@ -492,7 +492,11 @@
         "removed from the list": "fjernet fra listen",
         "set it on this instance": "sett det på denne instansen",
         "undo via snapshot": "angre via øyeblikksbilde",
-        "will be skipped": "hoppes over"
+        "will be skipped": "hoppes over",
+        "1 setting": "1 innstilling",
+        "%n settings": "%n innstillinger",
+        "1 row": "1 rad",
+        "%n rows": "%n rader"
     },
     "pluralForm": "nplurals=2; plural=(n != 1);"
 }

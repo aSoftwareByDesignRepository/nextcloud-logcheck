@@ -463,11 +463,11 @@
             "%n righe saltate."
         ],
         "_1 row_::_%n rows_": [
-            "%n riga",
+            "1 riga",
             "%n righe"
         ],
         "_1 setting_::_%n settings_": [
-            "%n impostazione",
+            "1 impostazione",
             "%n impostazioni"
         ],
         "_HealthCheck found %n new error_::_HealthCheck found %n new errors_": [
@@ -492,7 +492,11 @@
         "removed from the list": "rimosso dall’elenco",
         "set it on this instance": "impostalo su questa istanza",
         "undo via snapshot": "annulla tramite snapshot",
-        "will be skipped": "verrà saltato"
+        "will be skipped": "verrà saltato",
+        "1 setting": "1 impostazione",
+        "%n settings": "%n impostazioni",
+        "1 row": "1 riga",
+        "%n rows": "%n righe"
     },
     "pluralForm": "nplurals=2; plural=(n != 1);"
 }

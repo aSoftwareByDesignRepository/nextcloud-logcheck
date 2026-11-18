@@ -442,8 +442,8 @@ OC.L10N.register(
 	"_1 reference unresolved — see the groups below._::_%n references unresolved — see the groups below._" : ["%n referencia sin resolver — consulta los grupos siguientes.","%n referencias sin resolver — consulta los grupos siguientes."],
 	"_1 row needs a value on this instance_::_%n rows need a value on this instance_" : ["%n fila necesita un valor en esta instancia","%n filas necesitan un valor en esta instancia"],
 	"_1 row skipped._::_%n rows skipped._" : ["%n fila omitida.","%n filas omitidas."],
-	"_1 row_::_%n rows_" : ["%n fila","%n filas"],
-	"_1 setting_::_%n settings_" : ["%n ajuste","%n ajustes"],
+	"_1 row_::_%n rows_" : ["1 fila","%n filas"],
+	"_1 setting_::_%n settings_" : ["1 ajuste","%n ajustes"],
 	"_HealthCheck found %n new error_::_HealthCheck found %n new errors_" : ["HealthCheck ha encontrado %n error nuevo","HealthCheck ha encontrado %n errores nuevos"],
 	"_HealthCheck: %n new error_::_HealthCheck: %n new errors_" : ["HealthCheck: %n error nuevo","HealthCheck: %n errores nuevos"],
 	"_Warning: 1 row will be permanently deleted, then the file data is loaded._::_Warning: %n rows will be permanently deleted, then the file data is loaded._" : ["Advertencia: %n fila se eliminará permanentemente y después se cargarán los datos del archivo.","Advertencia: %n filas se eliminarán permanentemente y después se cargarán los datos del archivo."],
@@ -457,6 +457,10 @@ OC.L10N.register(
 	"removed from the list" : "eliminado de la lista",
 	"set it on this instance" : "establecerlo en esta instancia",
 	"undo via snapshot" : "deshacer mediante instantánea",
-	"will be skipped" : "se omitirá"
+	"will be skipped" : "se omitirá",
+	"1 setting" : "1 ajuste",
+	"%n settings" : "%n ajustes",
+	"1 row" : "1 fila",
+	"%n rows" : "%n filas"
 	}
 );

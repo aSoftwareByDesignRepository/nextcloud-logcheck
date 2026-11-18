@@ -457,6 +457,10 @@ OC.L10N.register(
 	"removed from the list" : "listeden kaldırıldı",
 	"set it on this instance" : "bu ortamda ayarla",
 	"undo via snapshot" : "anlık görüntüyle geri al",
-	"will be skipped" : "atlanacak"
+	"will be skipped" : "atlanacak",
+	"1 setting" : "1 ayar",
+	"%n settings" : "%n ayar",
+	"1 row" : "1 satır",
+	"%n rows" : "%n satır"
 	}
 );

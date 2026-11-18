@@ -463,11 +463,11 @@
             "%n rows skipped."
         ],
         "_1 row_::_%n rows_": [
-            "%n row",
+            "1 row",
             "%n rows"
         ],
         "_1 setting_::_%n settings_": [
-            "%n setting",
+            "1 setting",
             "%n settings"
         ],
         "_HealthCheck found %n new error_::_HealthCheck found %n new errors_": [
@@ -492,7 +492,11 @@
         "removed from the list": "removed from the list",
         "set it on this instance": "set it on this instance",
         "undo via snapshot": "undo via snapshot",
-        "will be skipped": "will be skipped"
+        "will be skipped": "will be skipped",
+        "1 setting": "1 setting",
+        "%n settings": "%n settings",
+        "1 row": "1 row",
+        "%n rows": "%n rows"
     },
     "pluralForm": "nplurals=2; plural=(n != 1);"
 }

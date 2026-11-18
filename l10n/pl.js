@@ -442,8 +442,8 @@ OC.L10N.register(
 	"_1 reference unresolved — see the groups below._::_%n references unresolved — see the groups below._" : ["Nierozwiązano %n odwołanie — zobacz grupy poniżej.","Nierozwiązano %n odwołania — zobacz grupy poniżej.","Nierozwiązano %n odwołań — zobacz grupy poniżej."],
 	"_1 row needs a value on this instance_::_%n rows need a value on this instance_" : ["%n wiersz wymaga wartości na tej instancji","%n wiersze wymagają wartości na tej instancji","%n wierszy wymaga wartości na tej instancji"],
 	"_1 row skipped._::_%n rows skipped._" : ["Pominięto %n wiersz.","Pominięto %n wiersze.","Pominięto %n wierszy."],
-	"_1 row_::_%n rows_" : ["%n wiersz","%n wiersze","%n wierszy"],
-	"_1 setting_::_%n settings_" : ["%n ustawienie","%n ustawienia","%n ustawień"],
+	"_1 row_::_%n rows_" : ["1 wiersz","%n wiersze","%n wierszy"],
+	"_1 setting_::_%n settings_" : ["1 ustawienie","%n ustawienia","%n ustawień"],
 	"_HealthCheck found %n new error_::_HealthCheck found %n new errors_" : ["HealthCheck znalazł %n nowy błąd","HealthCheck znalazł %n nowe błędy","HealthCheck znalazł %n nowych błędów"],
 	"_HealthCheck: %n new error_::_HealthCheck: %n new errors_" : ["HealthCheck: %n nowy błąd","HealthCheck: %n nowe błędy","HealthCheck: %n nowych błędów"],
 	"_Warning: 1 row will be permanently deleted, then the file data is loaded._::_Warning: %n rows will be permanently deleted, then the file data is loaded._" : ["Ostrzeżenie: %n wiersz zostanie trwale usunięty, a następnie dane z pliku zostaną wczytane.","Ostrzeżenie: %n wiersze zostaną trwale usunięte, a następnie dane z pliku zostaną wczytane.","Ostrzeżenie: %n wierszy zostanie trwale usuniętych, a następnie dane z pliku zostaną wczytane."],
@@ -457,6 +457,10 @@ OC.L10N.register(
 	"removed from the list" : "usunięto z listy",
 	"set it on this instance" : "ustaw je na tej instancji",
 	"undo via snapshot" : "cofnij za pomocą migawki",
-	"will be skipped" : "zostanie pominięte"
+	"will be skipped" : "zostanie pominięte",
+	"1 setting" : "1 ustawienie",
+	"%n settings" : "%n ustawienia",
+	"1 row" : "1 wiersz",
+	"%n rows" : "%n wiersze"
 	}
 );

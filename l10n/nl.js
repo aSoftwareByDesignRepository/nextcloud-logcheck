@@ -442,8 +442,8 @@ OC.L10N.register(
 	"_1 reference unresolved — see the groups below._::_%n references unresolved — see the groups below._" : ["%n verwijzing onopgelost — zie de groepen hieronder.","%n verwijzingen onopgelost — zie de groepen hieronder."],
 	"_1 row needs a value on this instance_::_%n rows need a value on this instance_" : ["%n rij heeft een waarde nodig op deze installatie","%n rijen hebben een waarde nodig op deze installatie"],
 	"_1 row skipped._::_%n rows skipped._" : ["%n rij overgeslagen.","%n rijen overgeslagen."],
-	"_1 row_::_%n rows_" : ["%n rij","%n rijen"],
-	"_1 setting_::_%n settings_" : ["%n instelling","%n instellingen"],
+	"_1 row_::_%n rows_" : ["1 rij","%n rijen"],
+	"_1 setting_::_%n settings_" : ["1 instelling","%n instellingen"],
 	"_HealthCheck found %n new error_::_HealthCheck found %n new errors_" : ["HealthCheck heeft %n nieuwe fout gevonden","HealthCheck heeft %n nieuwe fouten gevonden"],
 	"_HealthCheck: %n new error_::_HealthCheck: %n new errors_" : ["HealthCheck: %n nieuwe fout","HealthCheck: %n nieuwe fouten"],
 	"_Warning: 1 row will be permanently deleted, then the file data is loaded._::_Warning: %n rows will be permanently deleted, then the file data is loaded._" : ["Waarschuwing: %n rij wordt definitief verwijderd, daarna worden de bestandsgegevens geladen.","Waarschuwing: %n rijen worden definitief verwijderd, daarna worden de bestandsgegevens geladen."],
@@ -457,6 +457,10 @@ OC.L10N.register(
 	"removed from the list" : "van de lijst verwijderd",
 	"set it on this instance" : "het op deze instantie instellen",
 	"undo via snapshot" : "ongedaan maken via momentopname",
-	"will be skipped" : "wordt overgeslagen"
+	"will be skipped" : "wordt overgeslagen",
+	"1 setting" : "1 instelling",
+	"%n settings" : "%n instellingen",
+	"1 row" : "1 rij",
+	"%n rows" : "%n rijen"
 	}
 );

@@ -463,11 +463,11 @@
             "%n Zeilen übersprungen."
         ],
         "_1 row_::_%n rows_": [
-            "%n Zeile",
+            "1 Zeile",
             "%n Zeilen"
         ],
         "_1 setting_::_%n settings_": [
-            "%n Einstellung",
+            "1 Einstellung",
             "%n Einstellungen"
         ],
         "_HealthCheck found %n new error_::_HealthCheck found %n new errors_": [
@@ -492,7 +492,11 @@
         "removed from the list": "aus der Liste entfernt",
         "set it on this instance": "auf dieser Instanz setzen",
         "undo via snapshot": "per Snapshot rückgängig machen",
-        "will be skipped": "wird übersprungen"
+        "will be skipped": "wird übersprungen",
+        "1 setting": "1 Einstellung",
+        "%n settings": "%n Einstellungen",
+        "1 row": "1 Zeile",
+        "%n rows": "%n Zeilen"
     },
     "pluralForm": "nplurals=2; plural=(n != 1);"
 }

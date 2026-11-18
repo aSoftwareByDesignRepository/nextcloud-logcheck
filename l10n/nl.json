@@ -463,11 +463,11 @@
             "%n rijen overgeslagen."
         ],
         "_1 row_::_%n rows_": [
-            "%n rij",
+            "1 rij",
             "%n rijen"
         ],
         "_1 setting_::_%n settings_": [
-            "%n instelling",
+            "1 instelling",
             "%n instellingen"
         ],
         "_HealthCheck found %n new error_::_HealthCheck found %n new errors_": [
@@ -492,7 +492,11 @@
         "removed from the list": "van de lijst verwijderd",
         "set it on this instance": "het op deze instantie instellen",
         "undo via snapshot": "ongedaan maken via momentopname",
-        "will be skipped": "wordt overgeslagen"
+        "will be skipped": "wordt overgeslagen",
+        "1 setting": "1 instelling",
+        "%n settings": "%n instellingen",
+        "1 row": "1 rij",
+        "%n rows": "%n rijen"
     },
     "pluralForm": "nplurals=2; plural=(n != 1);"
 }

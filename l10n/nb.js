@@ -442,8 +442,8 @@ OC.L10N.register(
 	"_1 reference unresolved — see the groups below._::_%n references unresolved — see the groups below._" : ["%n referanse uløst — se gruppene nedenfor.","%n referanser uløst — se gruppene nedenfor."],
 	"_1 row needs a value on this instance_::_%n rows need a value on this instance_" : ["%n rad trenger en verdi på denne instansen","%n rader trenger en verdi på denne instansen"],
 	"_1 row skipped._::_%n rows skipped._" : ["%n rad hoppet over.","%n rader hoppet over."],
-	"_1 row_::_%n rows_" : ["%n rad","%n rader"],
-	"_1 setting_::_%n settings_" : ["%n innstilling","%n innstillinger"],
+	"_1 row_::_%n rows_" : ["1 rad","%n rader"],
+	"_1 setting_::_%n settings_" : ["1 innstilling","%n innstillinger"],
 	"_HealthCheck found %n new error_::_HealthCheck found %n new errors_" : ["HealthCheck fant %n ny feil","HealthCheck fant %n nye feil"],
 	"_HealthCheck: %n new error_::_HealthCheck: %n new errors_" : ["HealthCheck: %n ny feil","HealthCheck: %n nye feil"],
 	"_Warning: 1 row will be permanently deleted, then the file data is loaded._::_Warning: %n rows will be permanently deleted, then the file data is loaded._" : ["Advarsel: %n rad slettes permanent, deretter lastes fildataene inn.","Advarsel: %n rader slettes permanent, deretter lastes fildataene inn."],
@@ -457,6 +457,10 @@ OC.L10N.register(
 	"removed from the list" : "fjernet fra listen",
 	"set it on this instance" : "sett det på denne instansen",
 	"undo via snapshot" : "angre via øyeblikksbilde",
-	"will be skipped" : "hoppes over"
+	"will be skipped" : "hoppes over",
+	"1 setting" : "1 innstilling",
+	"%n settings" : "%n innstillinger",
+	"1 row" : "1 rad",
+	"%n rows" : "%n rader"
 	}
 );

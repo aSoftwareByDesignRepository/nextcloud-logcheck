@@ -481,6 +481,10 @@
         "removed from the list": "已從列表移除",
         "set it on this instance": "在此執行個體上設定",
         "undo via snapshot": "透過快照撤銷",
-        "will be skipped": "將被跳過"
+        "will be skipped": "將被跳過",
+        "1 setting": "1 項設定",
+        "%n settings": "%n 項設定",
+        "1 row": "1 列",
+        "%n rows": "%n 列"
     }
 }

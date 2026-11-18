@@ -463,11 +463,11 @@
             "%n rader hoppades över."
         ],
         "_1 row_::_%n rows_": [
-            "%n rad",
+            "1 rad",
             "%n rader"
         ],
         "_1 setting_::_%n settings_": [
-            "%n inställning",
+            "1 inställning",
             "%n inställningar"
         ],
         "_HealthCheck found %n new error_::_HealthCheck found %n new errors_": [
@@ -492,7 +492,11 @@
         "removed from the list": "borttagen från listan",
         "set it on this instance": "sätt det på den här instansen",
         "undo via snapshot": "ångra via ögonblicksbild",
-        "will be skipped": "kommer att hoppas över"
+        "will be skipped": "kommer att hoppas över",
+        "1 setting": "1 inställning",
+        "%n settings": "%n inställningar",
+        "1 row": "1 rad",
+        "%n rows": "%n rader"
     },
     "pluralForm": "nplurals=2; plural=(n != 1);"
 }

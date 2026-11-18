@@ -463,11 +463,11 @@
             "%n rækker sprunget over."
         ],
         "_1 row_::_%n rows_": [
-            "%n række",
+            "1 række",
             "%n rækker"
         ],
         "_1 setting_::_%n settings_": [
-            "%n indstilling",
+            "1 indstilling",
             "%n indstillinger"
         ],
         "_HealthCheck found %n new error_::_HealthCheck found %n new errors_": [
@@ -492,7 +492,11 @@
         "removed from the list": "fjernet fra listen",
         "set it on this instance": "sæt det på denne instans",
         "undo via snapshot": "fortryd via snapshot",
-        "will be skipped": "springes over"
+        "will be skipped": "springes over",
+        "1 setting": "1 indstilling",
+        "%n settings": "%n indstillinger",
+        "1 row": "1 række",
+        "%n rows": "%n rækker"
     },
     "pluralForm": "nplurals=2; plural=(n != 1);"
 }

@@ -457,6 +457,10 @@ OC.L10N.register(
 	"removed from the list" : "已从列表移除",
 	"set it on this instance" : "在此实例上设置",
 	"undo via snapshot" : "通过快照撤销",
-	"will be skipped" : "将被跳过"
+	"will be skipped" : "将被跳过",
+	"1 setting" : "1 项设置",
+	"%n settings" : "%n 项设置",
+	"1 row" : "1 行",
+	"%n rows" : "%n 行"
 	}
 );

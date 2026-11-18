@@ -470,12 +470,12 @@
             "Pominięto %n wierszy."
         ],
         "_1 row_::_%n rows_": [
-            "%n wiersz",
+            "1 wiersz",
             "%n wiersze",
             "%n wierszy"
         ],
         "_1 setting_::_%n settings_": [
-            "%n ustawienie",
+            "1 ustawienie",
             "%n ustawienia",
             "%n ustawień"
         ],
@@ -504,7 +504,11 @@
         "removed from the list": "usunięto z listy",
         "set it on this instance": "ustaw je na tej instancji",
         "undo via snapshot": "cofnij za pomocą migawki",
-        "will be skipped": "zostanie pominięte"
+        "will be skipped": "zostanie pominięte",
+        "1 setting": "1 ustawienie",
+        "%n settings": "%n ustawienia",
+        "1 row": "1 wiersz",
+        "%n rows": "%n wiersze"
     },
     "pluralForm": "nplurals=3; plural=(n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);"
 }

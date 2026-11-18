@@ -463,11 +463,11 @@
             "%n linhas ignoradas."
         ],
         "_1 row_::_%n rows_": [
-            "%n linha",
+            "1 linha",
             "%n linhas"
         ],
         "_1 setting_::_%n settings_": [
-            "%n configuração",
+            "1 configuração",
             "%n configurações"
         ],
         "_HealthCheck found %n new error_::_HealthCheck found %n new errors_": [
@@ -492,7 +492,11 @@
         "removed from the list": "removido da lista",
         "set it on this instance": "defini-lo nesta instância",
         "undo via snapshot": "desfazer via snapshot",
-        "will be skipped": "será ignorado"
+        "will be skipped": "será ignorado",
+        "1 setting": "1 configuração",
+        "%n settings": "%n configurações",
+        "1 row": "1 linha",
+        "%n rows": "%n linhas"
     },
     "pluralForm": "nplurals=2; plural=(n > 1);"
 }
