@@ -158,7 +158,7 @@ OC.L10N.register(
 	"Import failed — nothing was changed." : "Importazione non riuscita — niente è stato modificato.",
 	"Import preview" : "Anteprima importazione",
 	"In-app notifications" : "Notifiche nell’app",
-	"In-browser view is capped for safety. Ask a Nextcloud admin to download the full file if you need everything." : "La vista nel browser è limitata per sicurezza. Chiedi a un amministratore Nextcloud di scaricare il file completo se ti serve tutto.",
+	"In-browser view is capped for safety. Ask a Nextcloud admin to download the full file if you need everything." : "La vista nel browser è limitata per sicurezza. Chieda a un amministratore Nextcloud di scaricare il file completo se Le serve tutto.",
 	"In-browser view is capped for safety. Download the full file to read or copy everything." : "La vista nel browser è limitata per sicurezza. Scaricare il file completo per leggere o copiare tutto.",
 	"Include short log excerpts" : "Includere brevi estratti di log",
 	"Including log text can expose passwords, tokens, and personal data — including to services outside your country. Only enable if you accept that risk." : "Includere il testo del log può esporre password, token e dati personali — anche a servizi fuori dal Suo Paese. Lo attivi solo se accetta quel rischio.",

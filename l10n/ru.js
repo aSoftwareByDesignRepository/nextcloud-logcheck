@@ -111,7 +111,7 @@ OC.L10N.register(
 	"Download started." : "Скачивание началось.",
 	"Email" : "Эл. почта",
 	"Email could not be sent. Check mail settings." : "Не удалось отправить письмо. Проверьте настройки почты.",
-	"Email is best-effort — no reply SLA. Need booked help? Use Support & us." : "По почте отвечаем по мере возможности — SLA на ответ нет. Нужна платная помощь? См. раздел «Поддержать нас».",
+	"Email is best-effort — no reply SLA. Need booked help? Use Support & us." : "По почте отвечаем по мере возможности — SLA на ответ нет. Нужна платная помощь? См. раздел «Поддержка и мы».",
 	"Email, Slack, webhook" : "Эл. почта, Slack, webhook",
 	"Encryption passphrase" : "Парольная фраза шифрования",
 	"Enter something to search for." : "Введите что-нибудь для поиска.",
