@@ -470,12 +470,12 @@
             "Pominięto %n wierszy."
         ],
         "_1 row_::_%n rows_": [
-            "1 wiersz",
+            "%n wiersz",
             "%n wiersze",
             "%n wierszy"
         ],
         "_1 setting_::_%n settings_": [
-            "1 ustawienie",
+            "%n ustawienie",
             "%n ustawienia",
             "%n ustawień"
         ],

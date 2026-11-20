@@ -463,11 +463,11 @@
             "%n rækker sprunget over."
         ],
         "_1 row_::_%n rows_": [
-            "1 række",
+            "%n række",
             "%n rækker"
         ],
         "_1 setting_::_%n settings_": [
-            "1 indstilling",
+            "%n indstilling",
             "%n indstillinger"
         ],
         "_HealthCheck found %n new error_::_HealthCheck found %n new errors_": [

@@ -463,11 +463,11 @@
             "%n Zeilen übersprungen."
         ],
         "_1 row_::_%n rows_": [
-            "1 Zeile",
+            "%n Zeile",
             "%n Zeilen"
         ],
         "_1 setting_::_%n settings_": [
-            "1 Einstellung",
+            "%n Einstellung",
             "%n Einstellungen"
         ],
         "_HealthCheck found %n new error_::_HealthCheck found %n new errors_": [

@@ -463,11 +463,11 @@
             "%n rows skipped."
         ],
         "_1 row_::_%n rows_": [
-            "1 row",
+            "%n row",
             "%n rows"
         ],
         "_1 setting_::_%n settings_": [
-            "1 setting",
+            "%n setting",
             "%n settings"
         ],
         "_HealthCheck found %n new error_::_HealthCheck found %n new errors_": [

@@ -463,11 +463,11 @@
             "%n lignes ignorées."
         ],
         "_1 row_::_%n rows_": [
-            "1 ligne",
+            "%n ligne",
             "%n lignes"
         ],
         "_1 setting_::_%n settings_": [
-            "1 paramètre",
+            "%n paramètre",
             "%n paramètres"
         ],
         "_HealthCheck found %n new error_::_HealthCheck found %n new errors_": [

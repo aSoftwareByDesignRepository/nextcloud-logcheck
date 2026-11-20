@@ -463,11 +463,11 @@
             "%n rader hoppet over."
         ],
         "_1 row_::_%n rows_": [
-            "1 rad",
+            "%n rad",
             "%n rader"
         ],
         "_1 setting_::_%n settings_": [
-            "1 innstilling",
+            "%n innstilling",
             "%n innstillinger"
         ],
         "_HealthCheck found %n new error_::_HealthCheck found %n new errors_": [

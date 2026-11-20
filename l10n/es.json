@@ -463,11 +463,11 @@
             "%n filas omitidas."
         ],
         "_1 row_::_%n rows_": [
-            "1 fila",
+            "%n fila",
             "%n filas"
         ],
         "_1 setting_::_%n settings_": [
-            "1 ajuste",
+            "%n ajuste",
             "%n ajustes"
         ],
         "_HealthCheck found %n new error_::_HealthCheck found %n new errors_": [
