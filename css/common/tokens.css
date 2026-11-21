@@ -1,6 +1,6 @@
-/* Auto-adapted from arbeitszeitcheck/css/common/tokens.css for LogCheck shell parity. Do not invent divergent layout rules here. */
+/* Auto-adapted from arbeitszeitcheck/css/common/tokens.css for the Check-family shell. Do not invent divergent layout rules here. */
 /*
- * LogCheck design tokens (--lck-*).
+ * Logcheck design tokens (--lck-*).
  * Colors derive from Nextcloud theme variables; no raw hex in feature CSS.
  * Spacing/typography on :root; theme colors on body + themed app surfaces
  * (NC sets --color-* on body [data-theme-*]).
@@ -69,7 +69,7 @@
 
 	/*
 	 * QR / barcode canvas must stay light for scannability in every theme.
-	 * This is the only intentional non-theme surface in LogCheck feature CSS.
+	 * This is the only intentional non-theme surface in Logcheck feature CSS.
 	 */
 	--lck-qr-canvas: #ffffff;
 }
@@ -95,8 +95,15 @@ body,
 	--lck-bg-soft: color-mix(in srgb, var(--color-main-background) 96%, var(--color-main-text) 4%);
 	--lck-bg-card: var(--color-main-background);
 	--lck-bg-stripe: color-mix(in srgb, var(--color-main-background) 92%, var(--color-main-text) 8%);
+	--lck-bg-hover: var(--color-background-hover);
 	--lck-text: var(--color-main-text);
 	--lck-muted: var(--color-text-maxcontrast);
+	/* Muted ink on tinted surfaces (callouts/badges): main-text keeps it
+	   readable where pure maxcontrast washes out on the tint fill. */
+	--lck-muted-on-tint: color-mix(in srgb, var(--color-text-maxcontrast) 55%, var(--color-main-text));
+	/* Monospace for codes/refs (claim numbers, payment refs): NC ships no mono
+	   var, so pin a platform-native stack. */
+	--lck-mono: ui-monospace, 'Cascadia Mono', 'Segoe UI Mono', 'Liberation Mono', Menlo, Consolas, monospace;
 	--lck-border: color-mix(in srgb, var(--color-main-text) 12%, transparent);
 	/* Boundaries of cards/controls/callouts/dialogs need >=3:1 vs the adjacent
 	   surface (WCAG 1.4.11): NC's --color-border-maxcontrast is theme-tuned for
@@ -115,6 +122,10 @@ body,
 	/* Primary / focus — track NC accent for custom branding */
 	--lck-primary: var(--color-primary-element);
 	--lck-primary-text: var(--color-primary-element-text);
+	/* Accent used as text/icon ink on surfaces: pure --color-primary-element
+	   drops below WCAG AA 4.5:1 on dark themes (~4.3:1); the dark override
+	   below blends it toward main-text. Fills keep --lck-primary. */
+	--lck-accent-ink: var(--color-primary-element);
 	--lck-focus: 3px solid var(--color-primary-element);
 	--lck-focus-offset: 2px;
 
@@ -213,6 +224,7 @@ body[data-theme-dark-highcontrast] #content.app-logcheck {
 		var(--color-main-background)
 	);
 	--lck-danger-on-fill: var(--color-main-text);
+	--lck-accent-ink: color-mix(in srgb, var(--color-primary-element) 70%, var(--color-main-text));
 }
 
 /* NC high-contrast themes: stronger borders / shadows for 3:1 UI chrome */
@@ -254,15 +266,4 @@ body[data-theme-dark-highcontrast] #content.app-logcheck {
 /* Alias for dead-name ref (literal fallback masked it). */
 body {
 	--lck-bg: var(--lck-bg-card);
-}
-
-/* Accent ink for text-on-surface: --color-primary-element as text drops below
-   WCAG AA (~4.3:1) on dark themes — blend toward main-text there. */
-body {
-	--lck-accent-ink: var(--color-primary-element);
-}
-
-body[data-theme-dark],
-body[data-theme-dark-highcontrast] {
-	--lck-accent-ink: color-mix(in srgb, var(--color-primary-element) 70%, var(--color-main-text));
 }
