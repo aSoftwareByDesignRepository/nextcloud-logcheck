@@ -238,7 +238,7 @@ OC.L10N.register(
 	"Only Nextcloud admins and the people below can open HealthCheck. Open access is not available." : "HealthCheck'i yalnızca Nextcloud yöneticileri ve aşağıdaki kişiler açabilir. Açık erişim yoktur.",
 	"Only a Nextcloud admin can add or remove app admins." : "Uygulama yöneticilerini yalnızca bir Nextcloud yöneticisi ekleyebilir veya kaldırabilir.",
 	"Only these apps" : "Yalnızca bu uygulamalar",
-	"Open Alerts" : "Uyarıları aç",
+	"Open Alerts" : "Uyarı sayfasını aç",
 	"Open Alerts, fix the channel, then use Re-enable & test." : "Uyarıları açın, kanalı düzeltin, ardından “Yeniden etkinleştir ve test et”i kullanın.",
 	"Open GitHub Issues" : "GitHub Issues'u aç",
 	"Open Logs to review the newest errors." : "En yeni hataları gözden geçirmek için Günlükler'i açın.",

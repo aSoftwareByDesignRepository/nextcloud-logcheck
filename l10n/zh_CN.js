@@ -145,7 +145,7 @@ OC.L10N.register(
 	"HealthCheck noticed a different server. Multi-server setups need one shared log file." : "HealthCheck 检测到另一台服务器。多服务器部署需要共用一个日志文件。",
 	"HealthCheck only supports file-based logging." : "HealthCheck 仅支持基于文件的日志。",
 	"HealthCheck paused %s alerts after repeated failures. Re-enable & test in Alerts." : "HealthCheck 在多次失败后暂停了 %s 个告警。请在“告警”中重新启用并测试。",
-	"HealthCheck works on one Nextcloud server that can read its log file. Several servers each with their own log file are not supported." : "HealthCheck 适用于一台可读取其日志文件的 Nextcloud 服务器。多台服务器各自拥有日志文件时需要共用一个日志文件。",
+	"HealthCheck works on one Nextcloud server that can read its log file. Several servers each with their own log file are not supported." : "HealthCheck 适用于一台可读取其日志文件的 Nextcloud 服务器。多台服务器各自拥有日志文件的部署不受支持。",
 	"Help" : "帮助",
 	"Help keep HealthCheck free — donations and enterprise contact." : "帮助 HealthCheck 保持免费——捐赠与企业联系方式。",
 	"Hide" : "隐藏",
