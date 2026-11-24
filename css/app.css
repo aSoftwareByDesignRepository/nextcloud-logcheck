@@ -206,6 +206,21 @@
 	max-width: 100%;
 }
 
+/* Fieldset recipe chrome (mirrors .lck-fieldset in css/common/transfer.css —
+   that pack file only loads on the transfer section, the rules page needs the
+   same chrome on every section; min-width:0 covers the Blink/WebKit fieldset
+   shrink quirk documented in transfer.css). */
+#content.app-logcheck .lck-fieldset {
+	border: 0;
+	padding: 0;
+	margin: 0 0 var(--lck-space-3, 12px);
+	min-width: 0;
+}
+#content.app-logcheck .lck-fieldset legend {
+	font-weight: 600;
+	padding: 0 0 var(--lck-space-2, 8px);
+}
+
 #content.app-logcheck .lck-chip {
 	box-sizing: border-box;
 	position: relative;

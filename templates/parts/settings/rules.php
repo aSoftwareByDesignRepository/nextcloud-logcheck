@@ -65,7 +65,7 @@ $disabledProbes = is_array($settings['health_disabled_probes'] ?? null)
 	</details>
 
 	<?php if ($isNcAdmin): ?>
-	<fieldset class="lck-checks" id="lck-health-probes" data-field="health_disabled_probes">
+	<fieldset class="lck-fieldset" id="lck-health-probes" data-field="health_disabled_probes">
 		<legend><?php p($l->t('Checks on the Health page')); ?></legend>
 		<p class="lck-muted"><?php p($l->t('Turn off checks that cannot run on this server.')); ?></p>
 		<?php foreach (HealthDashboardService::cardTitles($l) as $probeId => $probeLabel): ?>

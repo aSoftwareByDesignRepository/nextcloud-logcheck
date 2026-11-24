@@ -1,0 +1,11 @@
+{
+	"lck-alerts-checklist__cta": "BEM element marker on the CTA paragraph inside styled .lck-alerts-checklist callout; spacing via p defaults",
+	"lck-app--denied": "state modifier on styled .lck-app canvas; deny marker cited by probes/e2e (access-denied surface paints via .lck-shell--minimal)",
+	"lck-badge__label": "JS text target inside styled .lck-badge pill (js/app.js updates the label; chrome via .lck-badge + .lck-badge__dot)",
+	"lck-channel-status": "base marker on the channel status line; state paints via --ok/--err modifiers (css/app.css), ink via .lck-muted",
+	"lck-health-card__action": "BEM element marker on styled .lck-btn inside styled .lck-health-card__actions",
+	"lck-health-summary__check": "BEM element marker on styled .lck-btn (check-again button; selected via #lck-check-again)",
+	"lck-reenable-channel": "JS hook on styled .lck-btn; binds data-channel re-enable/test in js/settings.js",
+	"lck-test-turn-on": "JS hook on styled .lck-btn; binds data-channel test+enable in js/settings.js",
+	"lck-transfer-report": "dialog root marker on styled .lck-dialog; verdict styled via .lck-transfer-report__verdict"
+}
