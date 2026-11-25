@@ -344,6 +344,7 @@ OC.L10N.register(
 	"Support us" : "Support us",
 	"Switch to the current log first." : "Switch to the current log first.",
 	"System cron is more reliable for alerts and health checks." : "System cron is more reliable for alerts and health checks.",
+	"Test ↔ production copy" : "Test ↔ production copy",
 	"Test failed." : "Test failed.",
 	"Test sent." : "Test sent.",
 	"The HTTPS certificate could not be verified. If this server uses a private certificate authority, trust it under Administration settings → Security." : "The HTTPS certificate could not be verified. If this server uses a private certificate authority, trust it under Administration settings → Security.",

@@ -344,6 +344,7 @@
         "Support us": "支援我們",
         "Switch to the current log first.": "請先切換到當前日誌。",
         "System cron is more reliable for alerts and health checks.": "系統定時任務對告警和健康檢查更可靠。",
+        "Test ↔ production copy": "測試 ↔ 正式副本",
         "Test failed.": "測試失敗。",
         "Test sent.": "測試已傳送。",
         "The HTTPS certificate could not be verified. If this server uses a private certificate authority, trust it under Administration settings → Security.": "無法驗證 HTTPS 證書。如果此伺服器使用私有證書頒發機構，請在“管理設定 → 安全”中信任它。",

@@ -344,6 +344,7 @@ OC.L10N.register(
 	"Support us" : "Støtt oss",
 	"Switch to the current log first." : "Bytt først til den gjeldende loggen.",
 	"System cron is more reliable for alerts and health checks." : "System-cron er mer pålitelig for varsler og helsesjekker.",
+	"Test ↔ production copy" : "Test ↔ produksjonskopi",
 	"Test failed." : "Test mislyktes.",
 	"Test sent." : "Test sendt.",
 	"The HTTPS certificate could not be verified. If this server uses a private certificate authority, trust it under Administration settings → Security." : "HTTPS-sertifikatet kunne ikke verifiseres. Hvis serveren bruker en privat sertifikatmyndighet, må du stole på den under Administrasjon → Sikkerhet.",

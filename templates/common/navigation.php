@@ -59,6 +59,14 @@ $settingsItems = [
 		'active' => $settingsSection === 'people',
 	],
 	[
+		'id' => 'transfer',
+		'label' => $l->t('Transfer'),
+		'hint' => $l->t('Test ↔ production copy'),
+		'url' => (string)($urls['transfer'] ?? '#'),
+		'icon' => 'refresh-cw',
+		'active' => $settingsSection === 'transfer',
+	],
+	[
 		'id' => 'support',
 		'label' => $l->t('Support us'),
 		'hint' => $l->t('Donations & enterprise'),

@@ -343,6 +343,7 @@
         "Support us": "Steun ons",
         "Switch to the current log first.": "Schakel eerst over naar het huidige log.",
         "System cron is more reliable for alerts and health checks.": "Systeemcron is betrouwbaarder voor alerts en gezondheidscontroles.",
+        "Test ↔ production copy": "Test ↔ productiekopie",
         "Test failed.": "Test mislukt.",
         "Test sent.": "Test verstuurd.",
         "The HTTPS certificate could not be verified. If this server uses a private certificate authority, trust it under Administration settings → Security.": "Het HTTPS-certificaat kon niet worden geverifieerd. Als deze server een eigen certificaatautoriteit gebruikt, vertrouw deze dan onder Beheerinstellingen → Beveiliging.",

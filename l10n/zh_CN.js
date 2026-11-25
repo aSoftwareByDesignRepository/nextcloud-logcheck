@@ -344,6 +344,7 @@ OC.L10N.register(
 	"Support us" : "支持我们",
 	"Switch to the current log first." : "请先切换到当前日志。",
 	"System cron is more reliable for alerts and health checks." : "系统定时任务对告警和健康检查更可靠。",
+	"Test ↔ production copy" : "测试 ↔ 生产副本",
 	"Test failed." : "测试失败。",
 	"Test sent." : "测试已发送。",
 	"The HTTPS certificate could not be verified. If this server uses a private certificate authority, trust it under Administration settings → Security." : "无法验证 HTTPS 证书。如果此服务器使用私有证书颁发机构，请在“管理设置 → 安全”中信任它。",

@@ -343,6 +343,7 @@
         "Support us": "Apoie-nos",
         "Switch to the current log first.": "Mude primeiro para o ficheiro de registo atual.",
         "System cron is more reliable for alerts and health checks.": "O cron do sistema é mais fiável para alertas e verificações de estado.",
+        "Test ↔ production copy": "Cópia teste ↔ produção",
         "Test failed.": "O teste falhou.",
         "Test sent.": "Teste enviado.",
         "The HTTPS certificate could not be verified. If this server uses a private certificate authority, trust it under Administration settings → Security.": "O certificado HTTPS não pôde ser verificado. Se este servidor usa uma autoridade de certificação privada, confie nela em Administração → Segurança.",

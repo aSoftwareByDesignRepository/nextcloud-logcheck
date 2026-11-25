@@ -343,6 +343,7 @@
         "Support us": "Destek ve biz",
         "Switch to the current log first.": "Önce geçerli günlüğe geçin.",
         "System cron is more reliable for alerts and health checks.": "Sistem cron'u uyarılar ve sağlık denetimleri için daha güvenilirdir.",
+        "Test ↔ production copy": "Test ↔ üretim kopyası",
         "Test failed.": "Test başarısız oldu.",
         "Test sent.": "Test gönderildi.",
         "The HTTPS certificate could not be verified. If this server uses a private certificate authority, trust it under Administration settings → Security.": "HTTPS sertifikası doğrulanamadı. Bu sunucu özel bir sertifika yetkilisi kullanıyorsa Yönetim ayarları → Güvenlik altında ona güvenin.",
