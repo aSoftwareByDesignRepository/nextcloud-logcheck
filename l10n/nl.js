@@ -162,7 +162,7 @@ OC.L10N.register(
 	"In-browser view is capped for safety. Download the full file to read or copy everything." : "De weergave in de browser is om veiligheidsredenen beperkt. Download het volledige bestand om alles te lezen of te kopiëren.",
 	"Include short log excerpts" : "Korte logfragmenten opnemen",
 	"Including log text can expose passwords, tokens, and personal data — including to services outside your country. Only enable if you accept that risk." : "Logtekst kan wachtwoorden, tokens en persoonsgegevens blootleggen — ook aan diensten buiten uw land. Schakel dit alleen in als u dat risico accepteert.",
-	"Info" : "Info",
+	"Info" : "Informatie",
 	"Instance HTTPS endpoint answered." : "HTTPS-eindpunt van de instantie heeft geantwoord.",
 	"Instance HTTPS endpoint returned HTTP %s." : "HTTPS-eindpunt van de instantie gaf HTTP %s terug.",
 	"Instance URL could not be parsed." : "Instantie-URL kon niet worden geparseerd.",

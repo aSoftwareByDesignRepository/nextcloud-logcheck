@@ -161,7 +161,7 @@
         "In-browser view is capped for safety. Download the full file to read or copy everything.": "Die Ansicht im Browser ist aus Sicherheitsgründen begrenzt. Laden Sie die gesamte Datei herunter, um alles zu lesen oder zu kopieren.",
         "Include short log excerpts": "Kurze Log-Ausschnitte einbeziehen",
         "Including log text can expose passwords, tokens, and personal data — including to services outside your country. Only enable if you accept that risk.": "Log-Text kann Passwörter, Tokens und personenbezogene Daten offenlegen — auch an Dienste außerhalb Ihres Landes. Nur aktivieren, wenn Sie dieses Risiko akzeptieren.",
-        "Info": "Info",
+        "Info": "Information",
         "Instance HTTPS endpoint answered.": "HTTPS-Endpunkt der Instanz hat geantwortet.",
         "Instance HTTPS endpoint returned HTTP %s.": "HTTPS-Endpunkt der Instanz antwortete mit HTTP %s.",
         "Instance URL could not be parsed.": "Instanz-URL konnte nicht gelesen werden.",

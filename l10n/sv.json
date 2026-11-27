@@ -161,7 +161,7 @@
         "In-browser view is capped for safety. Download the full file to read or copy everything.": "Vyn i webbläsaren är begränsad av säkerhetsskäl. Ladda ner hela filen för att läsa eller kopiera allt.",
         "Include short log excerpts": "Inkludera korta loggutdrag",
         "Including log text can expose passwords, tokens, and personal data — including to services outside your country. Only enable if you accept that risk.": "Loggtext kan avslöja lösenord, tokens och personuppgifter — även till tjänster utanför landet. Aktivera bara om risken accepteras.",
-        "Info": "Info",
+        "Info": "Information",
         "Instance HTTPS endpoint answered.": "Instansens HTTPS-slutpunkt svarade.",
         "Instance HTTPS endpoint returned HTTP %s.": "Instansens HTTPS-slutpunkt returnerade HTTP %s.",
         "Instance URL could not be parsed.": "Instans-URL kunde inte tolkas.",

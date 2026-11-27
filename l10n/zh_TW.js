@@ -229,7 +229,7 @@ OC.L10N.register(
 	"Not using HTTPS" : "未使用 HTTPS",
 	"Nothing to copy yet." : "暫無可複製內容。",
 	"Notifications" : "通知",
-	"OK" : "OK",
+	"OK" : "確定",
 	"OK — a longer passphrase is safer." : "可以——但更長的口令更安全。",
 	"Off" : "關",
 	"Offline" : "離線",

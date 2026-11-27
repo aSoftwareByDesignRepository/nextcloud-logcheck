@@ -162,7 +162,7 @@ OC.L10N.register(
 	"In-browser view is capped for safety. Download the full file to read or copy everything." : "La vista en el navegador está limitada por seguridad. Descargue el archivo completo para leer o copiar todo.",
 	"Include short log excerpts" : "Incluir extractos cortos del registro",
 	"Including log text can expose passwords, tokens, and personal data — including to services outside your country. Only enable if you accept that risk." : "Incluir texto del registro puede exponer contraseñas, tokens y datos personales — también a servicios fuera de su país. Actívelo solo si acepta ese riesgo.",
-	"Info" : "Info",
+	"Info" : "Información",
 	"Instance HTTPS endpoint answered." : "El endpoint HTTPS de la instancia respondió.",
 	"Instance HTTPS endpoint returned HTTP %s." : "El endpoint HTTPS de la instancia devolvió HTTP %s.",
 	"Instance URL could not be parsed." : "No se pudo analizar la URL de la instancia.",
